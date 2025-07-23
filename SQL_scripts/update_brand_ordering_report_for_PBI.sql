@@ -1,3 +1,7 @@
+--- SQL script to update brand ordering report for Power BI
+--- This script updates the stock information in the database based on the data from an Excel sheet.
+--- import the Excel sheet into a temporary table named [Sheet1$], then updates the relevant stock tables.
+
 SELECT *
 FROM [VJSCL].[dbo].[Sheet1$]
  
@@ -22,7 +26,7 @@ COMMIT
 BEGIN TRAN 
 UPDATE STK_STOCK3
 SET STK_USRFLAG2=1, 
-STK_USRNUM1=[Minimum Order ],
+STK_USRNUM1=[Minimum Order],
 STK_USRNUM7=CASE WHEN [Layer] IS NULL THEN 0 ELSE [Layer] END, 
 STK_USRNUM6=CASE WHEN [Full Pallet] IS NULL THEN 0 ELSE [Full Pallet] END,
 STK_USRNUM4=CASE WHEN [Min Stock Coverage] IS NULL THEN 0 ELSE [Min Stock Coverage] END,
