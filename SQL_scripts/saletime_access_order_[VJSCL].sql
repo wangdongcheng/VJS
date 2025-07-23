@@ -29,6 +29,7 @@ SELECT OL.Orderid as 'ST_OrdNo',
     OH_BATCH_FLAG as 'Batch Status'
 from Orders O
     inner join OrderLines OL on OL.Orderid=O.Id
+    -- The LEFT JOIN keyword returns all records from the left table (Orders), and the matched records from the right table (OrderLines).
     left join VJSCL..ORD_HEADER2 oh2 on oh2.OH_USRCHAR1=o.Id
     left join VJSCL..ORD_HEADER OH on OH.OH_PRIMARY=OH2.OH_PRIMARY_2
     left join VJSCL..ORD_DETAIL OD on OD.OD_ORDER_NUMBER=OH.OH_ORDER_NUMBER AND OD.OD_TYPE=OH.OH_TYPE and OD.OD_STOCK_CODE=OL.StockCode and left(od.OD_LOCATN,3)=ol.LocationCode and OD_DIMENSION3=ol.Id
