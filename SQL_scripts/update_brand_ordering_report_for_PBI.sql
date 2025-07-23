@@ -3,7 +3,7 @@
 --- import the Excel sheet into a temporary table named [Sheet1$], then updates the relevant stock tables.
 
 SELECT *
-FROM [VJSCL].[dbo].[Sheet1$]
+FROM [VJSCL].[dbo].[STK_STOCK]
  
 BEGIN TRAN 
 UPDATE STK_STOCK_2
