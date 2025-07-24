@@ -30,6 +30,6 @@ from
     INFORMATION_SCHEMA.COLUMNS
 where
 table_name like @searchtab ESCAPE '\' and -- list all order related tables from DB
-    COLUMN_NAME like '%date%' ESCAPE '\'
+    COLUMN_NAME like '%STK_USRFLAG2%' ESCAPE '\'
 order by table_name, ordinal_position
 ;
