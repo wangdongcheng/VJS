@@ -20,3 +20,10 @@ from stk_stock as stk
     LEFT JOIN STK_STOCK4 as stk4 on stk.STKCODE = stk4.STKCODE4
 where stkcode like @stock
 ;
+
+
+
+-- SELECT *
+-- FROM SL_ADDRESSES
+-- WHERE AD_ACC_CODE LIKE '508till001';
+
