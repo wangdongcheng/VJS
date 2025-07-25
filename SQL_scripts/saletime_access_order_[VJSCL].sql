@@ -35,10 +35,10 @@ from Orders O
     left join VJSCL..ORD_DETAIL OD on OD.OD_ORDER_NUMBER=OH.OH_ORDER_NUMBER AND OD.OD_TYPE=OH.OH_TYPE and OD.OD_STOCK_CODE=OL.StockCode and left(od.OD_LOCATN,3)=ol.LocationCode and OD_DIMENSION3=ol.Id
     left join VJSCL..STK_STOCK S on S.STKCODE=OD.OD_STOCK_CODE
     left join DiscountLines dl on dl.id = case when CHARINDEX(',',ol.discountlineids) = 0 THEN ol.discountlineids else SUBSTRING(ol.discountlineids,0,CHARINDEX(',',ol.discountlineids)) end
---WHERE CustomerCode = '30BOT001' --and Price = 0
+WHERE CustomerCode = '30SLU001' --and Price = 0
 --WHERE OL.StockCode = '30FIO_568549' 
---where OH_ORDER_NUMBER = '708639'
-where ol.Orderid = '1244300'
+and OH_ORDER_NUMBER  in ( '799187', '771060')
+-- and ol.Orderid = '1286140'
 --and DefaultRep = '30 JOANNE SCHEMBRI'
 order by DATECREATED DESC
  

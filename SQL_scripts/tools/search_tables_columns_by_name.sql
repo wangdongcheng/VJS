@@ -29,7 +29,8 @@ SELECT
 from
     INFORMATION_SCHEMA.COLUMNS
 where
-table_name like @searchtab ESCAPE '\'  -- list all order related tables from DB
-    -- COLUMN_NAME like '%STK_USRFLAG3%' ESCAPE '\'
+-- table_name like @searchtab ESCAPE '\'  -- list all order related tables from DB
+     COLUMN_NAME like 'OH_BATCH_FLAG' ESCAPE '\'
 order by table_name, ordinal_position
 ;
+
