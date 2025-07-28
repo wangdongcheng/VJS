@@ -41,4 +41,3 @@ and OH_ORDER_NUMBER  in ( '799187', '771060')
 -- and ol.Orderid = '1286140'
 --and DefaultRep = '30 JOANNE SCHEMBRI'
 order by DATECREATED DESC
- 
