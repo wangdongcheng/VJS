@@ -2,7 +2,7 @@
 
 use VJSPTEST;
 DECLARE @searchtab NVARCHAR(50);
-set @searchtab = 'STK%';
+set @searchtab = 'PL_%';
 
 SELECT
     name,
