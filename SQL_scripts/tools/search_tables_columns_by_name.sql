@@ -33,4 +33,3 @@ where
      COLUMN_NAME like 'OH_BATCH_FLAG' ESCAPE '\'
 order by table_name, ordinal_position
 ;
-
