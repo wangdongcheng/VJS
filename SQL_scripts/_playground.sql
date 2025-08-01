@@ -87,10 +87,3 @@ WHERE STKCODE2 in (
 ,'30SEP_5051'
 
 )
-
-SELECT top(100)
-det_stock_code,
-DET_pl,
-*
-from vjscl.dbo.SL_PL_NL_DETAIL
-where det_stock_code like '30vam%'
