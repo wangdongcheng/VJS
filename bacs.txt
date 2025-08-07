@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.03"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <CstmrCdtTrfInitn>
+        <GrpHdr>
+            <MsgId>CM290725</MsgId>
+            <CreDtTm>2025-07-29T12:56:36</CreDtTm>
+            <NbOfTxs>1</NbOfTxs>
+            <CtrlSum>3569.50</CtrlSum>
+            <InitgPty>
+                <Nm>VJ Salomone Consumer Line</Nm>
+                <Id>
+                    <PrvtId>
+                        <Othr>
+                            <Id>MyPrivateID</Id>
+                        </Othr>
+                    </PrvtId>
+                </Id>
+            </InitgPty>
+        </GrpHdr>
+        <PmtInf>
+            <PmtInfId>Supp Pay 2025-07-29T12:56:36</PmtInfId>
+            <PmtMtd>TRF</PmtMtd>
+            <BtchBookg>true</BtchBookg>
+            <NbOfTxs>1</NbOfTxs>
+            <CtrlSum>3569.50</CtrlSum>
+            <PmtTpInf>
+                <SvcLvl>
+                    <Cd>SEPA</Cd>
+                </SvcLvl>
+            </PmtTpInf>
+            <ReqdExctnDt>2025-07-29</ReqdExctnDt>
+            <Dbtr>
+                <Nm>VJ Salomone Consumer Line</Nm>
+                <PstlAdr>
+                    <AdrLine>79 Simpson Street,</AdrLine>
+                    <AdrLine>Marsa. MRS1606</AdrLine>
+                </PstlAdr>
+            </Dbtr>
+            <DbtrAcct>
+                <Id>
+                    <IBAN>MT05VALL22013000000040014777774</IBAN>
+                </Id>
+                <Ccy>EUR</Ccy>
+            </DbtrAcct>
+            <DbtrAgt>
+                <FinInstnId>
+                    <BIC>VALLMTMT</BIC>
+                </FinInstnId>
+            </DbtrAgt>
+            <CdtTrfTxInf>
+                <PmtId>
+                    <InstrId>BACS-CM290725</InstrId>
+                    <EndToEndId>000008500620250729</EndToEndId>
+                </PmtId>
+                <Amt>
+                    <InstdAmt Ccy="EUR">3569.50</InstdAmt>
+                </Amt>
+                <CdtrAgt>
+                    <FinInstnId>
+                        <BIC>VALLMTMT</BIC>
+                    </FinInstnId>
+                </CdtrAgt>
+                <Cdtr>
+                    <Nm>ATTRANS LTD</Nm>
+                </Cdtr>
+                <CdtrAcct>
+                    <Id>
+                        <IBAN>MT81VALL22013000000013503541118</IBAN>
+                    </Id>
+                </CdtrAcct>
+                <Purp>
+                    <Cd>SUPP</Cd>
+                </Purp>
+                <RmtInf>
+                    <Ustrd>CM290725</Ustrd>
+                </RmtInf>
+            </CdtTrfTxInf>
+        </PmtInf>
+    </CstmrCdtTrfInitn>
+</Document>

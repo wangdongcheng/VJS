@@ -1,8 +1,8 @@
 -- This script lists all user tables in the database that start by name criteria.
 
-use VJSPTEST;
+use VJScl;
 DECLARE @searchtab NVARCHAR(50);
-set @searchtab = 'PL_%';
+set @searchtab = '%sl_PL_%';
 
 SELECT
     name,
@@ -30,6 +30,6 @@ from
     INFORMATION_SCHEMA.COLUMNS
 where
 -- table_name like @searchtab ESCAPE '\'  -- list all order related tables from DB
-     COLUMN_NAME like 'OH_BATCH_FLAG' ESCAPE '\'
+     COLUMN_NAME like 'LOC_PHYSICAL' ESCAPE '\'
 order by table_name, ordinal_position
 ;
