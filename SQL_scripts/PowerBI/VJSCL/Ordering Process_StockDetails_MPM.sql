@@ -1,4 +1,4 @@
-declare @stktype NVARCHAR(50);
+DECLARE @stktype NVARCHAR(50);
 
 SET
   @stktype = '30 MPM PRODUCTS LTD.';
@@ -9,8 +9,11 @@ SELECT
   STK_USRCHAR12 AS OrderShelfLife,
   STK_USRFLAG8 AS SellOnlyCases,
   STK_USRFLAG1 AS DoNotLoad,
-  STK_EC_SUP_UNIT AS UnitsPercase,
+  STK_EC_SUP_UNIT AS UnitsPerCase,
   STK_USRFLAG3 AS Delisted,
+  -- NULLIF(S.STK_EC_SUP_UNIT, 0) will return NULL if S.STK_EC_SUP_UNIT is 0.
+  -- Division by NULL in SQL does not throw an error; it simply returns NULL.
+  -- Then COALESCE(..., 0) replaces that NULL with 0.
   COALESCE(s.stk_order_in / NULLIF(S.STK_EC_SUP_UNIT, 0), 0) AS IncomingOrderedQty,
   CASE
     WHEN S.STK_EC_SUP_UNIT = 0
