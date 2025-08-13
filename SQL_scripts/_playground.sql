@@ -122,3 +122,10 @@ WHERE LOC_SOPCHECK = 0
 AND loc_physical > 0
 AND datediff (dd, dbo.dateonly(getdate()), loc_userdate1 ) <= S.STK_EC_KILOS AND S3.STK_USRFLAG3=0
 -- AND S3.STK_USRCHAR2 IN (@Division) AND (S3.STK_USRCHAR16+' | '+EX.[Full Name]) IN (@Executive)
+
+
+select *
+from svbeauty.dbo.sys_lookup_text
+-- where txt_origin = 'delroute';
+
+

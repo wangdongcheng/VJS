@@ -1,8 +1,8 @@
 -- This script lists all user tables in the database that start by name criteria.
 
-use VJScl;
+use SVBeauty;
 DECLARE @searchtab NVARCHAR(50);
-set @searchtab = '%sl_PL_%';
+set @searchtab = 'sys\_%';
 
 SELECT
     name,
@@ -28,8 +28,8 @@ SELECT
     character_maximum_length
 from
     INFORMATION_SCHEMA.COLUMNS
-where
+-- where
 -- table_name like @searchtab ESCAPE '\'  -- list all order related tables from DB
-     COLUMN_NAME like 'LOC_PHYSICAL' ESCAPE '\'
-order by table_name, ordinal_position
+    --  COLUMN_NAME like 'LOC_PHYSICAL' ESCAPE '\'
+-- order by table_name, ordinal_position
 ;
