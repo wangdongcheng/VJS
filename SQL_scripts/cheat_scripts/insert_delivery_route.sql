@@ -1,5 +1,7 @@
-
 use SVBeauty;
+
+print 'Inserting delivery routes... Comment RETURN to confirm the execution of the script';
+return;
 
 begin try
     begin tran;

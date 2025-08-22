@@ -1,21 +1,24 @@
 -- This script lists all user tables in the database that start by name criteria.
+USE SVBeauty;
 
-use SVBeauty;
 DECLARE @searchtab NVARCHAR(50);
-set @searchtab = 'sys\_%';
+
+SET
+    @searchtab = 'sys\_%';
 
 SELECT
     name,
-    type
-FROM sys.tables
+TYPE
+FROM
+    sys.tables
 WHERE
- name LIKE @searchtab ESCAPE '\' -- list all order related tables from DB
-    and name not like '%_backup%'
-    and [type] = 'U'
--- user tables only
-ORDER BY name;
-
-
+    name LIKE @searchtab ESCAPE '\' -- list all order related tables from DB
+    AND
+    name NOT LIKE '%_backup%' AND
+    [type] = 'U'
+    -- user tables only
+ORDER BY
+    name;
 
 SELECT
     table_catalog,
@@ -26,10 +29,10 @@ SELECT
     ordinal_position,
     data_type,
     character_maximum_length
-from
+FROM
     INFORMATION_SCHEMA.COLUMNS
--- where
--- table_name like @searchtab ESCAPE '\'  -- list all order related tables from DB
+    -- where
+    -- table_name like @searchtab ESCAPE '\'  -- list all order related tables from DB
     --  COLUMN_NAME like 'LOC_PHYSICAL' ESCAPE '\'
--- order by table_name, ordinal_position
+    -- order by table_name, ordinal_position
 ;

@@ -1,25 +1,22 @@
-declare @stktype NVARCHAR(50);
-
-SET
-  @stktype = '30 MPM PRODUCTS LTD.';
+declare @stktype NVARCHAR(50) = '30 MPM PRODUCTS LTD.';
 
 SELECT
-  STK_SORT_KEY3 AS SUPPLIER,
-  STK_SORT_KEY AS BRAND,
-  STK_SORT_KEY1 AS CATEGORY,
-  STK_SORT_KEY2 AS [TYPE],
+  s.STK_SORT_KEY3 AS SUPPLIER,
+  s.STK_SORT_KEY AS BRAND,
+  s.STK_SORT_KEY1 AS CATEGORY,
+  s.STK_SORT_KEY2 AS [TYPE],
   S2.STK_SUPSTKCDE1 AS SupplierCode,
-  STKCODE,
-  STKNAME,
-  STKCODE + ' | ' + STKNAME AS STK_CN,
+  s.STKCODE,
+  s.STKNAME,
+  s.STKCODE + ' | ' + s.STKNAME AS STK_CN,
   S.STK_EC_SUP_UNIT AS UnitsPerCase,
-  COALESCE(STK_USRNUM1 / NULLIF(S.STK_EC_SUP_UNIT, 0), 0) AS POMinQty,
+  COALESCE(s3.STK_USRNUM1 / NULLIF(S.STK_EC_SUP_UNIT, 0), 0) AS POMinQty,
   S3.STK_USRNUM4 AS MIN_STK_QTY,
   S3.STK_USRNUM5 AS MAX_STK_QTY,
   S3.STK_USRNUM6 AS UNITS_PER_PALLET,
   CAST(Z.[3M_AVG] AS INT) AS [3M_AVG],
   CAST(Z2.[12M_AVG] AS INT) AS [12M_AVG],
-  COALESCE(stk_order_in / NULLIF(S.STK_EC_SUP_UNIT, 0), 0) AS STK_ORDER_IN,
+  COALESCE(s.stk_order_in / NULLIF(S.STK_EC_SUP_UNIT, 0), 0) AS STK_ORDER_IN,
   CASE
     WHEN S.STK_EC_SUP_UNIT = 0 THEN 0
     ELSE (LOC.STK_PHYSICAL + STK_ORDER_IN) / S.STK_EC_SUP_UNIT
@@ -35,72 +32,72 @@ SELECT
     )
   END AS CURRENT_STOCK_COVERAGE,
   CASE
-    WHEN COALESCE(STK_USRNUM1, 0) = 0
+    WHEN COALESCE(s3.STK_USRNUM1, 0) = 0
     OR COALESCE (S.STK_EC_SUP_UNIT, 0) = 0 THEN 0
     ELSE CASE
       WHEN (
         S3.STK_USRNUM5 * [z].[3M_AVG] * S.STK_EC_SUP_UNIT - LOC.STK_PHYSICAL - S.STK_ORDER_IN
-      ) / STK_USRNUM1 < 0 THEN 0
+      ) / s3.STK_USRNUM1 < 0 THEN 0
       ELSE ROUND(
         (
           S3.STK_USRNUM5 * [z].[3M_AVG] * S.STK_EC_SUP_UNIT - LOC.STK_PHYSICAL - S.STK_ORDER_IN
-        ) / STK_USRNUM1 / S.STK_EC_SUP_UNIT,
+        ) / s3.STK_USRNUM1 / S.STK_EC_SUP_UNIT,
         0
-      ) * STK_USRNUM1
+      ) * s3.STK_USRNUM1
     END
   END AS AUTO_ORDER_QTY,
   CASE
-    WHEN STK_USRNUM1 = 0
-    OR STK_USRNUM1 IS NULL
+    WHEN s3.STK_USRNUM1 = 0
+    OR s3.STK_USRNUM1 IS NULL
     OR S.STK_EC_SUP_UNIT = 0 THEN 0
     ELSE CASE
       WHEN FLOOR (
         (
-          (S3.STK_USRNUM5 * Z.[3M_AVG] * S.STK_EC_SUP_UNIT) - LOC.STK_PHYSICAL - STK_ORDER_IN
+          (S3.STK_USRNUM5 * Z.[3M_AVG] * S.STK_EC_SUP_UNIT) - LOC.STK_PHYSICAL - s.STK_ORDER_IN
         )
-      ) / STK_USRNUM1 < 0 THEN 0
+      ) / s3.STK_USRNUM1 < 0 THEN 0
       ELSE CASE
         WHEN Z.[3M_AVG] = 0 THEN 0
         ELSE CAST (
           (
-            LOC.STK_PHYSICAL + STK_ORDER_IN + ROUND (
+            LOC.STK_PHYSICAL + s.STK_ORDER_IN + ROUND (
               FLOOR (
                 (
-                  (S3.STK_USRNUM5 * Z.[3M_AVG] * S.STK_EC_SUP_UNIT) - LOC.STK_PHYSICAL - STK_ORDER_IN
+                  (S3.STK_USRNUM5 * Z.[3M_AVG] * S.STK_EC_SUP_UNIT) - LOC.STK_PHYSICAL - s.STK_ORDER_IN
                 )
-              ) / STK_USRNUM1,
+              ) / s3.STK_USRNUM1,
               0
-            ) * STK_USRNUM1
+            ) * s3.STK_USRNUM1
           ) / (Z.[3M_AVG] * S.STK_EC_SUP_UNIT) AS DECIMAL (18, 2)
         )
       END
     END
   END AS AUTO_ORDER_COVERAGE,
   CASE
-    WHEN STK_USRNUM1 = 0
-    OR STK_USRNUM1 IS NULL
+    WHEN s3.STK_USRNUM1 = 0
+    OR s3.STK_USRNUM1 IS NULL
     OR S.STK_EC_SUP_UNIT = 0 THEN 0
     ELSE CASE
       WHEN FLOOR (
         (
-          (S3.STK_USRNUM5 * Z.[3M_AVG] * S.STK_EC_SUP_UNIT) - LOC.STK_PHYSICAL - STK_ORDER_IN
+          (S3.STK_USRNUM5 * Z.[3M_AVG] * S.STK_EC_SUP_UNIT) - LOC.STK_PHYSICAL - s.STK_ORDER_IN
         )
-      ) / STK_USRNUM1 < 0 THEN 0
+      ) / s3.STK_USRNUM1 < 0 THEN 0
       ELSE CASE
-        WHEN STK_USRNUM6 = 0
-        OR STK_USRNUM6 IS NULL THEN 0
+        WHEN s3.STK_USRNUM6 = 0
+        OR s3.STK_USRNUM6 IS NULL THEN 0
         ELSE CAST (
           ROUND (
             (
               ROUND (
                 FLOOR (
                   (
-                    (S3.STK_USRNUM5 * Z.[3M_AVG] * S.STK_EC_SUP_UNIT) - LOC.STK_PHYSICAL - STK_ORDER_IN
+                    (S3.STK_USRNUM5 * Z.[3M_AVG] * S.STK_EC_SUP_UNIT) - LOC.STK_PHYSICAL -s.STK_ORDER_IN
                   )
-                ) / STK_USRNUM1,
+                ) / s3.STK_USRNUM1,
                 0
-              ) * STK_USRNUM1
-            ) / STK_USRNUM6,
+              ) * s3.STK_USRNUM1
+            ) / s3.STK_USRNUM6,
             2
           ) AS DECIMAL (18, 2)
         )
@@ -113,63 +110,63 @@ FROM
   INNER JOIN STK_STOCK3 S3 ON S3.STKCODE3 = S.STKCODE
   LEFT JOIN (
     SELECT
-      DET_STOCK_CODE,
+      det.DET_STOCK_CODE,
       SUM(
         CASE
           WHEN S.STK_EC_SUP_UNIT = 0
           OR S.STK_EC_SUP_UNIT IS NULL THEN 0
           ELSE (
             CASE
-              WHEN DET_TYPE = 'CRN' THEN DET_QUANTITY * -1
+              WHEN DET_TYPE = 'CRN' THEN det.DET_QUANTITY * -1
               ELSE DET_QUANTITY
             END
           ) / S.STK_EC_SUP_UNIT
         END
       ) / 3 AS [3M_AVG]
     FROM
-      SL_PL_NL_DETAIL
-      INNER JOIN STK_STOCK3 S3 ON S3.STKCODE3 = DET_STOCK_CODE
-      INNER JOIN STK_STOCK S ON DET_STOCK_CODE = S.STKCODE
+      SL_PL_NL_DETAIL det
+      INNER JOIN STK_STOCK3 S3 ON S3.STKCODE3 = det.DET_STOCK_CODE
+      INNER JOIN STK_STOCK S ON det.DET_STOCK_CODE = S.STKCODE
     WHERE
-      DET_DATE BETWEEN CAST(GETDATE() - 91 AS DATE)
+      det.DET_DATE BETWEEN CAST(GETDATE() - 91 AS DATE)
       AND CAST(GETDATE() - 1 AS DATE)
-      AND DET_TYPE IN ('INV', 'CRN')
-      AND DET_LEDGER = 'SL'
-      AND DET_STKSORTKEY3 = @stktype
-      AND STK_USRFLAG3 = 0
-      AND STK_USRFLAG2 = 1
+      AND det.DET_TYPE IN ('INV', 'CRN')
+      AND det.DET_LEDGER = 'SL'
+      AND det.DET_STKSORTKEY3 = @stktype
+      AND s3.STK_USRFLAG3 = 0
+      AND s3.STK_USRFLAG2 = 1
     GROUP BY
-      DET_STOCK_CODE
+      det.DET_STOCK_CODE
   ) Z ON Z.DET_STOCK_CODE = S.STKCODE
   LEFT JOIN (
     SELECT
-      DET_STOCK_CODE,
+      det.DET_STOCK_CODE,
       SUM(
         CASE
           WHEN S.STK_EC_SUP_UNIT = 0
           OR S.STK_EC_SUP_UNIT IS NULL THEN 0
           ELSE (
             CASE
-              WHEN DET_TYPE = 'CRN' THEN DET_QUANTITY * -1
-              ELSE DET_QUANTITY
+              WHEN det.DET_TYPE = 'CRN' THEN det.DET_QUANTITY * -1
+              ELSE det.DET_QUANTITY
             END
           ) / S.STK_EC_SUP_UNIT
         END
       ) / 12 AS [12M_AVG]
     FROM
-      SL_PL_NL_DETAIL
-      INNER JOIN STK_STOCK3 S3 ON S3.STKCODE3 = DET_STOCK_CODE
-      INNER JOIN STK_STOCK S ON DET_STOCK_CODE = S.STKCODE
+      SL_PL_NL_DETAIL det
+      INNER JOIN STK_STOCK3 S3 ON S3.STKCODE3 = det.DET_STOCK_CODE
+      INNER JOIN STK_STOCK S ON det.DET_STOCK_CODE = S.STKCODE
     WHERE
-      DET_DATE BETWEEN CAST(GETDATE() - 366 AS DATE)
+      det.DET_DATE BETWEEN CAST(GETDATE() - 366 AS DATE)
       AND CAST(GETDATE() - 1 AS DATE)
-      AND DET_TYPE IN ('INV', 'CRN')
-      AND DET_LEDGER = 'SL'
-      AND DET_STKSORTKEY3 = @stktype
-      AND STK_USRFLAG3 = 0
-      AND STK_USRFLAG2 = 1
+      AND det.DET_TYPE IN ('INV', 'CRN')
+      AND det.DET_LEDGER = 'SL'
+      AND det.DET_STKSORTKEY3 = @stktype
+      AND s3.STK_USRFLAG3 = 0
+      AND s3.STK_USRFLAG2 = 1
     GROUP BY
-      DET_STOCK_CODE
+      det.DET_STOCK_CODE
   ) Z2 ON Z2.DET_STOCK_CODE = S.STKCODE
   LEFT JOIN (
     SELECT
