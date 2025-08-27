@@ -49,7 +49,7 @@ FROM
         )
     END
 WHERE
-    CustomerCode = '30KRI001' --and Price = 0
+    CustomerCode = '30ACO001' --and Price = 0
     --WHERE OL.StockCode = '30FIO_568549' 
     -- and OH_ORDER_NUMBER  in ( '799187', '771060')
     -- and ol.Orderid = '1286140'

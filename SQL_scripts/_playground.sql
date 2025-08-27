@@ -129,3 +129,16 @@ from svbeauty.dbo.sys_lookup_text
 -- where txt_origin = 'delroute';
 
 
+
+declare @p1 int
+set @p1=27185
+exec sp_prepexec @p1 output,N'@P1 varchar(25),@P2 varchar(25),@P3 varchar(100)',N'select Movement_Primary,Origin,Tran_Date ,Tran_Year ,Period, Year_Label, Year_No ,case Exclude_From_Weighted_Value when 0 then 0 else 1 end,Stock_Code,Reference,Order_Ref,Order_Detail_Link,Serial_Number,Serialised,Cost_Header,Cost_Centre,Detail,Price_Adjustment_Flag,Analysis,Customer_or_Supplier_Code,Tran_Type ,Direction,case Direction when ''I'' then Quantity else Quantity*-1 end  signedQuantity,case Direction when ''I'' then Total_Quantity else Total_Quantity*-1 end signedTotalQuantity,case Quantity when 0 then 0 else Cost_Price end CostPrice,Weighted_Value Weighted_Value,case Direction when ''I'' then Cost_Value else Cost_Value*-1 end CostValue
+from (Select Order_Header_Link,Movement_Primary,Stock_Code,Tran_Date ,Tran_Year,Period,Period_Sort, Year_Label, Year_No, Year_Link, case Exclude_From_Weighted_Value when 0 then 0 else 1 end Exclude_From_Weighted_Value,Reference,Order_Ref,Order_Detail_Link,Origin,Serial_Number,Serialised,Cost_Header,Cost_Centre,Detail,Price_Adjustment_Flag,Sub_Analysis,Analysis,Direction,Quantity,Total_Quantity,Cost_Price,Weighted_Value , Cost_Value, Base2_Cost_Price,Base2_Cost_Value,Order_Account,Delivery_Account,Invoice_Account,Customer_or_Supplier_Code,Tran_Type from VJSCL.dbo.AA_STK_MOVEMENT_VIEW)  as  STK_TRANSACTIONS
+where Stock_Code=@P1 and Sub_Analysis=@P2 and Order_Header_Link=''S762301'' and Sub_Analysis = @P3
+order by Movement_Primary','30SCH_100601IGO','WHK260825B','WHK260825B'
+select @p1
+
+select Movement_Primary,Origin,Tran_Date ,Tran_Year ,Period, Year_Label, Year_No ,case Exclude_From_Weighted_Value when 0 then 0 else 1 end,Stock_Code,Reference,Order_Ref,Order_Detail_Link,Serial_Number,Serialised,Cost_Header,Cost_Centre,Detail,Price_Adjustment_Flag,Analysis,Customer_or_Supplier_Code,Tran_Type ,Direction,case Direction when ''I'' then Quantity else Quantity*-1 end  signedQuantity,case Direction when ''I'' then Total_Quantity else Total_Quantity*-1 end signedTotalQuantity,case Quantity when 0 then 0 else Cost_Price end CostPrice,Weighted_Value Weighted_Value,case Direction when ''I'' then Cost_Value else Cost_Value*-1 end CostValue
+from (Select Order_Header_Link,Movement_Primary,Stock_Code,Tran_Date ,Tran_Year,Period,Period_Sort, Year_Label, Year_No, Year_Link, case Exclude_From_Weighted_Value when 0 then 0 else 1 end Exclude_From_Weighted_Value,Reference,Order_Ref,Order_Detail_Link,Origin,Serial_Number,Serialised,Cost_Header,Cost_Centre,Detail,Price_Adjustment_Flag,Sub_Analysis,Analysis,Direction,Quantity,Total_Quantity,Cost_Price,Weighted_Value , Cost_Value, Base2_Cost_Price,Base2_Cost_Value,Order_Account,Delivery_Account,Invoice_Account,Customer_or_Supplier_Code,Tran_Type from VJSCL.dbo.AA_STK_MOVEMENT_VIEW)  as  STK_TRANSACTIONS
+where Stock_Code=@P1 and Sub_Analysis=@P2 and Order_Header_Link=''S762301'' and Sub_Analysis = @P3
+order by Movement_Primary
