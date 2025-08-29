@@ -142,3 +142,7 @@ select Movement_Primary,Origin,Tran_Date ,Tran_Year ,Period, Year_Label, Year_No
 from (Select Order_Header_Link,Movement_Primary,Stock_Code,Tran_Date ,Tran_Year,Period,Period_Sort, Year_Label, Year_No, Year_Link, case Exclude_From_Weighted_Value when 0 then 0 else 1 end Exclude_From_Weighted_Value,Reference,Order_Ref,Order_Detail_Link,Origin,Serial_Number,Serialised,Cost_Header,Cost_Centre,Detail,Price_Adjustment_Flag,Sub_Analysis,Analysis,Direction,Quantity,Total_Quantity,Cost_Price,Weighted_Value , Cost_Value, Base2_Cost_Price,Base2_Cost_Value,Order_Account,Delivery_Account,Invoice_Account,Customer_or_Supplier_Code,Tran_Type from VJSCL.dbo.AA_STK_MOVEMENT_VIEW)  as  STK_TRANSACTIONS
 where Stock_Code=@P1 and Sub_Analysis=@P2 and Order_Header_Link=''S762301'' and Sub_Analysis = @P3
 order by Movement_Primary
+
+
+select * from vjscl.dbo.STK_STOCK_2
+where stkcode2 like '30app%'
