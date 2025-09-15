@@ -49,11 +49,11 @@ FROM
         )
     END
 WHERE
-    CustomerCode = '30man002' --and Price = 0
+    CustomerCode = '30pen001' --and Price = 0
     and ol.DateCreated >= '2025-01-01'
     --WHERE OL.StockCode = '30FIO_568549' 
     -- and OH_ORDER_NUMBER  in ( '799187', '771060')
     -- and ol.Orderid = '1286140'
-    --and DefaultRep = '30 JOANNE SCHEMBRI'
+    and DefaultRep = '30 NYDIANNE FARRUGIA'
 ORDER BY
     DATECREATED DESC

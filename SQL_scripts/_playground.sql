@@ -29,3 +29,31 @@ AND CONCAT(year(@DateTo),'-',month(@DateTo),'-',day(@DateTo))
 	AND DET_ACCOUNT = '30VCS001'
 
 select top 1 CONCAT(year(@DateFrom),'-',month(@DateFrom),'-',day(@DateFrom),'and',year(@DateTo),'-',month(@DateTo),'-',day(@DateTo)) as 'Date Range';    
+
+select STKCODE as 'Stock Code',
+stkname as 'Stock Name',
+stk_p_weight as 'Duty' 
+from stk_stock 
+where stk_p_weight != 0 and STKCODE like '30euk_%' order by stkcode;
+
+
+select top 100 cu_usrflag3,* from sl_accounts2 where cu_usrflag3 = 0;
+
+
+select distinct cuuser1 from sl_accounts order by cuuser1;
+
+
+select top 100 
+DOH_VAT_CODE1,doh_vat_net1,doh_vat_value1,
+DOH_VAT_CODE2,doh_vat_net2,doh_vat_value2,
+DOH_VAT_CODE3,doh_vat_net3,doh_vat_value3,
+DOH_VAT_CODE4,doh_vat_net4,doh_vat_value4,
+DOH_VAT_CODE5,doh_vat_net5,doh_vat_value5,
+* from doc_order_header 
+where 
+DOH_DOC_NUMBER = '392962'
+--DOH_VAT_CODE3 != '';
+
+
+select * from SYS_VATCONTROL
+
