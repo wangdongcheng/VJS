@@ -1,0 +1,85 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.001.09">
+    <CstmrCdtTrfInitn>
+        <GrpHdr>
+            <MsgId>CM220925A</MsgId>
+            <CreDtTm>2025-09-22T10:29:59</CreDtTm>
+            <NbOfTxs>1</NbOfTxs>
+            <CtrlSum>511.75</CtrlSum>
+            <InitgPty>
+                <Nm> ***VJSCL CasesUnits*** </Nm>
+                <Id>
+                    <Othr>
+                        <Id>123</Id>
+                    </Othr>
+                </Id>
+            </InitgPty>
+        </GrpHdr>
+        <PmtInf>
+            <PmtInfId>Supplier Payments</PmtInfId>
+            <PmtMtd>TRF</PmtMtd>
+            <BtchBookg>true</BtchBookg>
+            <NbOfTxs>1</NbOfTxs>
+            <CtrlSum>511.75</CtrlSum>
+            <PmtTpInf>
+                <SvcLvl>
+                    <Cd>SEPA</Cd>
+                </SvcLvl>
+            </PmtTpInf>
+            <ReqdExctnDt>
+                <dt>2025-09-22</dt>
+            </ReqdExctnDt>
+            <Dbtr>
+                <Nm>VJ Salomone Consumer Line</Nm>
+            </Dbtr>
+            <DbtrAcct>
+                <Id>
+                    <IBAN>MT05VALL22013000000040014777774</IBAN>
+                </Id>
+            </DbtrAcct>
+            <DbtrAgt>
+                <FinInstnId>
+                    <BICFI>VALLMTMT</BICFI>
+                </FinInstnId>
+            </DbtrAgt>
+            <CdtTrfTxInf>
+                <PmtId>
+                    <InstrId>123</InstrId>
+                    <EndToEndId>000008699920250922</EndToEndId>
+                </PmtId>
+                <Amt>
+                    <InstdAmt Ccy="EUR">511.75</InstdAmt>
+                </Amt>
+                <CdtrAgt>
+                    <FinInstnId>
+                        <BICFI>VALLMTMT</BICFI>
+                    </FinInstnId>
+                </CdtrAgt>
+                <Cdtr>
+                    <Nm>BURMARRAD COMMERCIALS LTD</Nm>
+                    <PstlAdr>
+                        <StrtNM>
+                        </StrtNm>
+                        <BldgNb> </BldgNb>
+                        <BldgNm> </BldgNm>
+                        <PstCd> MRA041 </PstCd>
+                        <TwnNm> MARSA </TwnNm>
+                        <Ctry> MLT </Ctry>
+                    </PstlAdr>
+                </Cdtr>
+                <CdtrAcct>
+                    <Id>
+                        <IBAN>MT64VALL22013000000040024644910</IBAN>
+                    </Id>
+                </CdtrAcct>
+                <Purp>
+                    <Cd> SEPA </Cd>
+                </Purp>
+                <RmtInf>
+                    <Ustrd>CM220925A</Ustrd>
+                </RmtInf>
+            </CdtTrfTxInf>
+        </PmtInf>
+    </CstmrCdtTrfInitn>
+</Document>
