@@ -1,8 +1,11 @@
-select top 100 STK_SELL_NAME1,* from STK_STOCK_2
-where STK_SELL_NAME1 = 'm-pack';
+select su_usrchar1,su_usrchar2,su_usrchar3,su_usrchar4,su_usrchar5,su_usrchar6,
+su_usrchar7,su_usrchar8,* from VJSCLCasesUnits.dbo.PL_ACCOUNTS2
+where 
+-- SU_COUNTRY_CODE = 'MLT'
+SUCODE2='30bar001';
 
 
-SELECT CUCODE, CUNAME, CU_INV_LAYOUT_LINK, D.SDL_DOC_NAME
-FROM SL_ACCOUNTS A
-INNER JOIN [SYS_DOCUMENT_LAYOUTS] D ON A.CU_INV_LAYOUT_LINK=D.SDL_PRIMARY
-WHERE CU_DO_NOT_USE = 0 AND CU_INV_LAYOUT_LINK IS NOT NULL AND CU_INV_LAYOUT_LINK != 0 AND CU_INV_LAYOUT_LINK != 1
+select su_country_code,su_country,* from pl_accounts 
+where 
+su_country_code != 'MLT'
+;

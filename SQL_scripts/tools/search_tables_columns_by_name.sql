@@ -31,8 +31,8 @@ SELECT
     character_maximum_length
 FROM
     INFORMATION_SCHEMA.COLUMNS
-    -- where
+    where
     -- table_name like @searchtab ESCAPE '\'  -- list all order related tables from DB
-    --  COLUMN_NAME like 'LOC_PHYSICAL' ESCAPE '\'
+     COLUMN_NAME like '%Organisation' ESCAPE '\'
     -- order by table_name, ordinal_position
 ;
