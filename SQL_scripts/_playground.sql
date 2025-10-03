@@ -12,3 +12,7 @@ order by 1 desc;
 select * from stk_stock
 where stk_date_putin > '2025-08-15 00:00:00.000'
 or stk_date_edited > '2025-08-15 00:00:00.000';
+
+select *
+from sl_addresses addr
+where addr.AD_ACC_CODE = '30CRI003';
