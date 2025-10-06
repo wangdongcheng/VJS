@@ -14,11 +14,11 @@ WITH
 SELECT
     ac.cucode AS 'Customer Code',
     ac.cuname AS 'Customer Name',
-    ac.CUADDRESS + ', ' + ac.CU_ADDRESS_USER1 + ', ' + cp.Country + ', ' + ac.CUPHONE + ', ' + ac.cufax AS 'Company Address + Town + Country + Phone + Fax',
-    ad_del.ad_address + ', ' + ad_del.AD_ADDRESS_USER1 AS 'Delivery Address + Town',
+    ac.CUADDRESS + ' / ' + ac.CU_ADDRESS_USER1 + ' / ' + cp.Country + ' / ' + ac.CUPHONE + ' / ' + ac.cufax AS 'Company Address / Town / Country / Phone / Fax',
+    ad_del.ad_address + ' / ' + ad_del.AD_ADDRESS_USER1 AS 'Delivery Address / Town',
     AC.CU_EMAIL AS 'Email Address',
     'MT' + ac.CU_VAT_REG_NO AS 'VAT No.',
-    AC.CUCONTACT + ', ' + AC2.CU_CONTACT_TITLE + ', ' + AC2.CU_CONTACT_FIRSTNAME + AC2.CU_CONTACT_SURNAME + ', ' + AC2.CU_MOBILE_NUMBER + ', ' + ', ' + AC2.CU_CONTACT_JOB + ', ' + AC2.CU_CONTACT_INITIALS AS 'Contact Details',
+    AC.CUCONTACT + ' / ' + AC2.CU_CONTACT_TITLE + ' / ' + AC2.CU_CONTACT_FIRSTNAME + AC2.CU_CONTACT_SURNAME + ' / ' + AC2.CU_MOBILE_NUMBER + ' / ' + AC2.CU_CONTACT_JOB + ' / ' + AC2.CU_CONTACT_INITIALS AS 'Contact / Title / First name / Surname / Mobile Phone / Job Title / Initials',
     AC2.CU_USRCHAR1 AS 'ID Card No.',
     AC2.CU_USRCHAR2 AS 'Company Reg. No.'
 FROM
