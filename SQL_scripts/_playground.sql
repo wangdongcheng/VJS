@@ -1,18 +1,17 @@
-select SU_COUNTRY_CODE,* from vjscl.dbo.pl_accounts
-where SU_COUNTRY_CODE != 'MLT';
+use SVBeauty;
+select count(cuuser1) as cnt,
+ cuuser1
+ from sl_accounts
+ GROUP BY cuuser1;
 
-select pop.POH_INV_DATE,pop.POH_ACCOUNT,pla.SU_COUNTRY_CODE,* 
-from pop_header pop
-inner join pl_accounts pla on pop.poh_account = pla.sucode
-where pla.su_country_code != 'MLT'
-order by 1 desc;
+ select * from SL_ACCOUNTS
+ where cuname like '%falco%';
 
+ select st_user1,* from vjsp.dbo.SL_TRANSACTIONS
+ where ST_HEADER_REF = '749496';
 
+select top 100 * from SL_PL_NL_DETAIL
+-- where DET_HEADER_REF = '749496';
 
-select * from stk_stock
-where stk_date_putin > '2025-08-15 00:00:00.000'
-or stk_date_edited > '2025-08-15 00:00:00.000';
-
-select *
-from sl_addresses addr
-where addr.AD_ACC_CODE = '30CRI003';
+select Oh_ORDER_NUMBER,OH_USER_PUTIN , OH_DATE_PUTIN  ,* from vjsp.dbo.ORD_HEADER
+where Oh_ORDER_NUMBER = '788771';

@@ -1,4 +1,4 @@
-USE Salestime_scl
+USE Salestime;
 SELECT
     OL.Orderid AS 'ST_OrdNo',
     OH_ORDER_NUMBER AS 'AccOrdNo.',
@@ -32,14 +32,14 @@ FROM
     Orders O
     INNER JOIN OrderLines OL ON OL.Orderid = O.Id
     -- The LEFT JOIN keyword returns all records from the left table (Orders), and the matched records from the right table (OrderLines).
-    LEFT JOIN VJSCL.dbo.ORD_HEADER2 oh2 ON oh2.OH_USRCHAR1 = o.Id
-    LEFT JOIN VJSCL.dbo.ORD_HEADER OH ON OH.OH_PRIMARY = OH2.OH_PRIMARY_2
-    LEFT JOIN VJSCL.dbo.ORD_DETAIL OD ON OD.OD_ORDER_NUMBER = OH.OH_ORDER_NUMBER AND
+    LEFT JOIN VJSp.dbo.ORD_HEADER2 oh2 ON oh2.OH_USRCHAR1 = o.Id
+    LEFT JOIN VJSp.dbo.ORD_HEADER OH ON OH.OH_PRIMARY = OH2.OH_PRIMARY_2
+    LEFT JOIN VJSp.dbo.ORD_DETAIL OD ON OD.OD_ORDER_NUMBER = OH.OH_ORDER_NUMBER AND
     OD.OD_TYPE = OH.OH_TYPE AND
     OD.OD_STOCK_CODE = OL.StockCode AND
     LEFT(od.OD_LOCATN, 3) = ol.LocationCode AND
     OD_DIMENSION3 = ol.Id
-    LEFT JOIN VJSCL.dbo.STK_STOCK S ON S.STKCODE = OD.OD_STOCK_CODE
+    LEFT JOIN VJSP.dbo.STK_STOCK S ON S.STKCODE = OD.OD_STOCK_CODE
     LEFT JOIN DiscountLines dl ON dl.id = CASE
         WHEN CHARINDEX(',', ol.discountlineids) = 0 THEN ol.discountlineids
         ELSE SUBSTRING(
@@ -49,11 +49,6 @@ FROM
         )
     END
 WHERE
-    CustomerCode = '30pen001' --and Price = 0
-    and ol.DateCreated >= '2025-01-01'
-    --WHERE OL.StockCode = '30FIO_568549' 
-    -- and OH_ORDER_NUMBER  in ( '799187', '771060')
-    -- and ol.Orderid = '1286140'
-    and DefaultRep = '30 NYDIANNE FARRUGIA'
+    oh.OH_ORDER_NUMBER = '788771'
 ORDER BY
     DATECREATED DESC
