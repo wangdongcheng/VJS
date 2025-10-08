@@ -13,5 +13,9 @@ select count(cuuser1) as cnt,
 select top 100 * from SL_PL_NL_DETAIL
 -- where DET_HEADER_REF = '749496';
 
-select Oh_ORDER_NUMBER,OH_USER_PUTIN , OH_DATE_PUTIN  ,* from vjsp.dbo.ORD_HEADER
-where Oh_ORDER_NUMBER = '788771';
+select top 100 OD_STOCK_CODE, * from vjscl.dbo.ORD_DETAIL
+where OD_ORDER_NUMBER = '739015';
+
+select top 100 stk_sort_key, * from vjscl.dbo.STK_STOCK
+where stk_sort_key like '%actiph%';
+where STKCODE = '30JEY_2006512UX';
