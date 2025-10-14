@@ -19,3 +19,16 @@ where OD_ORDER_NUMBER = '739015';
 select top 100 stk_sort_key, * from vjscl.dbo.STK_STOCK
 where stk_sort_key like '%actiph%';
 where STKCODE = '30JEY_2006512UX';
+
+select pl2.sucode2,pl.suname, pl2.su_usrchar1, pl2.su_usrchar2, pl2.su_usrchar5,* 
+from vjsp.dbo.pl_accounts2 pl2 INNER join vjsp.dbo.pl_accounts pl on pl2.sucode2 = pl.SUCODE
+where
+pl.suname in (
+    'AIRSWIFT COURIERS LTD');
+
+
+
+
+-- su_usrchar1 != '' OR
+-- SU_USRCHAR2 != '' OR
+-- SU_USRCHAR5 != '';
