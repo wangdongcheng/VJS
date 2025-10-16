@@ -36,3 +36,5 @@ stk.stkcode IN (
 -- stk.STK_WO_UNALLOC_QUANTITY > 0
 ;
 
+
+
