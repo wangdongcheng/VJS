@@ -36,5 +36,25 @@ stk.stkcode IN (
 -- stk.STK_WO_UNALLOC_QUANTITY > 0
 ;
 
+select top 100 cu_terms, *
+from sl_accounts;
+
+select oh.OH_ORDER_NUMBER, sl.cu_terms, oh.oh_user3
+from ORD_HEADER oh
+INNER JOIN SL_ACCOUNTS sl ON oh.OH_ACCOUNT = sl.CUCODE
+where 
+lower(rtrim(ltrim(oh.oh_user3))) not in ('invoice', 'credit note', 'cash sale', 'cash');
 
 
+SELECT DISTINCT LOWER(LTRIM(RTRIM(oh.oh_user3))) AS cleaned_value
+FROM ORD_HEADER oh;
+
+-- 'cash', 'cash sale',' invoice', 'credit note'
+
+
+select distinct sd.DET_HEADER_REF
+from SL_PL_NL_DETAIL sd
+INNER JOIN 
+stk_stock3 stk3
+on sd.DET_STOCK_CODE = stk3.stkcode3
+where stk3.STK_USRFLAG8 = 1;
