@@ -58,3 +58,11 @@ INNER JOIN
 stk_stock3 stk3
 on sd.DET_STOCK_CODE = stk3.stkcode3
 where stk3.STK_USRFLAG8 = 1;
+
+select top 100 cucode2, *
+from vjscl.dbo.sl_accounts2
+where CU_USRFLAG4 = 1;
+
+select top 100 *
+from vjscl.dbo.ORD_DETAIL
+where OD_PRIMARY = '808819';

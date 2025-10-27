@@ -172,7 +172,10 @@ FROM
         LEFT OUTER JOIN "VJSCL"."dbo"."STK_STOCK_2" "STK_STOCK_2" ON "STK_STOCK"."STKCODE" = "STK_STOCK_2"."STKCODE2"
     )
     LEFT OUTER JOIN "VJSCL"."dbo"."STK_STOCK3" "STK_STOCK3" ON "STK_STOCK"."STKCODE" = "STK_STOCK3"."STKCODE3"
-    where STK_STOCK.STK_SORT_KEY like '%actiph%'
+--- begin add my conditions    
+    where DOC_ORDER_HEADER.DOH_DOC_NUMBER='127580'
+    and ord_header.oh_order_number = '808819'
+--- end
 ORDER BY
     "PTL_COPIES"."CC_COPIES",
     "DOC_ORDER_HEADER"."DOH_ORDER_LINK",
