@@ -1,24 +1,29 @@
 USE vjscl;
 
 select
-pl.sucode,
-pl.SU_ADDRESS_USER1 'town_old',
-ti.town 'town_new'
-from PL_ACCOUNTS pl 
-inner join tmp_import ti on pl.sucode = ti.supcode
-where pl.SU_ADDRESS_USER1 = ti.town;
+stkcode,
+stkname
+FROM
+stk_stock stk
+inner join 
+tmp_import ti on stk.stkcode = ti.[stock code]
+-- where 
+-- stk.stkname <> ti.[description]
+;
 
-return;
+-- return;
 
 BEGIN try BEGIN TRAN
-UPDATE pl
+UPDATE stk
 SET
-    pl.supostcode = ti.postcode
+    stk.STKNAME = ti.[description]
 FROM
-    PL_ACCOUNTS pl
-    INNER JOIN tmp_import ti ON pl.sucode = ti.supcode
-WHERE
-    pl.supostcode <> ti.postcode;
+stk_stock stk
+inner join 
+tmp_import ti on stk.stkcode = ti.[stock code]
+where 
+stk.stkname <> ti.[description]
+;
 
 COMMIT;
 

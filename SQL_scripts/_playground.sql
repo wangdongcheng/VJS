@@ -66,3 +66,47 @@ where CU_USRFLAG4 = 1;
 select top 100 *
 from vjscl.dbo.ORD_DETAIL
 where OD_PRIMARY = '808819';
+
+select 
+s.stk_sort_key as 'Brand',
+s.stk_sort_key1 as 'Sub Category',
+s.stk_sort_key2 as 'Type',
+s.stk_sort_key3 as 'Supplier'
+from vjscl.dbo.stk_stock s
+where stkcode = '308in1_01505';
+
+select * from SYS_DATAINFO;
+
+SELECT STK_STOCK3.STK_USRCHAR5 from stk_stock3
+where stkcode3 = '30nuv_30689'
+
+
+
+If {ORD_DETAIL.OD_ENTRY_TYPE}='S' and {SYS_DATAINFO.COMP_VATNUMBER} = "15923434" 
+then {ORD_DETAIL.OD_STOCK_CODE} else
+//If  then
+ //{ORD_DETAIL.OD_STOCK_CODE} else
+//If {ORD_DETAIL.OD_ENTRY_TYPE}='P' then
+// {ORD_DETAIL.OD_PRICE_CODE} else
+If {ORD_DETAIL.OD_ENTRY_TYPE}='T' then
+{ORD_DETAIL.OD_DETAIL}
+else {ORD_DETAIL.OD_STOCK_CODE}
+
+// The above formula is used to decide what should appear in the Detail A section of the template.
+// e.g If the detail line is for a Stock item you would probably want the stock code to appear on the first line
+// whereas if it is a text line item you would want the detail to appear on the first line.
+
+
+If {ORD_DETAIL.OD_ENTRY_TYPE}='S' and {SYS_DATAINFO.COMP_VATNUMBER} = "15923434" 
+then {STK_STOCK3.STK_USRCHAR5} else
+//If  then
+ //{ORD_DETAIL.OD_STOCK_CODE} else
+//If {ORD_DETAIL.OD_ENTRY_TYPE}='P' then
+// {ORD_DETAIL.OD_PRICE_CODE} else
+If {ORD_DETAIL.OD_ENTRY_TYPE}='T' then
+{ORD_DETAIL.OD_DETAIL}
+else {ORD_DETAIL.OD_STOCK_CODE};
+
+// The above formula is used to decide what should appear in the Detail A section of the template.
+// e.g If the detail line is for a Stock item you would probably want the stock code to appear on the first line
+// whereas if it is a text line item you would want the detail to appear on the first line.
