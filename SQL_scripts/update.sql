@@ -1,28 +1,39 @@
 USE vjscl;
 
-select
-stkcode,
-stkname
-FROM
-stk_stock stk
-inner join 
-tmp_import ti on stk.stkcode = ti.[stock code]
--- where 
--- stk.stkname <> ti.[description]
+select 
+stkcode2,
+STK_SELL_NAME1,
+STK_SELL_NAME2,
+STK_SELL_NAME3,
+STK_SELL_NAME4,
+STK_SELL_NAME5,
+STK_SELL_NAME6,
+STK_SELL_NAME7,
+STK_SELL_NAME8,
+STK_SELL_NAME9,
+STK_SELL_NAME10
+from STK_STOCK_2
+inner join tmp_import ti on STK_STOCK_2.stkcode2 = ti.[stk code]
 ;
 
--- return;
+return;
 
 BEGIN try BEGIN TRAN
-UPDATE stk
+UPDATE stk_stock_2
 SET
-    stk.STKNAME = ti.[description]
+    stk_sell_name1 = [sell price line 1],
+    stk_sell_name2 = [sell price line 2],
+    stk_sell_name3 = [sell price line 3],
+    stk_sell_name4 = [sell price line 4],
+    stk_sell_name5 = [sell price line 5],
+    stk_sell_name6 = [sell price line 6],
+    stk_sell_name7 = [sell price line 7],
+    stk_sell_name8 = [sell price line 8],
+    stk_sell_name9 = [sell price line 9],
+    stk_sell_name10 = [sell price line 10]
 FROM
-stk_stock stk
-inner join 
-tmp_import ti on stk.stkcode = ti.[stock code]
-where 
-stk.stkname <> ti.[description]
+STK_STOCK_2 stk2
+inner join tmp_import ti on stk2.stkcode2 = ti.[stk code]
 ;
 
 COMMIT;

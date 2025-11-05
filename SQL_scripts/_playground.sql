@@ -1,4 +1,38 @@
-use SVBeauty;
+use vjscl;
+
+
+
+
+
+select 
+stkcode2,
+STK_SELL_NAME1,
+STK_SELL_NAME2,
+STK_SELL_NAME3,
+STK_SELL_NAME4,
+STK_SELL_NAME5,
+STK_SELL_NAME6,
+STK_SELL_NAME7,
+STK_SELL_NAME8,
+STK_SELL_NAME9,
+STK_SELL_NAME10
+from STK_STOCK_2
+where 
+(upper(STK_SELL_NAME1) = 'EACH' or
+upper(STK_SELL_NAME2) = 'EACH' or
+upper(STK_SELL_NAME3) = 'EACH' or
+upper(STK_SELL_NAME4) = 'EACH' or
+upper(STK_SELL_NAME5) = 'EACH' or
+upper(STK_SELL_NAME6) = 'EACH' or
+upper(STK_SELL_NAME7) = 'EACH' or
+upper(STK_SELL_NAME8) = 'EACH' or
+upper(STK_SELL_NAME9) = 'EACH' or
+upper(STK_SELL_NAME10) = 'EACH' ) and
+stkcode2 = '30ENS_4637';
+
+
+
+
 select count(cuuser1) as cnt,
  cuuser1
  from sl_accounts

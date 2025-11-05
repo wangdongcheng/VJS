@@ -173,8 +173,8 @@ FROM
     )
     LEFT OUTER JOIN "VJSCL"."dbo"."STK_STOCK3" "STK_STOCK3" ON "STK_STOCK"."STKCODE" = "STK_STOCK3"."STKCODE3"
 --- begin add my conditions    
-    where DOC_ORDER_HEADER.DOH_DOC_NUMBER='127580'
-    and ord_header.oh_order_number = '808819'
+    where DOC_ORDER_HEADER.DOH_DOC_NUMBER='680084'
+    -- and ord_header.oh_order_number = '808819'
 --- end
 ORDER BY
     "PTL_COPIES"."CC_COPIES",

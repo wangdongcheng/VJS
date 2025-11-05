@@ -17,7 +17,7 @@ SELECT
     CAST(TargetQtyFrom AS DECIMAL) AS TargetQtyFrom,
     CAST(TargetQtyTo AS DECIMAL) AS TargetQtyTo,
     dl.DiscountType,
-    CAST(VALUE AS DECIMAL) AS 'Percentage',
+    CAST(dl.Value AS DECIMAL) AS 'Percentage',
     CAST(ol.TotalUnitQuantity AS DECIMAL) AS 'ST_Qty',
     od.OD_QTYPRINTED AS 'Acc_Qty_P',
     od.OD_QTYINVD AS 'Acc_Qty',
@@ -49,6 +49,7 @@ FROM
         )
     END
 WHERE
-    oh.OH_ORDER_NUMBER = '788771'
+    oh.OH_ORDER_NUMBER = '790087'
+    -- and ol.stockcode = '50MYLELIDCRM1X30'
 ORDER BY
     DATECREATED DESC
