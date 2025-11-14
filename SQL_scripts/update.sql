@@ -1,21 +1,22 @@
-USE vjscl;
+USE vjsclcasesunits;
 
-select distinct
-AD_ACC_CODE,
-AD_CODE,
-ad_address_user1,
-ad_inv_address,
-ad_del_address,
-AD_DEL_ADDRESS_2,
-ad_stat_address,
-SL_AD_PRIMARY
-from SL_ADDRESSES sad
-inner join tmp_import ti on sad.AD_ACC_CODE = ti.[Customer Code]
+select *
+-- AD_ACC_CODE,
+-- AD_CODE,
+-- ad_address_user1,
+-- ad_inv_address,
+-- ad_del_address,
+-- AD_DEL_ADDRESS_2,
+-- ad_stat_address,
+-- SL_AD_PRIMARY
+from sl_accounts
+-- inner join tmp_import ti on sad.AD_ACC_CODE = ti.[Customer Code]
 where 
-( sad.ad_del_address = 1 or sad.AD_DEL_ADDRESS_2 = 1 )
+-- sad.ad_del_address = 0 and
+-- sad.AD_DEL_ADDRESS_2 = 1
 -- and 
--- sad.AD_ACC_CODE = '30WOL002'
-order by 1,2;
+cucode = '30ABP001'
+
 
 
 
