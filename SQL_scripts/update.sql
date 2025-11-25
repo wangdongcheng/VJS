@@ -1,14 +1,26 @@
 USE vjscl;
 
+-- SELECT
+-- sa.cucode,
+-- sa.cu_address_user1
+-- from
+-- sl_accounts sa
+-- inner join tmp_import ti on sa.cucode = ti.[Customer Code]
+-- ;
+
+-- return;
+
 BEGIN try BEGIN TRAN
-update sl_accounts
-SET
-cu_notes = replace(ti.notes,CHAR(10), CHAR(13) + CHAR(10))
-FROM
-sl_accounts sl
-INNER JOIN
-tmp_import ti on sl.cucode = ti.[Customer Code]
--- where sl.cucode = '30ADS002'
+
+
+update
+sl_accounts
+set
+cu_address_user1 = ti.[NEW Town/City in Customer]
+from
+sl_accounts sa
+inner join tmp_import ti on sa.cucode = ti.[Customer Code]
+
 
 
 -- return;
