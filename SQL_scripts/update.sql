@@ -12,14 +12,42 @@ USE vjscl;
 
 BEGIN try BEGIN TRAN
 
-
-update
-sl_accounts
-set
-cu_address_user1 = ti.[NEW Town/City in Customer]
-from
-sl_accounts sa
-inner join tmp_import ti on sa.cucode = ti.[Customer Code]
+SELECT
+cucode,
+cu_address_user1
+from 
+SL_ACCOUNTS
+-- update sl_accounts
+-- SET
+-- cu_address_user1 = replace(cu_address_user1, ' - GOZO', '')
+where cucode IN
+(
+'30AMP002',
+'30AZZ004',
+'30BAL003',
+'30BAT003',
+'30BER002',
+'30BOD003',
+'30CAS004',
+'30CMZ001',
+'30CST001',
+'30CTO001',
+'30FNE001',
+'30FON002',
+'30GGH001',
+'30GHP001',
+'30GOZ010',
+'30GSU001',
+'30GWS001',
+'30IMS001',
+'30IVY002',
+'30JDS002',
+'30JJS002',
+'30JMM001',
+'30JOY001',
+'30LAU001',
+'30LIG002'
+)
 
 
 
