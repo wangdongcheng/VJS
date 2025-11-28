@@ -86,3 +86,8 @@ ORDER BY
 -- where sa.cu_address_user2 <> sad.ad_address_user2 and
 --     sa.cu_do_not_use = 0 AND
 --     sad.AD_DO_NOT_USE = 0;
+
+
+select *
+from sl_addresses
+where AD_ACC_CODE = '30ahb001'
