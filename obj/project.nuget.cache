@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "/j5LdeEn2BQ=",
+  "success": true,
+  "projectFilePath": "C:\\Github\\VJS\\VJS.sqlproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\paulw\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.3\\microsoft.netframework.referenceassemblies.1.0.3.nupkg.sha512",
+    "C:\\Users\\paulw\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net20\\1.0.3\\microsoft.netframework.referenceassemblies.net20.1.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
