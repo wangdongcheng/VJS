@@ -1,5 +1,7 @@
 use vjscl;
 DECLARE @SalesRep NVARCHAR(100) = 'All';
+
+-- replace getdate() with variable @Now to turn date back to 2025.
 DECLARE @Now DATETIME = '2025-12-31';
 
 IF OBJECT_ID('tempdb..#slplnldetail_thisyear') IS NOT NULL DROP TABLE #slplnldetail_thisyear;
