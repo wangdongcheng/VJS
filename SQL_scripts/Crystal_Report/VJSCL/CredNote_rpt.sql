@@ -159,9 +159,6 @@ FROM
         LEFT OUTER JOIN "VJSCL"."dbo"."STK_STOCK_2" "STK_STOCK_2" ON "STK_STOCK"."STKCODE" = "STK_STOCK_2"."STKCODE2"
     )
     LEFT OUTER JOIN "VJSCL"."dbo"."STK_LOCATION2" "STK_LOCATION2" ON "STK_LOCATION"."LOC_PRIMARY" = "STK_LOCATION2"."LOC_PRIMARY2"
---- begin add my conditions    
-    where DOC_ORDER_HEADER.DOH_DOC_NUMBER='127664'
-    and ord_header.oh_order_number = '809450'
---- end    
+WHERE doh_doc_number = '129917'
 ORDER BY
     "DOC_ORDER_HEADER"."DOH_ORDER_LINK"

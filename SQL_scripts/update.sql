@@ -1,68 +1,37 @@
-USE vjscl;
+USE VJSCL;
 
--- SELECT
--- sa.cucode,
--- sa.cu_address_user1
--- from
--- sl_accounts sa
--- inner join tmp_import ti on sa.cucode = ti.[Customer Code]
--- ;
+select 
+sa.cucode,
+sa.cuuser3,
+ti.[New Sort Key - Document],
+sa.cu_terms,
+ti.[New Payment Terms],
+sa.CU_DUE_DAYS,
+ti.[New Due Days],
+sa.CU_A_P_DAYS,
+ti.[New Ant# Days]
+from sl_accounts sa
+inner join vjscl.dbo.tmp_import ti on sa.cucode = ti.[Customer Code]
+-- where sa.cuuser3 != ti.[New Sort Key - Document] OR
+--       sa.cu_terms != ti.[New Payment Terms] OR
+--       sa.cu_due_days != ti.[New Due Days] OR
+--       sa.cu_a_p_days != ti.[New Ant# Days]
+;
 
--- return;
+
+return;
 
 BEGIN try BEGIN TRAN
 
-SELECT
-cucode,
-cu_address_user1
-from 
-SL_ACCOUNTS
--- update sl_accounts
--- SET
--- cu_address_user1 = replace(cu_address_user1, ' - GOZO', '')
-where cucode IN
-(
-'30AMP002',
-'30AZZ004',
-'30BAL003',
-'30BAT003',
-'30BER002',
-'30BOD003',
-'30CAS004',
-'30CMZ001',
-'30CST001',
-'30CTO001',
-'30FNE001',
-'30FON002',
-'30GGH001',
-'30GHP001',
-'30GOZ010',
-'30GSU001',
-'30GWS001',
-'30IMS001',
-'30IVY002',
-'30JDS002',
-'30JJS002',
-'30JMM001',
-'30JOY001',
-'30LAU001',
-'30LIG002'
-)
+update SL_ACCOUNTS
+set cuuser3 = [New Sort Key - Document],
+    cu_terms = [New Payment Terms],
+    CU_DUE_DAYS = [New Due Days],
+    CU_A_P_DAYS = [New Ant# Days]
+from sl_accounts sa
+inner join vjscl.dbo.tmp_import ti on sa.cucode = ti.[Customer Code]
+;
 
-
-
--- return;
-
--- BEGIN try BEGIN TRAN
--- UPDATE sl_accounts
--- SET
--- cu_address_user2 = ti.[County],
--- CU_COUNTRY = ti.[Country Code]
--- from 
--- sl_accounts sa
--- INNER JOIN 
--- tmp_import ti on sa.cucode = ti.[Customer Code]
--- ;
 
 COMMIT;
 
@@ -88,3 +57,4 @@ PRINT 'Error Message: ' + ERROR_MESSAGE();
 -- Re-throw error (optional)
 -- THROW;
 END CATCH;
+
