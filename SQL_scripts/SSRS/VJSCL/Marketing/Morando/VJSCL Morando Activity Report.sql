@@ -1,9 +1,8 @@
 use vjscl;
-DECLARE @DateFrom DATETIME = '2025-10-01',
- @DateTo DATETIME = '2026-01-31';
+DECLARE @DateFrom DATETIME2(7) = '2025-01-01',
+        @DateTo   DATETIME2(7) = '2025-12-31';
 
-select top 100percent
-		case when [DiscountName] is null then 'No Discount in ST' else DiscountName end as 'DiscountName'
+select case when [DiscountName] is null then 'No Discount in ST' else DiscountName end as 'DiscountName'
 	  ,[Month]
       ,[InvoiceNumber]
       ,[TranDate]
@@ -34,8 +33,7 @@ inner join ORD_DETAIL on DET_ORDER_LINK=OD_PRIMARY and DET_STOCK_CODE=OD_STOCK_C
 inner join ORD_HEADER on OD_ORDER_NUMBER=OH_ORDER_NUMBER
 INNER JOIN SL_ADDRESSES A ON oh_del_add=A.AD_CODE and det_account=a.ad_acc_code
 where stk_sort_key3 = '30 MORANDO SPA' and DET_ORIGIN = 'SO' 
-and det_type = 'INV' 
-and det_date between @DateFrom and @DateTo
+and det_type = 'INV' and det_date between @DateFrom and @DateTo
 )hills
 
 left outer join
@@ -62,4 +60,3 @@ left outer join
 	)salestime on hills.det_dimension3 = orderlineid
 
 where TranDate between @DateFrom and @DateTo
-order by 2,3,7
