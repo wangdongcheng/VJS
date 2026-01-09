@@ -22,3 +22,21 @@ FROM PL_TRANSACTIONS PL
 INNER JOIN PL_ACCOUNTS PA ON PL.PT_COPYSUPP=PA.SUCODE
 WHERE YEAR(PT_DATE) > '2020' AND PL.PT_TRANTYPE IN ('PAY', 'INV')) SUP ON PL.SUCODE=SUP.PT_COPYSUPP
 WHERE SU_DO_NOT_USE = 0
+
+
+
+
+SELECT
+sucode as [Supplier Code],
+SUNAME as [Supplier Name],
+supostcode as [Postcode],
+SU_ADDRESS_USER1 as [Town],
+su_usrchar1 as [Street Name],
+su_usrchar2 as [Building No.],
+su_usrchar5 as [Building Name],
+su_iban_no as [IBAN Number]
+from PL_ACCOUNTS pa inner join
+pl_accounts2 pa2 on pa.sucode=pa2.sucode2
+where SU_DO_NOT_USE = 0
+order by 1
+;
