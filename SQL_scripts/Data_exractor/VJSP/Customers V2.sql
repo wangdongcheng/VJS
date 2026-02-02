@@ -26,16 +26,17 @@ AC.CUCURRENCYCODE AS 'Currency',
 'MT'+CU_VAT_REG_NO AS 'Tax Registration ID',
 AC.CU_COMPANY_REG_NUMBER AS 'Company Reg. ID',
 CASE WHEN AC.CU_COUNTRY_CODE = 'MT' THEN 'LOCVAT' ELSE 'EUVAT' END AS 'Tax Zone',
+AD.AD_CODE AS 'Address Code',
 AD.AD_ADDRESS AS 'Shipping Address L1', 
 AD.AD_ADDRESS_USER1 AS 'Shipping City', 
-AD.AD_E_MAIL 'Ship Email',
+AD.AD_E_MAIL AS 'Ship Email',
 AD.AD_POSTCODE AS 'Shipping Postal Code',
 AD.AD_PHONE AS 'Ship Phone',
 AD.AD_COUNTRY AS 'Ship Country',
 'P092000' AS 'AR Account'
 FROM SL_ACCOUNTS AC
 INNER JOIN SL_ACCOUNTS2 AC2 ON AC.CUCODE=AC2.CUCODE2
-INNER JOIN SL_ADDRESSES AD ON AC.CUCODE=AD.AD_ACC_CODE
+INNER JOIN SL_ADDRESSES AD ON AC.CUCODE=AD.AD_ACC_CODE 
 INNER JOIN (select *
 from
 (
@@ -58,4 +59,9 @@ from
   ) unpiv
 ) src) P ON AC.CU_PRICE_KEY=P.PriceKey
 WHERE AC.CU_DO_NOT_USE = 0
-ORDER BY 2
+-- add by paul 20260130_094128
+and (ad.ad_del_address = 1 OR
+        ad.ad_del_address_2 = 1) and
+        ad.AD_DO_NOT_USE = 0
+-- add end
+ORDER BY AC.CUNAME, ad.ad_code;

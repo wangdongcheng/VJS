@@ -1,4 +1,4 @@
-use vjscl;
+use vjsp;
 SELECT
     -- 'VJSCL' AS 'Company',
     -- '' AS 'Reason for Sample',
@@ -82,11 +82,11 @@ SELECT
     -- 'C092000' AS 'AR Account',
     --CUSTOM FIELDS TO FOLLOW--
     AC2.CU_USRFLAG1 AS 'Do Not Load',
-    AC2.CU_USRCHAR1 AS 'ID Card No.',
-    AC2.CU_USRCHAR2 AS 'Company Registration No.',
+    AC2.CU_USRCHAR1 AS 'VJSP Cus Class',
+    AC2.CU_USRCHAR2 AS 'Nov Cus Class',
     AC2.CU_USRCHAR8 AS 'Contract Detail',
-    AC2.CU_USRCHAR9 AS 'Pet Food Rep',
-    AC2.CU_USRCHAR11 AS 'Main Div Rep',
+    -- AC2.CU_USRCHAR9 AS 'Pet Food Rep',
+    -- AC2.CU_USRCHAR11 AS 'Main Div Rep',
     AC2.CU_USRCHAR5 AS 'BDF Customer Rank',
     AC2.CU_USRCHAR6 AS 'H&D Customer Rank',
     AC2.CU_USRFLAG2 AS 'Focus Review',
