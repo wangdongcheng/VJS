@@ -9,8 +9,8 @@ SELECT
 		WHEN V.VAT_RATE = 18 THEN 'RF'
 	END AS 'Tax Category',
 	CASE
-		WHEN S3.STK_USRFLAG8 = 1 THEN 'OUTER'
-		ELSE 'EA'
+		WHEN S3.STK_USRFLAG8 = 1 THEN 'Case'
+		ELSE 'Unit'
 	END AS 'Sales UOM',
 	CASE
 		WHEN S3.STK_USRFLAG8 = 1 THEN S.STK_EC_SUP_UNIT
@@ -20,11 +20,11 @@ SELECT
 		WHEN S.STK_EC_SUP_UNIT IS NULL OR
 		S.STK_EC_SUP_UNIT = 0 THEN 1
 		ELSE S.STK_EC_SUP_UNIT
-	END AS 'Case UOM Conversion to Base (Multiply)',
+	END AS 'Units per Case',
 	CASE
 		WHEN S3.STK_USRNUM6 = 0 THEN 1
 		ELSE S3.STK_USRNUM6
-	END AS 'Pallet UOM Conversion to Base (Multiply)',
+	END AS 'Units per Pallet',
 	S.STK_COSTPRICE AS 'Last Cost',
 	S.STK_BASEPRICE AS 'Default Price',
 	S2.STK_SELLPRICE10 AS 'RRP (incl. VAT)',
@@ -45,7 +45,7 @@ SELECT
 		ELSE ''
 	END AS 'Content Weight',
 	S3.STK_USRNUM8 AS 'Content Volume',
-	S3.STK_USRNUM7 AS 'Units per Pallet',
+	S3.STK_USRNUM7 AS 'Units per Layer',
 	CASE
 		WHEN S3.STK_USRNUM7 = 0 OR
 		S3.STK_USRNUM6 = 0 THEN 0
@@ -95,4 +95,16 @@ FROM
 			STK_LOCATION2
 	) L ON S.STKCODE = L.LOC_STOCKCODE2
 WHERE
-	S3.STK_USRFLAG3 = 0
+	s.STK_DO_NOT_USE = 0 AND
+	S3.STK_USRFLAG3 = 0 AND
+	STK_SORT_KEY IN (
+		'30 NIVEA',
+		'30 ELASTOPLAST',
+		'30 DEMAKUP',
+		'30 FIOCCO',
+		'30 NUVENIA',
+		'30 TEMPO'
+	)
+ORDER BY
+	stk_sort_key,
+	stkcode;
