@@ -1,4 +1,5 @@
-use vjscl;
+USE vjscl;
+
 SELECT
     -- 'VJSCL' AS 'Company',
     -- '' AS 'Reason for Sample',
