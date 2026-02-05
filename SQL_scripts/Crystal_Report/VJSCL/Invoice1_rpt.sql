@@ -1,4 +1,4 @@
-SELECT top 100
+SELECT
     "ORD_HEADER"."OH_ACCOUNT",
     "ORD_HEADER"."OH_ORDER_NUMBER",
     "DOC_ORDER_HEADER"."DOH_DOC_DATE",
@@ -173,8 +173,10 @@ FROM
     )
     LEFT OUTER JOIN "VJSCL"."dbo"."STK_STOCK3" "STK_STOCK3" ON "STK_STOCK"."STKCODE" = "STK_STOCK3"."STKCODE3"
 --- begin add my conditions    
-    where DOC_ORDER_HEADER.DOH_DOC_NUMBER='686325'
-    -- and ord_header.oh_order_number = '808819'
+    where 
+    -- DOC_ORDER_HEADER.DOH_DOC_NUMBER='686325'
+     ord_header.oh_order_number = '823205' AND
+     od_stock_code = '30iam_00395'
 --- end
 ORDER BY
     "PTL_COPIES"."CC_COPIES",

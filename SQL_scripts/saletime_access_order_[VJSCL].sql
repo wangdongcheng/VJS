@@ -1,4 +1,4 @@
-USE Salestime;
+USE Salestime_scl;
 SELECT
     OL.Orderid AS 'ST_OrdNo',
     OH_ORDER_NUMBER AS 'AccOrdNo.',
@@ -49,7 +49,7 @@ FROM
         )
     END
 WHERE
-    oh.OH_ORDER_NUMBER = '790087'
-    -- and ol.stockcode = '50MYLELIDCRM1X30'
+    oh.OH_ORDER_NUMBER = '824097'
+    and ol.stockcode LIKE '30iam%'
 ORDER BY
     DATECREATED DESC

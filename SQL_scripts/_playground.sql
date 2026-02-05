@@ -131,3 +131,6 @@ ORDER BY
 
 
 select * from tmp_import;
+
+select CONCAT(YEAR(DATEADD(month,DATEDIFF(month, 0, GETDATE())-1,0)),'0101')
+select DATEADD(month,DATEDIFF(month, 0, GETDATE()),0)-1
