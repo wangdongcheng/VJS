@@ -48,7 +48,6 @@ SELECT
   -- AD.AD_POSTCODE AS 'Shipping Postal Code',
   -- AD.AD_PHONE AS 'Ship Phone',
   -- AD.AD_COUNTRY AS 'Ship Country',
-
   -- address page details
   AD.AD_CODE AS 'Address Code',
   AD.AD_ADDRESS AS 'Address on Address Page',
@@ -56,8 +55,12 @@ SELECT
   AD.AD_ADDRESS_USER1 AS 'Town/City City on Address Page',
   AD.ad_address_user2 AS 'County on Address Page',
   AD.AD_POSTCODE AS 'Postal Code on Address Page',
-  AD.AD_E_MAIL AS 'Email Address on Address Page',
-  ISNULL(ad.ad_cc_email, '') AS 'CC Email on Address Page',
+  CASE
+    WHEN ad.ad_cc_email IS NOT NULL AND
+    ad.AD_CC_EMAIL != '' THEN CONCAT(ad.AD_E_MAIL, ';', ad.ad_cc_email)
+    ELSE ad.AD_E_MAIL
+  END AS 'Email Address on Address Page',
+  -- ISNULL(ad.ad_cc_email, '') AS 'CC Email on Address Page',
   AD.ad_phone AS 'Phone on Address Page',
   ad.ad_mobile AS 'Mobile on Address Page',
   ad.ad_fax AS 'Fax on Address Page',
@@ -123,7 +126,9 @@ WHERE
   AND
   (
     ad.ad_del_address = 1 OR
-    ad.ad_del_address_2 = 1
+    ad.ad_del_address_2 = 1 OR
+    ad.AD_INV_ADDRESS = 1 OR
+    ad.AD_STAT_ADDRESS = 1
   ) AND
   ad.AD_DO_NOT_USE = 0
   -- add end
