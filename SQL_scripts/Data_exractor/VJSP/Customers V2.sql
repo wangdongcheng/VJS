@@ -3,11 +3,11 @@ SELECT
   AC.CUNAME AS 'Name',
   AC2.CU_CONTACT_FIRSTNAME AS 'First Name',
   AC2.CU_CONTACT_SURNAME AS 'Surname',
-  AC.CU_EMAIL AS 'Email',
-  AC.CUPHONE AS 'Phone1',
+  AC.CU_EMAIL AS 'Billing Email',
+  AC.CUPHONE AS 'Billing Phone1',
   AC.CUADDRESS AS 'Billing Address L1',
   AC.CU_ADDRESS_USER1 AS 'Billing City',
-  AC.CU_COUNTRY_CODE AS 'Country Code',
+  AC.CU_COUNTRY_CODE AS 'Billing Country Code',
   AC.CU_COUNTRY AS 'Billing Country',
   AC.CUPOSTCODE AS 'Billing Postal Code',
   AC.CUSORT AS 'Customer Type',
@@ -41,13 +41,41 @@ SELECT
     WHEN AC.CU_COUNTRY_CODE = 'MT' THEN 'LOCVAT'
     ELSE 'EUVAT'
   END AS 'Tax Zone',
+  -- AD.AD_CODE AS 'Address Code',
+  -- AD.AD_ADDRESS AS 'Shipping Address L1',
+  -- AD.AD_ADDRESS_USER1 AS 'Shipping City',
+  -- AD.AD_E_MAIL AS 'Ship Email',
+  -- AD.AD_POSTCODE AS 'Shipping Postal Code',
+  -- AD.AD_PHONE AS 'Ship Phone',
+  -- AD.AD_COUNTRY AS 'Ship Country',
+
+  -- address page details
   AD.AD_CODE AS 'Address Code',
-  AD.AD_ADDRESS AS 'Shipping Address L1',
-  AD.AD_ADDRESS_USER1 AS 'Shipping City',
-  AD.AD_E_MAIL AS 'Ship Email',
-  AD.AD_POSTCODE AS 'Shipping Postal Code',
-  AD.AD_PHONE AS 'Ship Phone',
-  AD.AD_COUNTRY AS 'Ship Country',
+  AD.AD_ADDRESS AS 'Address on Address Page',
+  -- '' AS 'Shipping Address L2',
+  AD.AD_ADDRESS_USER1 AS 'Town/City City on Address Page',
+  AD.ad_address_user2 AS 'County on Address Page',
+  AD.AD_POSTCODE AS 'Postal Code on Address Page',
+  AD.AD_E_MAIL AS 'Email Address on Address Page',
+  ISNULL(ad.ad_cc_email, '') AS 'CC Email on Address Page',
+  AD.ad_phone AS 'Phone on Address Page',
+  ad.ad_mobile AS 'Mobile on Address Page',
+  ad.ad_fax AS 'Fax on Address Page',
+  ISNULL(ad.ad_delivery_route, '') AS 'Delivery Route',
+  CASE
+    WHEN ad.ad_inv_address = 1 THEN 'Yes'
+    ELSE ''
+  END AS 'Address for Invoice',
+  CASE
+    WHEN ad.ad_del_address = 1 OR
+    ad.ad_del_address_2 = 1 THEN 'Yes'
+    ELSE ''
+  END AS 'Address for Delivery',
+  CASE
+    WHEN ad.ad_stat_address = 1 THEN 'Yes'
+    ELSE ''
+  END AS 'Address for Statement',
+  ad.SL_AD_PRIMARY AS 'Address Primary ID',
   'P092000' AS 'AR Account'
 FROM
   SL_ACCOUNTS AC

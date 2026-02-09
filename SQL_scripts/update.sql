@@ -1,37 +1,17 @@
 USE VJSCL;
 
-select 
-sa.cucode,
-sa.cuuser3,
-ti.[New Sort Key - Document],
-sa.cu_terms,
-ti.[New Payment Terms],
-sa.CU_DUE_DAYS,
-ti.[New Due Days],
-sa.CU_A_P_DAYS,
-ti.[New Ant# Days]
-from sl_accounts sa
-inner join vjscl.dbo.tmp_import ti on sa.cucode = ti.[Customer Code]
--- where sa.cuuser3 != ti.[New Sort Key - Document] OR
---       sa.cu_terms != ti.[New Payment Terms] OR
---       sa.cu_due_days != ti.[New Due Days] OR
---       sa.cu_a_p_days != ti.[New Ant# Days]
-;
-
-
-return;
-
+-- SELECT
+-- OH_ORDER_NUMBER,
+-- OH_USER3
+-- from ORD_HEADER
+-- where OH_ORDER_NUMBER = '827255';
+-- return;
 BEGIN try BEGIN TRAN
-
-update SL_ACCOUNTS
-set cuuser3 = [New Sort Key - Document],
-    cu_terms = [New Payment Terms],
-    CU_DUE_DAYS = [New Due Days],
-    CU_A_P_DAYS = [New Ant# Days]
-from sl_accounts sa
-inner join vjscl.dbo.tmp_import ti on sa.cucode = ti.[Customer Code]
-;
-
+UPDATE ORD_HEADER
+SET
+    oh_user3 = 'INVOICE'
+WHERE
+    OH_ORDER_NUMBER = '827255';
 
 COMMIT;
 
@@ -57,4 +37,3 @@ PRINT 'Error Message: ' + ERROR_MESSAGE();
 -- Re-throw error (optional)
 -- THROW;
 END CATCH;
-

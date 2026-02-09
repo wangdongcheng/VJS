@@ -1,5 +1,9 @@
 USE vjscl;
 
+select *
+from ORD_HEADER
+where OH_ORDER_NUMBER = '827255';
+
 select det.DET_HEADER_REF,
 stk.stkcode,
 stk.stkname,
