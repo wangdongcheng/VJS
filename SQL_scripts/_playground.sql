@@ -1,4 +1,18 @@
-USE vjscl;
+
+select 
+*
+from STK_STOCK3
+where stkcode3 = '50ABBENSPSAVCHIC';
+;
+
+
+
+
+
+
+return;
+
+
 
 select *
 from ORD_HEADER
