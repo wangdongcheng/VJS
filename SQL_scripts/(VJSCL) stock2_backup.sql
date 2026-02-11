@@ -1,4 +1,4 @@
-select * from vjscl.dbo.STK_STOCK_2
+select * from STK_STOCK_2
 -- where stkcode2 IN (
 -- '308IN1_02250UX',
 -- '308IN1_02281UX',
