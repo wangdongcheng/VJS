@@ -1,21 +1,5 @@
-select STK_SORT_KEY,
-    stk_sort_key1,
-    stk_sort_key2,
-    stk_s_weight,
-    STK_SUPSTKCDE1,
-    stkname,
-    stkcode
-from ord_detail
-INNER JOIN stk_stock ON ord_detail.OD_STOCK_CODE = stk_stock.STKCODE
-INNER JOIN stk_stock_2 on ord_detail.OD_STOCK_CODE = stk_stock_2.STKCODE2
-where Od_ORDER_NUMBER = '821622'
-    order by STK_SORT_KEY,
-    stk_sort_key1,
-    stk_sort_key2,
-    stk_s_weight,
-    STK_SUPSTKCDE1
-    ;
-return;
+DECLARE @order_number varchar(20) = '820671';
+
 SELECT
     "ORD_HEADER"."OH_ORDER_REF",
     "ORD_HEADER"."OH_ACCOUNT",
@@ -106,10 +90,26 @@ FROM
         LEFT OUTER JOIN "VJSCL"."dbo"."STK_STOCK_2" "STK_STOCK_2" ON "STK_STOCK"."STKCODE" = "STK_STOCK_2"."STKCODE2"
     )
     INNER JOIN "VJSCL"."dbo"."STK_STOCK3" "STK_STOCK3" ON "STK_STOCK_2"."STKCODE2" = "STK_STOCK3"."STKCODE3"
-    where "ORD_HEADER"."OH_ORDER_NUMBER" = '821556'
+    where "ORD_HEADER"."OH_ORDER_NUMBER" = @order_number
     order by STK_SORT_KEY,
     stk_sort_key1,
     stk_sort_key2,
     stk_s_weight,
     STK_SUPSTKCDE1
     ;
+
+
+
+ SELECT 
+ oh_order_number,
+ ad_acc_code,
+ ad_delivery_route,
+ ad_del_address,
+ ad_del_address_2
+ from SL_ADDRESSES
+ INNER JOIN ORD_HEADER ON SL_ADDRESSES.AD_ACC_CODE = ORD_HEADER.OH_ACCOUNT
+ and SL_ADDRESSES.AD_CODE = ORD_HEADER.OH_DEL_ADD
+ where OH_ORDER_NUMBER in (
+    @order_number
+ )
+ 

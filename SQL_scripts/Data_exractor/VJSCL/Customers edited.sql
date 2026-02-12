@@ -131,6 +131,18 @@ FROM
 WHERE
     AC.CU_DO_NOT_USE = 0 AND
     AD_DO_NOT_USE = 0
+
+--
+-- and cucode in (
+--     '30cbi001',
+--     '30cho001',
+--     '30mrt001',
+--     '30nut001'
+-- )
+--    
 ORDER BY
     'Customer Code',
     'Address Code';
+
+
+
