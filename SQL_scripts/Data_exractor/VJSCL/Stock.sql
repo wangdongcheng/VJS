@@ -96,15 +96,16 @@ FROM
 	) L ON S.STKCODE = L.LOC_STOCKCODE2
 WHERE
 	s.STK_DO_NOT_USE = 0 AND
-	S3.STK_USRFLAG3 = 0 AND
-	STK_SORT_KEY IN (
-		'30 NIVEA',
-		'30 ELASTOPLAST',
-		'30 DEMAKUP',
-		'30 FIOCCO',
-		'30 NUVENIA',
-		'30 TEMPO'
-	)
+	S3.STK_USRFLAG3 = 0 
+	-- AND
+	-- STK_SORT_KEY IN (
+	-- 	'30 NIVEA',
+	-- 	'30 ELASTOPLAST',
+	-- 	'30 DEMAKUP',
+	-- 	'30 FIOCCO',
+	-- 	'30 NUVENIA',
+	-- 	'30 TEMPO'
+	-- )
 ORDER BY
 	stk_sort_key,
-	stkcode;
+	stkcode;	

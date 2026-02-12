@@ -1,8 +1,11 @@
 
 select 
-*
-from STK_STOCK3
-where stkcode3 = '50ABBENSPSAVCHIC';
+S3.STKCODE3 AS 'Stock Code',
+s3.STK_USRCHAR8 as 'NotUsed'
+from STK_STOCK3 s3
+inner join STK_STOCK S on s3.STKCODE3 = S.STKCODE
+where S.STK_DO_NOT_USE = 0
+and s3.STK_USRCHAR8 IS NOT NULL and s3.STK_USRCHAR8 <> ''
 ;
 
 
