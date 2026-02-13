@@ -1,107 +1,131 @@
+SELECT
+    S3.STKCODE3 AS 'Stock Code',
+    STK_SORT_KEY AS 'Brand',
+    STK_SORT_KEY1 AS 'Sub Category',
+    S.STK_SORT_KEY2 AS 'Type',
+    ISNULL(S3.STK_USRCHAR18, '') AS 'Categ Manager'
+FROM
+    STK_STOCK3 s3
+    INNER JOIN STK_STOCK S ON s3.STKCODE3 = S.STKCODE
+WHERE
+    S.STK_DO_NOT_USE = 0 AND
+    s3.STK_USRCHAR18 IS NULL OR
+    s3.STK_USRCHAR18 = ''
+ORDER BY
+    1;
 
-select 
-S3.STKCODE3 AS 'Stock Code',
-s3.STK_USRCHAR8 as 'NotUsed'
-from STK_STOCK3 s3
-inner join STK_STOCK S on s3.STKCODE3 = S.STKCODE
-where S.STK_DO_NOT_USE = 0
-and s3.STK_USRCHAR8 IS NOT NULL and s3.STK_USRCHAR8 <> ''
-;
+RETURN;
 
+SELECT
+    *
+FROM
+    ORD_HEADER
+WHERE
+    OH_ORDER_NUMBER = '827255';
 
+SELECT
+    det.DET_HEADER_REF,
+    stk.stkcode,
+    stk.stkname,
+    det.*
+FROM
+    sl_pl_nl_detail det
+    INNER JOIN stk_stock stk ON det.det_stock_code = stk.stkcode
+WHERE
+    (
+        det_header_ref = '680038' AND
+        stkname = '*136354 THERMOS COOLER KIDS DUAL LUNCH BOX RAINBOWS'
+    ) OR
+    (
+        det_header_ref = '680038' AND
+        stkname = '*167379 THERMOS COOLER KIDS DUAL LUNCH BOX DINASOUR'
+    ) OR
+    (
+        det_header_ref = '684434' AND
+        stkname = 'F5000PU THERMOS FUNTAINER FOOD STORAGE PURPLE'
+    ) OR
+    (
+        det_header_ref = '684434' AND
+        stkname = 'F500NY THERMOS FUNTAINER FOOD STORAGE NAVY'
+    ) OR
+    (
+        det_header_ref = '691145' AND
+        stkname = 'F5004BL THERMOS FUNTAINER FOOD STORAGE BLUE'
+    ) OR
+    (
+        det_header_ref = '680037' AND
+        stkname = '150362 THERMOS COOLER CLASSIC 12 CAN BLUE'
+    ) OR
+    (
+        det_header_ref = '673195' AND
+        stkname = '150378 THERMOS COOLER CLASSIC 24 CAN BLUE'
+    ) OR
+    (
+        det_header_ref = '680037' AND
+        stkname = '150378 THERMOS COOLER CLASSIC 24 CAN BLUE'
+    );
 
-
-
-
-return;
-
-
-
-select *
-from ORD_HEADER
-where OH_ORDER_NUMBER = '827255';
-
-select det.DET_HEADER_REF,
-stk.stkcode,
-stk.stkname,
-det.*
-from sl_pl_nl_detail det
-inner join stk_stock stk ON det.det_stock_code = stk.stkcode
-where 
-(det_header_ref = '680038' and stkname =	'*136354 THERMOS COOLER KIDS DUAL LUNCH BOX RAINBOWS') or
-(det_header_ref = '680038' and stkname =	'*167379 THERMOS COOLER KIDS DUAL LUNCH BOX DINASOUR') or
-(det_header_ref = '684434' and stkname =	'F5000PU THERMOS FUNTAINER FOOD STORAGE PURPLE') or
-(det_header_ref = '684434' and stkname =	'F500NY THERMOS FUNTAINER FOOD STORAGE NAVY') or
-(det_header_ref = '691145' and stkname =	'F5004BL THERMOS FUNTAINER FOOD STORAGE BLUE') or
-(det_header_ref = '680037' and stkname =	'150362 THERMOS COOLER CLASSIC 12 CAN BLUE') or
-(det_header_ref = '673195' and stkname =	'150378 THERMOS COOLER CLASSIC 24 CAN BLUE') or
-(det_header_ref = '680037' and stkname =	'150378 THERMOS COOLER CLASSIC 24 CAN BLUE')
-;
-
-
-select stkcode2,
-stk_sellprice3,
-stk_sellprice6
-from STK_STOCK_2
-where stkcode2 in (
-'30TMS_150378',
-'30TMS_150362',
-'30TMS_150378',
-'30TMS_28006',
-'30TMS_50006',
-'30TMS_F500NY',
-'30TMS_F5000PU',
-'30TMS_F5004BL',
-'30TMS_158009',
-'30TMS_176656'
-)
-
-
--- SELECT
--- *
--- from SL_TRANSACTIONS
--- where ST_ALOC_POINTER = '30pis200';
-
-
--- SELECT
---     sad.AD_ACC_CODE AS 'Customer Code',
---     sa.cuname AS 'Customer Name',
---     sad.AD_CODE AS 'Address Code',
---     sa.CU_ADDRESS_USER2 AS 'County in Customer',
---     sa.cu_address_user1 as 'Town/City in Customer',
---     sad.ad_address_user2 as 'County in Address',
---     sad.ad_address_user1 AS 'Town/City in Address',
---     sad.ad_address AS 'Current Address',
---     -- '' AS 'New Town/City',
---     CASE
---         WHEN sad.ad_inv_address = 1 THEN 'Yes'
---         ELSE ''
---     END AS 'Address for Invoice',
---     CASE
---         WHEN sad.ad_del_address = 1 OR
---         sad.ad_del_address_2 = 1 THEN 'Yes'
---         ELSE ''
---     END AS 'Address for Delivery',
---     CASE
---         WHEN sad.ad_stat_address = 1 THEN 'Yes'
---         ELSE ''
---     END AS 'Address for Statement',
---     sad.SL_AD_PRIMARY AS 'Primary ID'
--- FROM
---     SL_ADDRESSES sad
---     LEFT OUTER JOIN sl_accounts sa ON sad.AD_ACC_CODE = sa.cucode
--- WHERE
---     sa.cu_do_not_use = 0 AND
---     sad.AD_DO_NOT_USE = 0
---     -- ( sa.cu_address_user2 <> sad.ad_address_user2 OR
---     --     sa.cu_address_user2 = '' OR
---     --     sa.cu_address_user1 = '' OR
---     --     sad.ad_address_user2 = '' OR
---     --     sad.ad_address_user1 = '') 
--- ORDER BY
---     1,
---     3;
-
+SELECT
+    stkcode2,
+    stk_sellprice3,
+    stk_sellprice6
+FROM
+    STK_STOCK_2
+WHERE
+    stkcode2 IN (
+        '30TMS_150378',
+        '30TMS_150362',
+        '30TMS_150378',
+        '30TMS_28006',
+        '30TMS_50006',
+        '30TMS_F500NY',
+        '30TMS_F5000PU',
+        '30TMS_F5004BL',
+        '30TMS_158009',
+        '30TMS_176656'
+    )
+    -- SELECT
+    -- *
+    -- from SL_TRANSACTIONS
+    -- where ST_ALOC_POINTER = '30pis200';
+    -- SELECT
+    --     sad.AD_ACC_CODE AS 'Customer Code',
+    --     sa.cuname AS 'Customer Name',
+    --     sad.AD_CODE AS 'Address Code',
+    --     sa.CU_ADDRESS_USER2 AS 'County in Customer',
+    --     sa.cu_address_user1 as 'Town/City in Customer',
+    --     sad.ad_address_user2 as 'County in Address',
+    --     sad.ad_address_user1 AS 'Town/City in Address',
+    --     sad.ad_address AS 'Current Address',
+    --     -- '' AS 'New Town/City',
+    --     CASE
+    --         WHEN sad.ad_inv_address = 1 THEN 'Yes'
+    --         ELSE ''
+    --     END AS 'Address for Invoice',
+    --     CASE
+    --         WHEN sad.ad_del_address = 1 OR
+    --         sad.ad_del_address_2 = 1 THEN 'Yes'
+    --         ELSE ''
+    --     END AS 'Address for Delivery',
+    --     CASE
+    --         WHEN sad.ad_stat_address = 1 THEN 'Yes'
+    --         ELSE ''
+    --     END AS 'Address for Statement',
+    --     sad.SL_AD_PRIMARY AS 'Primary ID'
+    -- FROM
+    --     SL_ADDRESSES sad
+    --     LEFT OUTER JOIN sl_accounts sa ON sad.AD_ACC_CODE = sa.cucode
+    -- WHERE
+    --     sa.cu_do_not_use = 0 AND
+    --     sad.AD_DO_NOT_USE = 0
+    --     -- ( sa.cu_address_user2 <> sad.ad_address_user2 OR
+    --     --     sa.cu_address_user2 = '' OR
+    --     --     sa.cu_address_user1 = '' OR
+    --     --     sad.ad_address_user2 = '' OR
+    --     --     sad.ad_address_user1 = '') 
+    -- ORDER BY
+    --     1,
+    --     3;
 SELECT
     cucode AS 'Customer Code',
     cuname AS 'Customer Name',
@@ -138,7 +162,6 @@ ORDER BY
 -- sl_addresses sad
 -- inner join tmp_import ti on sad.SL_AD_PRIMARY = ti.[Primary ID]
 -- ;
-
 -- SELECT
 -- sa.cucode,
 -- sad.ad_code,
@@ -149,9 +172,17 @@ ORDER BY
 -- where sa.cu_address_user2 <> sad.ad_address_user2 and
 --     sa.cu_do_not_use = 0 AND
 --     sad.AD_DO_NOT_USE = 0;
+SELECT
+    *
+FROM
+    tmp_import;
 
-
-select * from tmp_import;
-
-select CONCAT(YEAR(DATEADD(month,DATEDIFF(month, 0, GETDATE())-1,0)),'0101')
-select DATEADD(month,DATEDIFF(month, 0, GETDATE()),0)-1
+SELECT
+    CONCAT(
+        YEAR(
+            DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()) -1, 0)
+        ),
+        '0101'
+    )
+SELECT
+    DATEADD(MONTH, DATEDIFF(MONTH, 0, GETDATE()), 0) -1
