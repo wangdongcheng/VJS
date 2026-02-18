@@ -49,7 +49,11 @@ FROM
         )
     END
 WHERE
-    oh.OH_ORDER_NUMBER = '824097'
-    and ol.stockcode LIKE '30iam%'
+-- OH_ORDER_NUMBER = '825958'
+     CustomerCode = '30GRE006'
+    --  ol.Orderid  IN (
+    --     1309406,1309401,1309369,1309368
+    --     )
+    -- and ol.stockcode LIKE '30iam%'
 ORDER BY
     DATECREATED DESC
