@@ -5,6 +5,38 @@ SELECT
     -- '' AS 'Reason for Sample',
     AC.CUCODE AS 'Customer Code',
     AC.CUNAME AS 'Customer Name',
+    AC.CU_EMAIL AS 'Email on Customer Page',
+    AD.AD_CODE AS 'Address Code',
+    AD.AD_E_MAIL AS 'Email Address on Address Page',
+    ISNULL(ad.ad_cc_email, '') AS 'CC Email on Address Page',
+    CASE
+        WHEN ad.ad_inv_address = 1 THEN 'Yes'
+        ELSE ''
+    END AS 'Address for Invoice',
+    CASE
+        WHEN ad.ad_del_address = 1 OR
+        ad.ad_del_address_2 = 1 THEN 'Yes'
+        ELSE ''
+    END AS 'Address for Delivery',
+    CASE
+        WHEN ad.ad_stat_address = 1 THEN 'Yes'
+        ELSE ''
+    END AS 'Address for Statement',
+    ad.SL_AD_PRIMARY AS 'Address Primary ID'
+FROM
+    SL_ACCOUNTS AC
+    INNER JOIN SL_ADDRESSES AD ON AC.CUCODE = AD.AD_ACC_CODE
+WHERE
+    AC.CU_DO_NOT_USE = 0 AND
+    AD_DO_NOT_USE = 0
+ORDER BY
+    2;
+
+SELECT
+    -- 'VJSCL' AS 'Company',
+    -- '' AS 'Reason for Sample',
+    AC.CUCODE AS 'Customer Code',
+    AC.CUNAME AS 'Customer Name',
     AC.CUUSER1 AS 'Default salesrep Code',
     -- '' AS 'Sales Manager',
     AC.CU_EMAIL AS 'Email on Customer Page',
@@ -131,18 +163,14 @@ FROM
 WHERE
     AC.CU_DO_NOT_USE = 0 AND
     AD_DO_NOT_USE = 0
-
---
--- and cucode in (
---     '30cbi001',
---     '30cho001',
---     '30mrt001',
---     '30nut001'
--- )
---    
+    --
+    -- and cucode in (
+    --     '30cbi001',
+    --     '30cho001',
+    --     '30mrt001',
+    --     '30nut001'
+    -- )
+    --    
 ORDER BY
     'Customer Code',
     'Address Code';
-
-
-
