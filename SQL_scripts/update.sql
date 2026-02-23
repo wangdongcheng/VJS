@@ -1,4 +1,4 @@
-USE VJSCL;
+USE Spot;
 
 -- SELECT
 -- OH_ORDER_NUMBER,
@@ -7,13 +7,20 @@ USE VJSCL;
 -- where OH_ORDER_NUMBER = '827255';
 -- return;
 BEGIN try BEGIN TRAN
-UPDATE ORD_HEADER
-SET
-    oh_user3 = 'INVOICE'
-WHERE
-    OH_ORDER_NUMBER = '827255';
 
-COMMIT;
+update Spot.[dbo].[VJSCL_Exec_Targets]
+set brand = '30 HILLS PET'
+where rowid in (155,156);
+
+update Spot.[dbo].[VJSCL_Exec_Targets]
+set SubCategory = '30 HIL PD'
+where rowid = 155;
+
+update Spot.[dbo].[VJSCL_Exec_Targets]
+set SubCategory = '30 HIL SP'
+where rowid = 156;
+
+commit;
 
 END try BEGIN CATCH
 -- Rollback if transaction is active

@@ -1,10 +1,4 @@
--- This script lists all user tables in the database that start by name criteria.
-USE SVBeauty;
-
-DECLARE @searchtab NVARCHAR(50);
-
-SET
-    @searchtab = 'sys\_%';
+DECLARE @searchtab NVARCHAR(50) = '#%';
 
 SELECT
     name,
@@ -13,9 +7,7 @@ FROM
     sys.tables
 WHERE
     name LIKE @searchtab ESCAPE '\' -- list all order related tables from DB
-    AND
-    name NOT LIKE '%_backup%' AND
-    [type] = 'U'
+    -- AND [type] = 'U'
     -- user tables only
 ORDER BY
     name;
@@ -31,8 +23,17 @@ SELECT
     character_maximum_length
 FROM
     INFORMATION_SCHEMA.COLUMNS
-    where
+WHERE
     -- table_name like @searchtab ESCAPE '\'  -- list all order related tables from DB
-     COLUMN_NAME like '%Organisation' ESCAPE '\'
+    COLUMN_NAME LIKE '%Organisation' ESCAPE '\'
     -- order by table_name, ordinal_position
 ;
+
+
+SELECT 
+    name,
+    create_date,
+    modify_date
+FROM tempdb.sys.tables
+WHERE name LIKE '#%'
+ORDER BY create_date DESC;
