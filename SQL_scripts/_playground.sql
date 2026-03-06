@@ -1,3 +1,22 @@
+SELECT top 100
+acc.cucode AS 'Customer Code',
+acc.cuname AS 'Customer Name', 
+det.det_header_ref AS 'Invoice Number',
+det.det_stock_code AS 'Stock Code',
+stk.stkname AS 'Stock Name',
+*
+from SL_PL_NL_DETAIL det
+inner join sl_accounts acc on det.det_account = acc.cucode
+inner join stk_stock stk on det.det_stock_code = stk.stkcode
+where acc.cucode like '95%'
+and acc.cu_do_not_use = 0
+and det.det_header_ref in ('556541')
+order by acc.cucode, det.det_header_ref;
+
+
+
+return;
+
 SELECT
     S3.STKCODE3 AS 'Stock Code',
     STK_SORT_KEY AS 'Brand',
