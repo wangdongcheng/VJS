@@ -1,94 +1,25 @@
 USE vjscl;
+-- select * from tmp_import;
 
-select 
-stkcode3,
-STK_USRNUM1,
-stk_usrnum7,
-STK_USRNUM6
-from stk_stock3
-where stkcode3 IN (
-'30TEN_761175',
-'30TEN_792725',
-'30TEN_760914',
-'30TEN_772801',
-'30TEN_792712',
-'30TEN_794633',
-'30TEN_772628',
-'30TEN_760456',
-'30TEN_792609',
-'30TEN_760811',
-'30TEN_796612',
-'30TEN_760928',
-'30TEN_750796',
-'30TEN_750661',
-'30TEN_792533',
-'30TEN_761115',
-'30TEN_760265',
-'30TEN_760728',
-'30TEN_761701',
-'30TEN_760479',
-'30TEN_760764',
-'30TEN_761816'
-) order by 1;
-
-return;
 BEGIN try BEGIN TRAN
 
-update stk_stock3
-set 
-STK_USRNUM1 = v.STK_USRNUM1,
-STK_USRNUM7 = v.STK_USRNUM7,
-STK_USRNUM6 = v.STK_USRNUM6
-from STK_STOCK3
-inner join (
-values
-('30TEN_761175',10,120,600),
-('30TEN_792725',4,40,80),
-('30TEN_760914',8,88,352),
-('30TEN_772801',2,28,140),
-('30TEN_792712',4,40,80),
-('30TEN_794633',4,24,120),
-('30TEN_772628',2,28,140),
-('30TEN_760456',6,108,648),
-('30TEN_792609',4,24,120),
-('30TEN_760811',8,96,576),
-('30TEN_796612',4,40,80),
-('30TEN_760928',6,48,192),
-('30TEN_750796',6,108,432),
-('30TEN_750661',8,72,1008),
-('30TEN_792533',4,24,120),
-('30TEN_761115',6,126,756),
-('30TEN_760265',10,120,720),
-('30TEN_760728',6,72,504),
-('30TEN_761701',6,24,168),
-('30TEN_760479',6,114,684),
-('30TEN_760764',6,96,480),
-('30TEN_761816',6,114,570)
-) v (stkcode3, STK_USRNUM1, STK_USRNUM7, STK_USRNUM6) on stk_stock3.stkcode3 = v.stkcode3
-where stk_stock3.stkcode3 IN (
-'30TEN_761175',
-'30TEN_792725',
-'30TEN_760914',
-'30TEN_772801',
-'30TEN_792712',
-'30TEN_794633',
-'30TEN_772628',
-'30TEN_760456',
-'30TEN_792609',
-'30TEN_760811',
-'30TEN_796612',
-'30TEN_760928',
-'30TEN_750796',
-'30TEN_750661',
-'30TEN_792533',
-'30TEN_761115',
-'30TEN_760265',
-'30TEN_760728',
-'30TEN_761701',
-'30TEN_760479',
-'30TEN_760764',
-'30TEN_761816'
-);
+UPDATE STK_STOCK
+set STK_EC_SUP_UNIT = ti.[To Update: Units per Case]
+from stk_stock stk
+inner join tmp_import ti on stk.STKCODE = ti.[Inventory ID]
+where [To Update: Units per Pallet] is NOT NULL;
+
+
+update STK_STOCK3
+set STK_USRNUM6 = ti.[To Update: Units per Pallet],
+STK_USRNUM7 = ti.[To Update: Units per Layer],
+STK_USRNUM1 = ti.[To Update: PO Min Qty],
+STK_USRFLAG2 = ti.[To Update: Order Process],
+STK_USRNUM4 = ti.[To Update: Min Stock Coverage],
+STK_USRNUM5 = ti.[To Update: Max Stock Coverage]
+from stk_stock3 stk3
+inner join tmp_import ti on stk3.STKCODE3 = ti.[Inventory ID]
+where [To Update: Units per Pallet] is NOT NULL;
 
 
 commit;
