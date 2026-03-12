@@ -1,25 +1,21 @@
 USE vjscl;
--- select * from tmp_import;
+SELECT
+STKCODE3,
+STK_USRCHAR8,
+loc_code
+from STK_STOCK3 stk3
+INNER JOIN tmp_import ti on stk3.STKCODE3 = ti.stkcode
+where stk_usrchar8 != ti.[loc_code]
+;
+
+return;
 
 BEGIN try BEGIN TRAN
 
-UPDATE STK_STOCK
-set STK_EC_SUP_UNIT = ti.[To Update: Units per Case]
-from stk_stock stk
-inner join tmp_import ti on stk.STKCODE = ti.[Inventory ID]
-where [To Update: Units per Pallet] is NOT NULL;
-
-
 update STK_STOCK3
-set STK_USRNUM6 = ti.[To Update: Units per Pallet],
-STK_USRNUM7 = ti.[To Update: Units per Layer],
-STK_USRNUM1 = ti.[To Update: PO Min Qty],
-STK_USRFLAG2 = ti.[To Update: Order Process],
-STK_USRNUM4 = ti.[To Update: Min Stock Coverage],
-STK_USRNUM5 = ti.[To Update: Max Stock Coverage]
-from stk_stock3 stk3
-inner join tmp_import ti on stk3.STKCODE3 = ti.[Inventory ID]
-where [To Update: Units per Pallet] is NOT NULL;
+set stk_usrchar8 = ti.[loc_code]
+from stk_stock3 stk3 inner join tmp_import ti on stk3.STKCODE3 = ti.stkcode
+where stk_usrchar8 != ti.[loc_code];
 
 
 commit;
