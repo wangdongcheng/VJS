@@ -1,4 +1,4 @@
-USE vjscl;
+-- USE vjscl;
 
 SELECT
     -- 'VJSCL' AS 'Company',
