@@ -1,21 +1,11 @@
-USE vjscl;
-SELECT
-STKCODE3,
-STK_USRCHAR8,
-loc_code
-from STK_STOCK3 stk3
-INNER JOIN tmp_import ti on stk3.STKCODE3 = ti.stkcode
-where stk_usrchar8 != ti.[loc_code]
-;
-
-return;
+-- select * from tmp_target;
+-- select * from tmp_stretch;
+-- return;
 
 BEGIN try BEGIN TRAN
 
-update STK_STOCK3
-set stk_usrchar8 = ti.[loc_code]
-from stk_stock3 stk3 inner join tmp_import ti on stk3.STKCODE3 = ti.stkcode
-where stk_usrchar8 != ti.[loc_code];
+DELETE FROM TGT_STRETCHED
+WHERE Sales_Rep IS NULL and brand is null and StretchedTarget is null;
 
 
 commit;
