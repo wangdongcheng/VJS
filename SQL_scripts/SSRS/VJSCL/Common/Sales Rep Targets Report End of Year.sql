@@ -163,15 +163,15 @@ WITH
     FROM SPOT.dbo.TGT_BRANDS
     WHERE brand NOT IN (
         '30 HIL SP CAT', '30 HIL SP DOG', 
-        '30 HIL PD CAT', '30 HIL PD DOG',
-		'30 .NIV MEN', 		
-		'30 .NIV BODY', 		
-		'30 .NIV CREAM', 	
-		'30 .NIV MINIS', 	
-		'30 .NIV STYLING', 	
-		'30 .NIV LIP CARE', 	
-		'30 .NIV GIFT PACK', 
-		'30 .NIV HAND'
+        '30 HIL PD CAT', '30 HIL PD DOG'
+		-- '30 .NIV MEN', 		
+		-- '30 .NIV BODY', 		
+		-- '30 .NIV CREAM', 	
+		-- '30 .NIV MINIS', 	
+		-- '30 .NIV STYLING', 	
+		-- '30 .NIV LIP CARE', 	
+		-- '30 .NIV GIFT PACK', 
+		-- '30 .NIV HAND'
     )
 	),
 	BT AS (
