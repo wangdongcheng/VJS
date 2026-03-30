@@ -1,0 +1,373 @@
+DECLARE @SalesRep NVARCHAR(100) = 'All';
+
+create table #slplnldetail_thisyear (detprimary float,det_header_key varchar(20), detstock_code varchar(25),sales_value float,det_type varchar(3))
+
+insert into #slplnldetail_thisyear
+select det_primary, det_header_key, det_stock_code, case when det_type = 'INV' then det_nett else det_nett*-1 end as Sales_Value, det_type
+from sl_pl_nl_detail
+where det_date >= DATEADD(yy, DATEDIFF(yy, 0, GETDATE()), 0) --StartOfThisYr
+AND det_date <= getdate() and det_type in ('INV','CRN');
+
+create table #slplnldetail_lastyear (detprimary float,det_header_key varchar(20), detstock_code varchar(25),sales_value float,det_type varchar(3))
+
+insert into #slplnldetail_lastyear
+select det_primary, det_header_key, det_stock_code, case when det_type = 'INV' then det_nett else det_nett*-1 end as Sales_Value ,det_type
+from sl_pl_nl_detail
+where det_date >= DATEADD(year,-1, DATEADD(yy, DATEDIFF(yy, 0, GETDATE()), 0))--StartOfLastYr
+and det_type in ('INV','CRN') AND det_date <= DATEADD(YEAR, -1, GETDATE()); --LastYrToDate
+
+create table #slplnldetail_halfyear (detprimary float,det_header_key varchar(20), detstock_code varchar(25),sales_value float,det_type varchar(3))
+
+insert into #slplnldetail_halfyear
+select det_primary, det_header_key, det_stock_code, case when det_type = 'INV' then det_nett else det_nett*-1 end as Sales_Value,det_type
+from sl_pl_nl_detail
+where det_date >= 
+CAST(
+        CAST(YEAR(GETDATE()) AS VARCHAR) + 
+        CASE WHEN MONTH(GETDATE()) <= 6 THEN '-01-01' ELSE '-01-01' END 
+        AS DATE
+    ) --StartOfThisHalf
+AND det_type in ('INV','CRN') AND det_date <= '2025-06-30';
+
+WITH TargetBrandMap AS (
+    -- Mapped brands
+    SELECT '30 HIL SP CAT' AS RawBrand, '30 HIL SP' AS ReportBrand
+    UNION ALL
+    SELECT '30 HIL SP DOG', '30 HIL SP'
+    UNION ALL
+    SELECT '30 HIL PD CAT', '30 HIL PD'
+    UNION ALL
+    SELECT '30 HIL PD DOG', '30 HIL PD'
+
+    -- Paul, 30/03/2026, add NIV MIX+
+	union all
+	select '30 .NIV MEN',			'NIV MIX' union all
+	select '30 .NIV BODY', 			'NIV MIX' union all
+	select '30 .NIV CREAM', 		'NIV MIX' union all
+	select '30 .NIV MINIS', 		'NIV MIX' union all
+	select '30 .NIV STYLING', 		'NIV MIX' union all
+	select '30 .NIV LIP CARE', 		'NIV MIX' union all
+	select '30 .NIV GIFT PACK', 	'NIV MIX' union all
+	select '30 .NIV HAND', 			'NIV MIX'
+
+
+    -- Identity mapping for all other brands
+    UNION ALL
+    SELECT brand AS RawBrand, brand AS ReportBrand
+    FROM SPOT.dbo.TGT_BRANDS
+    WHERE brand NOT IN (
+        '30 HIL SP CAT', '30 HIL SP DOG', 
+        '30 HIL PD CAT', '30 HIL PD DOG',
+		'30 .NIV MEN', 		
+		'30 .NIV BODY', 		
+		'30 .NIV CREAM', 	
+		'30 .NIV MINIS', 	
+		'30 .NIV STYLING', 	
+		'30 .NIV LIP CARE', 	
+		'30 .NIV GIFT PACK', 
+		'30 .NIV HAND'
+    )
+),
+
+BT AS (
+    SELECT DISTINCT 
+        t.sales_rep AS salesrep,
+        tbm.RawBrand,
+        tbm.ReportBrand,
+        b.BusinessType
+    FROM SPOT.dbo.TGT_TARGETS t
+    INNER JOIN TargetBrandMap tbm ON t.brand = tbm.ReportBrand
+    INNER JOIN SPOT.dbo.TGT_BRANDS b ON b.brand = tbm.RawBrand
+    WHERE RIGHT(qtr, 4) = YEAR(GETDATE())
+)
+
+
+SELECT
+CurrHalfTgts.SalesRep,
+
+CurrHalfTgts.Brand,
+
+FinalSales.Sales_LYTD as SalesToDate_LastYear,
+
+FinalSales.Sales_HYTD as SalesToDate_For_Half,
+
+ISNULL(CurrHalfTgts.SalesTarget,0) as SalesTarget_For_Half,
+
+-ISNULL(CurrHalfTgts.SalesTarget,0)+ISNULL(FinalSales.Sales_HYTD,0) as DiffTargetvsActual_Half,
+
+ISNULL(StretchedTargets.StretchedTarget, 0) AS SalesTarget_Stretched,
+
+FinalSales.Sales_YTD as SalesToDate_Cumulative,
+
+FinalSales.Sales_YTD - ISNULL(StretchedTargets.StretchedTarget, 0) AS DiffStretchedTargetvsActual,
+
+CASE
+	WHEN (DATEDIFF(day, GETDATE(), CurrHalfTgts.HALF_DATE_TO) / 7) = 0 THEN 0 
+	ELSE
+	(-ISNULL(CurrHalfTgts.SalesTarget,0)+ISNULL(FinalSales.Sales_HYTD, 0)) / 
+	(DATEDIFF(day, GETDATE(), CurrHalfTgts.HALF_DATE_TO) / 7) --WeeksLeft
+END AS AmtToSell_PerWeek,
+
+CASE WHEN -ISNULL(CurrHalfTgts.SalesTarget,0)+ISNULL(FinalSales.Sales_HYTD,0) > 0 THEN 0 
+	ELSE ((-ISNULL(CurrHalfTgts.SalesTarget,0)+ISNULL(FinalSales.Sales_HYTD,0))*-1)/CAL.DaysLeft  END AS AVGTSalesPerDay,
+
+CASE 
+	WHEN ISNULL(YearCAL.WorkDaysInYear, 0) = 0 THEN 0
+	ELSE ROUND(ISNULL(StretchedTargets.StretchedTarget, 0) / YearCAL.WorkDaysInYear, 2)
+END AS StretchedTarget_PerDay
+
+FROM
+--sales targets for the current half
+(select TGT_Inner.sales_rep  as salesrep, TGT_Inner.brand, TGT_Inner.[Target] as SalesTarget, TGT_Half.HALF_DATE_FROM, TGT_Half.HALF_DATE_TO, TGT_Half.HALF_DESC
+from SPOT.[dbo].[TGT_TARGETS] TGT_Inner
+inner join SPOT.[dbo].[TGT_HALVES] TGT_Half on TGT_Inner.QTR=TGT_Half.HALF_DESC
+where TGT_Half.HALF_DATE_FROM = CAST(CAST(YEAR(GETDATE()) AS VARCHAR) + '-01-01' AS DATE)
+--Start of Current Half-Year
+) CurrHalfTgts
+
+INNER JOIN
+	(SELECT COUNT(fullDate)+1 as DaysLeft
+	FROM [Spot].[dbo].[CalendarTbl]
+	WHERE holiday = 0 and isBusDay = 1 and fullDate between GETDATE() and CAST(
+            CASE 
+                WHEN MONTH(GETDATE()) <= 6 THEN CAST(YEAR(GETDATE()) AS VARCHAR) + '-06-30'
+                ELSE CAST(YEAR(GETDATE()) AS VARCHAR) + '-12-31'
+            END AS DATE
+        )) CAL
+	ON 1=1
+
+LEFT OUTER JOIN
+(
+
+select SalesSummary.SalesRep, SalesSummary.reportbrand as SortKey, 
+cast(sum(case when Yr = 'SalesCurrentYear' then SalesSummary.Sales_Value else 0 end) as decimal(10,2) ) as Sales_YTD,
+cast(sum(case when Yr = 'SalesLastYear' then SalesSummary.Sales_Value else 0 end) as decimal(10,2) ) as Sales_LYTD,
+cast(sum(case when Yr = 'SalesHalfYear' then SalesSummary.Sales_Value else 0 end) as decimal(10,2) ) as Sales_HYTD
+from 
+
+	(
+
+ --Year To Date
+
+	select 
+	SalesRep,
+	bt.reportbrand,
+	'SalesCurrentYear' as Yr,
+	Sales_Value
+	from #slplnldetail_thisyear 
+	inner join stk_stock on detstock_code = stkcode
+	inner join stk_stock3 on stkcode = stkcode3 /*added to exclude certain items from target sales*/
+	inner join sl_transactions on det_header_key = st_header_key
+	inner join bt on bt.rawbrand = stk_sort_key and st_user1= bt.salesrep
+	where 
+	bt.BusinessType = 'Brand' --and st_user1 like CASE WHEN @SalesRep='All' THEN '%' ELSE @SalesRep END 
+	and stk_usrflag7 = 0  /*12/10/2021 - certin products marked 1 with this flag need to be excluded*/
+	
+		union all
+
+	select 
+	SalesRep as SalesRep,
+	bt.reportbrand,
+	'SalesCurrentYear' as Yr,
+	Sales_Value
+	from #slplnldetail_thisyear 
+	inner join stk_stock on detstock_code = stkcode
+	inner join stk_stock3 on stkcode = stkcode3 /*added to exclude certain items from target sales*/
+	inner join sl_transactions on det_header_key = st_header_key
+	inner join bt on bt.rawbrand = stk_sort_key1 and st_user1= bt.salesrep
+	where
+	BusinessType = 'SubCategory' and st_user1 like CASE WHEN @SalesRep='All' THEN '%' ELSE @SalesRep END 
+	and stk_usrflag7 = 0  /*12/10/2021 - certin products marked 1 with this flag need to be excluded*/
+
+		union all 
+
+	select 
+	SalesRep as SalesRep,
+	bt.reportbrand,
+	'SalesCurrentYear' as Yr,
+	Sales_Value
+	from #slplnldetail_thisyear 
+	inner join stk_stock on detstock_code = stkcode
+	inner join stk_stock3 on stkcode = stkcode3 /*added to exclude certain items from target sales*/
+	inner join sl_transactions on det_header_key = st_header_key
+	inner join bt on bt.RawBrand = stk_sort_key3 and st_user1= bt.salesrep
+	where  	
+	BusinessType = 'Supplier' and st_user1 like CASE WHEN @SalesRep='All' THEN '%' ELSE @SalesRep END 
+	and stk_usrflag7 = 0  /*12/10/2021 - certin products marked 1 with this flag need to be excluded*/
+
+		union all
+
+	select 
+	SalesRep as SalesRep,
+	bt.reportbrand,
+	'SalesCurrentYear' as Yr,
+	Sales_Value
+	from #slplnldetail_thisyear  
+	inner join stk_stock on detstock_code = stkcode
+	inner join stk_stock3 on stkcode = stkcode3 /*added to exclude certain items from target sales*/
+	inner join sl_transactions on det_header_key = st_header_key
+	inner join bt on bt.rawbrand = stk_sort_key2 and st_user1= bt.salesrep
+	where  	
+	BusinessType = 'Type' and st_user1 like CASE WHEN @SalesRep='All' THEN '%' ELSE @SalesRep END 
+	and stk_usrflag7 = 0  /*12/10/2021 - certin products marked 1 with this flag need to be excluded*/
+
+-- end year to date
+
+		union all
+
+-- last year 
+
+	select 
+	SalesRep as SalesRep,
+	bt.reportbrand,
+	'SalesLastYear' as Yr,
+	Sales_Value
+	from #slplnldetail_lastyear 
+	inner join stk_stock on detstock_code = stkcode
+	inner join stk_stock3 on stkcode = stkcode3 /*added to exclude certain items from target sales*/
+	inner join sl_transactions on det_header_key = st_header_key
+	inner join bt on bt.rawbrand = stk_sort_key and st_user1= bt.salesrep
+	where 
+	BusinessType = 'Brand' and st_user1 like CASE WHEN @SalesRep='All' THEN '%' ELSE @SalesRep END 
+	and stk_usrflag7 = 0  /*12/10/2021 - certin products marked 1 with this flag need to be excluded*/
+
+		union all
+
+	select 
+	SalesRep as SalesRep,
+	bt.reportbrand,
+	'SalesLastYear' as Yr,
+	Sales_Value
+	from #slplnldetail_lastyear 
+	inner join stk_stock on detstock_code = stkcode
+	inner join stk_stock3 on stkcode = stkcode3 /*added to exclude certain items from target sales*/
+	inner join sl_transactions on det_header_key = st_header_key
+	inner join bt on bt.rawbrand = stk_sort_key1 and st_user1= bt.salesrep
+	where
+	BusinessType = 'SubCategory' and st_user1 like CASE WHEN @SalesRep='All' THEN '%' ELSE @SalesRep END 
+	and stk_usrflag7 = 0  /*12/10/2021 - certin products marked 1 with this flag need to be excluded*/
+
+		union all
+
+	select 
+	SalesRep as SalesRep,
+	bt.reportbrand,
+	'SalesLastYear' as Yr,
+	Sales_Value
+	from #slplnldetail_lastyear 
+	inner join stk_stock on detstock_code = stkcode
+	inner join stk_stock3 on stkcode = stkcode3 /*added to exclude certain items from target sales*/
+	inner join sl_transactions on det_header_key = st_header_key
+	inner join bt on bt.rawbrand = stk_sort_key3 and st_user1= bt.salesrep
+	where  	
+	BusinessType = 'Supplier' and st_user1 like CASE WHEN @SalesRep='All' THEN '%' ELSE @SalesRep END 
+	and stk_usrflag7 = 0  /*12/10/2021 - certin products marked 1 with this flag need to be excluded*/
+	
+	union all
+
+	select 
+	SalesRep as SalesRep,
+	bt.reportbrand,
+	'SalesLastYear' as Yr,
+	Sales_Value
+	from #slplnldetail_lastyear 
+	inner join stk_stock on detstock_code = stkcode
+	inner join stk_stock3 on stkcode = stkcode3 /*added to exclude certain items from target sales*/
+	inner join sl_transactions on det_header_key = st_header_key
+	inner join bt on bt.rawbrand = stk_sort_key2 and st_user1= bt.salesrep
+	where  	
+	BusinessType = 'Type' and st_user1 like CASE WHEN @SalesRep='All' THEN '%' ELSE @SalesRep END 
+	and stk_usrflag7 = 0  /*12/10/2021 - certin products marked 1 with this flag need to be excluded*/
+
+UNION ALL
+
+-- half year sales 
+
+	select 
+	SalesRep as SalesRep,
+	bt.reportbrand,
+	'SalesHalfYear' as Yr,
+	Sales_Value
+	from #slplnldetail_halfyear 
+	inner join stk_stock on detstock_code = stkcode
+	inner join stk_stock3 on stkcode = stkcode3 /*added to exclude certain items from target sales*/
+	inner join sl_transactions on det_header_key = st_header_key
+	inner join bt on bt.rawbrand = stk_sort_key and st_user1= bt.salesrep
+	where 
+	BusinessType = 'Brand' and st_user1 like CASE WHEN @SalesRep='All' THEN '%' ELSE @SalesRep END 
+	and stk_usrflag7 = 0  /*12/10/2021 - certin products marked 1 with this flag need to be excluded*/
+	
+union all
+
+select 
+	SalesRep as SalesRep,
+	bt.reportbrand,
+	'SalesHalfYear' as Yr,
+	Sales_Value
+	from #slplnldetail_halfyear 
+	inner join stk_stock on detstock_code = stkcode
+	inner join stk_stock3 on stkcode = stkcode3 /*added to exclude certain items from target sales*/
+	inner join sl_transactions on det_header_key = st_header_key
+	inner join bt on bt.rawbrand = stk_sort_key1 and st_user1= bt.salesrep
+	where 
+	BusinessType = 'SubCategory' and st_user1 like CASE WHEN @SalesRep='All' THEN '%' ELSE @SalesRep END 
+	and stk_usrflag7 = 0  /*12/10/2021 - certin products marked 1 with this flag need to be excluded*/
+
+union all
+
+select 
+	SalesRep as SalesRep,
+	bt.reportbrand,
+	'SalesHalfYear' as Yr,
+	Sales_Value
+	from #slplnldetail_halfyear 
+	inner join stk_stock on detstock_code = stkcode
+	inner join stk_stock3 on stkcode = stkcode3 /*added to exclude certain items from target sales*/
+	inner join sl_transactions on det_header_key = st_header_key
+	inner join bt on bt.rawbrand = stk_sort_key3 and st_user1= bt.salesrep
+	where 
+	BusinessType = 'Supplier' and st_user1 like CASE WHEN @SalesRep='All' THEN '%' ELSE @SalesRep END 
+	and stk_usrflag7 = 0  /*12/10/2021 - certin products marked 1 with this flag need to be excluded*/
+
+union all
+
+select 
+	SalesRep as SalesRep,
+	bt.reportbrand,
+	'SalesHalfYear' as Yr,
+	Sales_Value
+	from #slplnldetail_halfyear 
+	inner join stk_stock on detstock_code = stkcode
+	inner join stk_stock3 on stkcode = stkcode3 /*added to exclude certain items from target sales*/
+	inner join sl_transactions on det_header_key = st_header_key
+	inner join bt on bt.rawbrand = stk_sort_key2 and st_user1= bt.salesrep
+	where 
+	BusinessType = 'Type' and st_user1 like CASE WHEN @SalesRep='All' THEN '%' ELSE @SalesRep END 
+	and stk_usrflag7 = 0  /*12/10/2021 - certin products marked 1 with this flag need to be excluded*/
+
+-- end half year sales to date
+	)SalesSummary
+
+	group by SalesRep, SalesSummary.reportbrand
+
+)FinalSales
+on FinalSales.SalesRep=CurrHalfTgts.salesrep and FinalSales.SortKey = CurrHalfTgts.brand
+
+LEFT JOIN SPOT.dbo.TGT_STRETCHED StretchedTargets
+    ON CurrHalfTgts.SalesRep = StretchedTargets.Sales_Rep
+   AND CurrHalfTgts.Brand = StretchedTargets.Brand
+   AND StretchedTargets.Year = YEAR(GETDATE())
+
+LEFT JOIN (
+	SELECT COUNT(fullDate) AS WorkDaysInYear
+	FROM [Spot].[dbo].[CalendarTbl]
+	WHERE holiday = 0 
+	  AND isBusDay = 1
+	  AND fullDate BETWEEN 
+		CAST(CAST(YEAR(GETDATE()) AS VARCHAR) + '-01-01' AS DATE) AND 
+		CAST(CAST(YEAR(GETDATE()) AS VARCHAR) + '-12-31' AS DATE)
+) YearCAL ON 1 = 1
+
+where CurrHalfTgts.SalesRep like CASE WHEN @SalesRep='All' THEN '%' ELSE @SalesRep END 
+
+order by 1
