@@ -1,5 +1,9 @@
 DECLARE @SalesRep NVARCHAR(100) = 'All';
 
+if object_id('tempdb..#slplnldetail_thisyear') is not null drop table #slplnldetail_thisyear;
+if object_id('tempdb..#slplnldetail_lastyear') is not null drop table #slplnldetail_lastyear;
+if object_id('tempdb..#slplnldetail_halfyear') is not null drop table #slplnldetail_halfyear;
+
 CREATE TABLE
 	#slplnldetail_thisyear (
 		detprimary FLOAT,
@@ -24,7 +28,7 @@ FROM
 WHERE
 	det_date >= DATEADD(yy, DATEDIFF(yy, 0, GETDATE()), 0) --StartOfThisYr
 	AND
-	det_date <= GETDATE() AND
+	det_date <= CAST(GETDATE() AS DATE) AND
 	det_type IN ('INV', 'CRN');
 
 CREATE TABLE

@@ -1,3 +1,28 @@
+SELECT
+	-- det_primary,
+	-- det_header_key,
+	-- det_stock_code,  
+    st_user1,
+    stk.stk_sort_key1,
+    det_date,
+  
+	sum(CASE
+		WHEN det_type = 'INV' THEN det_nett
+		ELSE det_nett * -1
+	END) AS Sales_Value
+	-- det_type
+FROM
+	sl_pl_nl_detail sd inner join stk_stock stk on sd.DET_STOCK_CODE = stk.stkcode
+    INNER JOIN sl_transactions ON det_header_key = st_header_key
+WHERE
+	det_type IN ('INV', 'CRN') AND
+	det_date = cast(GETDATE() AS DATE) AND
+    stk.STK_SORT_KEY1 like '30 HIL PD%'
+GROUP BY st_user1, stk.stk_sort_key1, det_date;
+    
+
+
+
 select stkcode,STK_EC_SUP_UNIT,STK_USRNUM1
 from STK_STOCK s INNER join stk_stock3 s3 on s3.stkcode3 = s.stkcode
 where stkcode in (
