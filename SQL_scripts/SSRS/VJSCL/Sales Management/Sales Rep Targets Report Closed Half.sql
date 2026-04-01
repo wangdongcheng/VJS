@@ -56,7 +56,7 @@ WHERE
 	) --StartOfLastYr
 	AND
 	det_type IN ('INV', 'CRN') AND
-	det_date <= DATEADD(YEAR, -1, GETDATE());
+	det_date <= DATEADD(YEAR, -1, GETDATE())-1;
 
 --LastYrToDate
 CREATE TABLE
