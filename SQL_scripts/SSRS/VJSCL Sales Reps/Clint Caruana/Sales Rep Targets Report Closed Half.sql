@@ -1,3 +1,11 @@
+DECLARE @SalesRep NVARCHAR(100) = '30 CLINT CARUANA';
+
+if object_id('tempdb..#slplnldetail_thisyear') is not null drop table #slplnldetail_thisyear;
+if object_id('tempdb..#slplnldetail_lastyear') is not null drop table #slplnldetail_lastyear;
+if object_id('tempdb..#slplnldetail_halfyear') is not null drop table #slplnldetail_halfyear;
+
+--------------------------------------
+
 create table #slplnldetail_thisyear (detprimary float,det_header_key varchar(20), detstock_code varchar(25),sales_value float,det_type varchar(3))
 
 insert into #slplnldetail_thisyear
