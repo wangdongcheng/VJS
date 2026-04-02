@@ -1,9 +1,15 @@
 DECLARE @SalesRep NVARCHAR(100) = 'All';
 
-if object_id('tempdb..#slplnldetail_thisyear') is not null drop table #slplnldetail_thisyear;
-if object_id('tempdb..#slplnldetail_lastyear') is not null drop table #slplnldetail_lastyear;
-if object_id('tempdb..#slplnldetail_halfyear') is not null drop table #slplnldetail_halfyear;
+IF OBJECT_ID('tempdb..#slplnldetail_thisyear') IS NOT NULL
+DROP TABLE #slplnldetail_thisyear;
 
+IF OBJECT_ID('tempdb..#slplnldetail_lastyear') IS NOT NULL
+DROP TABLE #slplnldetail_lastyear;
+
+IF OBJECT_ID('tempdb..#slplnldetail_halfyear') IS NOT NULL
+DROP TABLE #slplnldetail_halfyear;
+
+-----------------------------------------------------------
 CREATE TABLE
 	#slplnldetail_thisyear (
 		detprimary FLOAT,
@@ -60,8 +66,9 @@ WHERE
 	) --StartOfLastYr
 	AND
 	det_type IN ('INV', 'CRN') AND
-	det_date <= DATEADD(YEAR, -1, GETDATE())-1;
+	det_date <= DATEADD(YEAR, -1, GETDATE()) -1;
 
+-- one day before the current date in last year, to align with Necto
 --LastYrToDate
 CREATE TABLE
 	#slplnldetail_halfyear (
@@ -88,15 +95,15 @@ WHERE
 	det_type IN ('INV', 'CRN') AND
 	det_date >= DATEFROMPARTS(YEAR(GETDATE()), 1, 1) AND
 	det_date <= DATEFROMPARTS(YEAR(GETDATE()), 6, 30);
-	-- det_date >= CAST(
-	-- 	CAST(YEAR(GETDATE()) AS VARCHAR) + CASE
-	-- 		WHEN MONTH(GETDATE()) <= 6 THEN '-01-01'
-	-- 		ELSE '-01-01'
-	-- 	END AS DATE
-	-- ) --StartOfThisHalf
-	-- AND
-	-- det_date <= '2025-06-30';
 
+-- det_date >= CAST(
+-- 	CAST(YEAR(GETDATE()) AS VARCHAR) + CASE
+-- 		WHEN MONTH(GETDATE()) <= 6 THEN '-01-01'
+-- 		ELSE '-01-01'
+-- 	END AS DATE
+-- ) --StartOfThisHalf
+-- AND
+-- det_date <= '2025-06-30';
 WITH
 	TargetBrandMap AS (
 		-- Mapped brands
