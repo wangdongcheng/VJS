@@ -1,13 +1,17 @@
--- select * from tmp_target;
--- select * from tmp_stretch;
--- return;
+-- select * from [Spot].[dbo].[TGT_TARGETS]
+--  where SALES_REP = '30 NADESH O''BRIEN';
+-- select * from [Spot].[dbo].[TGT_STRETCHED]
+--  where Sales_Rep = '30 NADESH O''BRIEN';
 
 BEGIN try BEGIN TRAN
 
-DELETE FROM TGT_STRETCHED
-WHERE Sales_Rep IS NULL and brand is null and StretchedTarget is null;
+update [Spot].[dbo].[TGT_TARGETS]
+set SALES_REP = '30 NADESH OBRIEN'
+where SALES_REP = '30 NADESH O''BRIEN';
 
-
+update [Spot].[dbo].[TGT_STRETCHED]
+set Sales_Rep = '30 NADESH OBRIEN'
+where Sales_Rep = '30 NADESH O''BRIEN';
 commit;
 
 END try BEGIN CATCH
