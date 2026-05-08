@@ -1,17 +1,18 @@
--- select * from [Spot].[dbo].[TGT_TARGETS]
---  where SALES_REP = '30 NADESH O''BRIEN';
--- select * from [Spot].[dbo].[TGT_STRETCHED]
---  where Sales_Rep = '30 NADESH O''BRIEN';
+select 
+stkcode,
+stkname,
+STK_SORT_KEY3,
+s3.STK_USRNUM5
+from STK_STOCK s inner join stk_stock3 s3 on s.stkcode = s3.stkcode3
+where STK_SORT_KEY3 = '30 MPM PRODUCTS LTD.' 
+-- and stk_usrnum5 = 5
+return;
 
 BEGIN try BEGIN TRAN
 
-update [Spot].[dbo].[TGT_TARGETS]
-set SALES_REP = '30 NADESH OBRIEN'
-where SALES_REP = '30 NADESH O''BRIEN';
-
-update [Spot].[dbo].[TGT_STRETCHED]
-set Sales_Rep = '30 NADESH OBRIEN'
-where Sales_Rep = '30 NADESH O''BRIEN';
+update stk_stock3 set stk_usrnum5 = 3.5
+from stk_stock s inner join stk_stock3 s3 on s.stkcode = s3.stkcode3
+where STK_SORT_KEY3 = '30 MPM PRODUCTS LTD.' and stk_usrnum5 = 5;
 commit;
 
 END try BEGIN CATCH
