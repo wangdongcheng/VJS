@@ -1,3 +1,10 @@
+select stk_sort_key,count(stkcode) as count
+from stk_stock
+where stk_sort_key3 = '30 SPECTRUM BRANDS'
+group by stk_sort_key
+
+
+
 SELECT
 	-- det_primary,
 	-- det_header_key,
