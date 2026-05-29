@@ -45,3 +45,12 @@ STKCODE, STKNAME, STKCODE+' | '+STKNAME AS STK_CN,
 	GROUP BY LOC_STOCK_CODE) LOC
 ON S.STKCODE=LOC.LOC_STOCK_CODE
 WHERE STK_SORT_KEY3 = '30 FISH 4 PETS' AND STK_USRFLAG2 = 1
+
+select *
+from stk_stock3
+where stkcode3 = '30F4P_106S'
+
+select det_stock_code, sum(case when det_type = 'CRN' then det_quantity*-1 else DET_QUANTITY end)/3 as [3M_AVG] 
+	from SL_PL_NL_DETAIL
+	where det_stock_code = '30F4P_106S'
+	group by DET_STOCK_CODE;
