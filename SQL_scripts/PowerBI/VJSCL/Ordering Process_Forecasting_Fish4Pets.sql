@@ -46,11 +46,39 @@ STKCODE, STKNAME, STKCODE+' | '+STKNAME AS STK_CN,
 ON S.STKCODE=LOC.LOC_STOCK_CODE
 WHERE STK_SORT_KEY3 = '30 FISH 4 PETS' AND STK_USRFLAG2 = 1
 
-select *
-from stk_stock3
-where stkcode3 = '30F4P_106S'
 
-select det_stock_code, sum(case when det_type = 'CRN' then det_quantity*-1 else DET_QUANTITY end)/3 as [3M_AVG] 
+select det_stock_code, 
+-- sum(case when det_type = 'CRN' then det_quantity*-1 else DET_QUANTITY end)/3 as [3M_AVG] 
+det_type,
+det_stock_code,
+det_quantity,
+det_ledger,
+DET_HEADER_REF,
+stk_usrflag3,
+stk_usrflag2,
+det_stksortkey3,
+det_date
 	from SL_PL_NL_DETAIL
-	where det_stock_code = '30F4P_106S'
-	group by DET_STOCK_CODE;
+	INNER JOIN STK_STOCK3 S3 ON S3.STKCODE3=DET_STOCK_CODE
+	where 
+	det_date between cast(getdate()-91 as date) and cast(getdate()-1 as date) and
+	--  det_type in ('INV','CRN') AND 
+	-- DET_LEDGER = 'SL' AND 
+	DET_STKSORTKEY3 = '30 FISH4PETS' 
+	-- STK_USRFLAG3 = 0 AND STK_USRFLAG2 = 1 
+	-- det_stock_code = '30F4P_415' 
+	--  det_header_ref = '701652'
+	-- group by DET_STOCK_CODE
+
+
+
+
+begin tran;
+update sl_pl_nl_detail
+set det_stksortkey3 = '30 FISH 4 PETS'
+where det_stksortkey3 = '30 FISH4PETS' and
+det_date between cast(getdate()-91 as date) and cast(getdate()-1 as date)
+
+
+rollback tran;
+commit tran;

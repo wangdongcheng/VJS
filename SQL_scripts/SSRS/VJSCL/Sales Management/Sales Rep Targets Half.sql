@@ -30,12 +30,13 @@ SELECT
 	END AS Sales_Value,
 	det_type
 FROM
-	sl_pl_nl_detail
+	sl_pl_nl_detail inner join sl_accounts sa on DET_ACCOUNT = sa.cucode
 WHERE
 	det_date >= DATEADD(yy, DATEDIFF(yy, 0, GETDATE()), 0) --StartOfThisYr
 	AND
 	det_date <= CAST(GETDATE() AS DATE) AND
-	det_type IN ('INV', 'CRN');
+	det_type IN ('INV', 'CRN') and
+	sa.cusort <> '30 WHOLESALER';
 
 CREATE TABLE
 	#slplnldetail_lastyear (
@@ -57,7 +58,7 @@ SELECT
 	END AS Sales_Value,
 	det_type
 FROM
-	sl_pl_nl_detail
+	sl_pl_nl_detail inner join sl_accounts sa on DET_ACCOUNT = sa.cucode
 WHERE
 	det_date >= DATEADD(
 		YEAR,
@@ -66,7 +67,8 @@ WHERE
 	) --StartOfLastYr
 	AND
 	det_type IN ('INV', 'CRN') AND
-	det_date <= DATEADD(YEAR, -1, GETDATE()) -1;
+	det_date <= DATEADD(YEAR, -1, GETDATE()) -1 and
+	sa.cusort <> '30 WHOLESALER';
 
 -- one day before the current date in last year, to align with Necto
 --LastYrToDate
@@ -90,11 +92,12 @@ SELECT
 	END AS Sales_Value,
 	det_type
 FROM
-	sl_pl_nl_detail
+	sl_pl_nl_detail inner join sl_accounts sa on DET_ACCOUNT = sa.cucode
 WHERE
 	det_type IN ('INV', 'CRN') AND
 	det_date >= DATEFROMPARTS(YEAR(GETDATE()), 1, 1) AND
-	det_date <= DATEFROMPARTS(YEAR(GETDATE()), 6, 30);
+	det_date <= DATEFROMPARTS(YEAR(GETDATE()), 6, 30) and
+	sa.cusort <> '30 WHOLESALER';
 
 -- det_date >= CAST(
 -- 	CAST(YEAR(GETDATE()) AS VARCHAR) + CASE

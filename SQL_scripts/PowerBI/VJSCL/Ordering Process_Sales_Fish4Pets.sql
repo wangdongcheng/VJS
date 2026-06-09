@@ -26,3 +26,8 @@ FROM Data
 UNION ALL 
 SELECT StkCode, Y_2 as [Year], [Jan Y-2],[Feb Y-2],[Mar Y-2],[Apr Y-2],[May Y-2],[Jun Y-2],[Jul Y-2],[Aug Y-2],[Sep Y-2],[Oct Y-2],[Nov Y-2],[Dec Y-2],[Jan Y-2]+[Feb Y-2]+[Mar Y-2]+[Apr Y-2]+[May Y-2]+[Jun Y-2]+[Jul Y-2]+[Aug Y-2]+[Sep Y-2]+[Oct Y-2]+[Nov Y-2]+[Dec Y-2] as Total
 FROM Data
+
+
+SELECT * FROM STK_LOCATION 
+where loc_stock_code = '30F4P_309'
+-- GROUP BY LOC_STOCK_CODE
