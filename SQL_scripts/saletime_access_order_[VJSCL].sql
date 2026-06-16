@@ -50,10 +50,10 @@ FROM
     END
 WHERE
 -- OH_ORDER_NUMBER = '825958'
-     CustomerCode = '30GRE006'
+     CustomerCode = '30FRU003'
     --  ol.Orderid  IN (
     --     1309406,1309401,1309369,1309368
     --     )
-    -- and ol.stockcode LIKE '30iam%'
+    and ol.stockcode = '30EUC_63073N'
 ORDER BY
     DATECREATED DESC
