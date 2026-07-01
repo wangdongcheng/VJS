@@ -3,7 +3,7 @@ SELECT
     AC.CUNAME AS 'Main - Name',
     ac.cu_do_not_use AS 'Info. - Inactive',
     AD.AD_CODE AS 'Addresses - Code',
-    ac.CU_DEL_ADD_CDE as 'Addresses - Default Address Code',
+    ac.CU_DEL_ADD_CDE AS 'Addresses - Default Address Code',
     ad.AD_CONTACT AS 'Addresses - Contact',
     AD.AD_ADDRESS AS 'Addresses - Address',
     AD.AD_ADDRESS_USER1 AS 'Addresses - Town',
@@ -36,9 +36,8 @@ FROM
     SL_ACCOUNTS AC
     INNER JOIN SL_ADDRESSES AD ON AC.CUCODE = AD.AD_ACC_CODE
 ORDER BY
-    2,
-    4;
-
+    ac.CUNAME,
+    ad.ad_code;
 
 
 
