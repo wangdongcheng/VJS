@@ -83,7 +83,7 @@ SELECT
     ac.CU_WEB_PASSWORD AS 'Comms - High Risk Customer',
     ac2.CU_ISDN_NUMBER AS 'Comms - ISDN',
     ac2.CU_OUR_ACCOUNT_CODE AS 'Comms - Our Account code',
-    ac2.CU_EDI_ANA AS 'Comms - EDI Details',
+    ac2.CU_EDI_ANA AS 'Comms - ANA/EAN Location Code',
     ac2.CU_EDI_CUSTIDN AS 'Comms - Delivery Location Code',
     --- Custom fields tab
     ac2.cu_usrflag1 AS 'Custom - Do Not Load',
