@@ -1,102 +1,135 @@
+-- select * from STK_STOCK where stkcode =  '30aca_9048fr';
+-- select * from stk_location where loc_stock_code = '30aca_cotton';
+-- return;
 SELECT
-	STKCODE AS 'Inventory ID',
-	STKNAME AS 'Description',
-	STK_SORT_KEY1 AS 'Category',
-	STK_SORT_KEY AS 'Brand',
-	CASE
-		WHEN V.VAT_RATE = 0 THEN 'RE'
-		WHEN V.VAT_RATE = 5 THEN 'RR'
-		WHEN V.VAT_RATE = 18 THEN 'RF'
-	END AS 'Tax Category',
-	CASE
-		WHEN S3.STK_USRFLAG8 = 1 THEN 'Case'
-		ELSE 'Unit'
-	END AS 'Sales UOM',
-	CASE
-		WHEN S3.STK_USRFLAG8 = 1 THEN S.STK_EC_SUP_UNIT
-		ELSE 1
-	END AS 'Sales UOM Conversion to Base (Multiply)',
-	CASE
-		WHEN S.STK_EC_SUP_UNIT IS NULL OR
-		S.STK_EC_SUP_UNIT = 0 THEN 1
-		ELSE S.STK_EC_SUP_UNIT
-	END AS 'Units per Case',
-	CASE
-		WHEN S3.STK_USRNUM6 = 0 THEN 1
-		ELSE S3.STK_USRNUM6
-	END AS 'Units per Pallet',
-	S.STK_COSTPRICE AS 'Last Cost',
-	S.STK_BASEPRICE AS 'Default Price',
-	S2.STK_SELLPRICE10 AS 'RRP (incl. VAT)',
-	CASE
-		WHEN S.STK_S_WGHT_NAME = 'KG' THEN 'KG'
-		ELSE ''
-	END AS 'Weight UOM',
-	CASE
-		WHEN S.STK_S_WGHT_NAME = 'L' THEN S.STK_S_WEIGHT
-		ELSE ''
-	END AS 'Volume',
-	CASE
-		WHEN S.STK_S_WGHT_NAME = 'L' THEN 'L'
-		ELSE ''
-	END AS 'Volume UOM',
-	CASE
-		WHEN S.STK_S_WGHT_NAME = 'KG' THEN S.STK_S_WEIGHT
-		ELSE ''
-	END AS 'Content Weight',
-	S3.STK_USRNUM8 AS 'Content Volume',
-	S3.STK_USRNUM7 AS 'Units per Layer',
-	CASE
-		WHEN S3.STK_USRNUM7 = 0 OR
-		S3.STK_USRNUM6 = 0 THEN 0
-		ELSE S3.STK_USRNUM6 / S3.STK_USRNUM7
-	END AS 'Pallet Layers',
-	--NOT INCLUDED--
-	S.STK_SORT_KEY2 AS 'Type',
-	S.STK_SORT_KEY3 AS 'Supplier',
-	S.STK_NOTES AS 'Notes',
-	S.STK_BARCODE AS 'Barcode',
-	S.STK_EC_COM_CODE AS 'Commodity Code',
-	S.STK_EC_KILOS AS 'Expiry Days Alarm',
-	--CUSTOM FIELDS--
-	S3.STK_USRFLAG1 AS 'Do Not Load',
-	S3.STK_USRCHAR2 AS 'Company Division',
-	S3.STK_USRCHAR5 AS 'Barcode 2',
-	S3.STK_USRNUM1 AS 'PO Min Qty',
-	S3.STK_USRNUM2 AS 'Commission Rate %',
-	S3.STK_USRFLAG2 AS 'Order Process',
-	S3.STK_USRCHAR12 AS 'Order Shelf Life',
-	S3.STK_USRCHAR13 AS 'Sales Min Ord Qty',
-	S3.STK_USRFLAG4 AS 'Pick List Large Bag',
-	S3.STK_USRFLAG6 AS 'Exclude MHV Report',
-	S3.STK_USRCHAR6 AS 'Brand Category',
-	S3.STK_USRFLAG7 AS 'Orijen Special Breed',
-	S3.STK_USRFLAG8 AS 'Sell Only In Cases',
-	S3.STK_USRCHAR7 AS 'Barcode Outer Case',
-	ISNULL(S3.STK_USRCHAR14, '') AS 'Dimensions',
-	S3.STK_USRNUM4 AS 'Min Stock Coverage',
-	S3.STK_USRNUM5 AS 'Max Stock Coverage',
-	ISNULL(S3.STK_USRCHAR16, '') AS 'Executive',
-	ISNULL(S3.STK_USRCHAR17, '') AS 'Champion Category',
-	S3.STK_USRNUM9 AS 'Weight / Pallet',
-	ISNULL(S3.STK_USRCHAR18, '') AS 'Categ Manager'
+	s.STKCODE AS 'Main - Stock code',
+	s.STKNAME AS 'Main - Description',
+	s.stk_rtp_flag AS 'Main - Enable RTP',
+	s.stk_baseprice AS 'Main - Sell Price',
+	s.stk_costprice AS 'Main - Cost Price',
+	s.stk_physical + s.stk_qtyprinted AS 'Main - Physical',
+	-- s.stk_qtyprinted as 'Main - Deliveries to Update',
+	s.stk_reserve_out AS 'Main - Allocated Stock',
+	0 AS 'Main - Unallocated Orders',
+	s.stk_physical - s.stk_reserve_out AS 'Main - Free',
+	s.stk_order_in AS 'Main - Order In',
+	s.stk_av_valu AS 'Main - Average Value',
+	s.stk_min_qty AS 'Main - Minimum',
+	s.stk_max_qty AS 'Main - Maximum',
+	s.stk_bin_number AS 'Main - Bin Number',
+	s.stk_sort_key AS 'Sort Key - Brand',
+	s.stk_sort_key1 AS 'Sort Key - Sub Category',
+	s.stk_sort_key2 AS 'Sort Key - Type',
+	s.stk_sort_key3 AS 'Sort Key - Supplier',
+	--- Info dialog ---
+	CAST(s.stk_date_putin AS DATE) AS 'Info - Created On',
+	CAST(s.stk_date_edited AS DATE) AS 'Info - Last Changed',
+	s.stk_oldcode AS 'Info - Superseded by Code',
+	s.stk_level AS 'Info - Level',
+	s.stk_reverse_chrge_vat AS 'Info - Reverse Charge VAT applies',
+	s.stk_do_not_use AS 'Info - Inactive',
+	s.stk_www_publish AS 'Info - Publish on World Wide Web',
+	--- EC Info dialog ---
+	s.stk_ec_kilos AS 'EC Info - Exp Days Alarm',
+	s.stk_ec_origin AS 'EC Info - Country of Origin',
+	s.stk_ec_com_code AS 'EC Info - Commodity Code',
+	s.stk_ec_sup_unit AS 'EC Info - Units per Case',
+	s.stk_ec_sup_unit_type AS 'EC Info - Type (of Units per Case)',
+	s.stk_service AS 'EC Info - Service',
+	s.stk_place_of_supply_vat AS 'EC Info - Apply Place of Supply VAT Rules',
+	--- Profit dialog ---
+	s.STK_SALEVALUE AS 'Profit - Sale Value - Total',
+	s.STK_COSTVALUE AS 'Profit - Cost of Sales - Total',
+	s.STK_SALEVALUE - s.STK_COSTVALUE AS 'Profit - Profit - Total',
+	(s.STK_SALEVALUE - s.STK_COSTVALUE) / NULLIF(s.STK_SALEVALUE, 0) * 100 AS 'Profit - Margin % - Total',
+	s.STK_SALEVAL_PTD AS 'Profit - Sale Value - Period',
+	s.STK_COSTVAL_PTD AS 'Profit - Cost of Sales - Period',
+	s.STK_SALEVAL_PTD - s.STK_COSTVAL_PTD AS 'Profit - Profit - Period',
+	(s.STK_SALEVAL_PTD - s.STK_COSTVAL_PTD) / NULLIF(s.STK_SALEVAL_PTD, 0) * 100 AS 'Profit - Margin % - Period',
+	s.STK_SALEVAL_YTD AS 'Profit - Sale Value - Year',
+	s.STK_COSTVAL_YTD AS 'Profit - Cost of Sales - Year',
+	s.STK_SALEVAL_YTD - s.STK_COSTVAL_YTD AS 'Profit - Profit - Year',
+	(s.STK_SALEVAL_YTD - s.STK_COSTVAL_YTD) / NULLIF(s.STK_SALEVAL_YTD, 0) * 100 AS 'Profit - Margin % - Year',
+	--- Notes tab ---
+	s.stk_notes AS 'Notes - Notes',
+	--- Picture tab ---
+	--- Weights tab ---
+	s.stk_p_weight AS 'Weights - Weight Duty',
+	s.stk_s_weight AS 'Weights - Weight Sell',
+	s.stk_p_wght_name AS 'Weights - Description Duty',
+	s.stk_s_wght_name AS 'Weights - Description Sell',
+	S.STK_BARCODE AS 'Weights - Barcode',
+	--- Custom tab ---
+	s3.stk_usrflag3 AS 'Custom - Delisted',
+	s3.stk_usrflag1 AS 'Custom - Do Not Load',
+	s3.stk_usrchar2 AS 'Custom - Comp. Division',
+	s3.stk_usrchar5 AS 'Custom - Barcode',
+	s3.stk_usrnum1 AS 'Custom - PO Min Qty',
+	s3.stk_usrnum2 AS 'Custom - Commission',
+	s3.stk_usrflag2 AS 'Custom - Order Process',
+	s3.stk_usrchar12 AS 'Custom - Order Shelf Life',
+	s3.STK_USRCHAR13 AS 'Custom - Sales MOQ (Min Ord Qty)',
+	s3.STK_USRFLAG4 AS 'Custom - Pick List Large Bag',
+	s3.STK_USRFLAG6 AS 'Custom - Exclude MHV Report',
+	s3.STK_USRCHAR6 AS 'Custom - Brand Category',
+	s3.STK_USRFLAG5 AS 'Custom - LCS Zero Value',
+	s3.STK_USRFLAG7 AS 'Custom - ORI S Breed',
+	s3.STK_USRFLAG9 AS 'Custom - Not Used 2',
+	s3.STK_USRFLAG8 AS 'Custom - Sell Only cases',
+	s3.STK_USRFLAG10 AS 'Custom - Not Used 3',
+	s3.STK_USRCHAR7 AS 'Custom - BarcodeOutCase',
+	s3.STK_USRCHAR8 AS 'Custom - Warehouse Locat',
+	s3.STK_USRCHAR14 AS 'Custom - Dimensions',
+	s3.STK_USRCHAR15 AS 'Custom - NotUsed',
+	s3.STK_USRNUM3 AS 'Custom - DispUOM',
+	s3.STK_USRNUM4 AS 'Custom - MinStkCoverage',
+	s3.STK_USRNUM5 AS 'Custom - MaxStkCoverage',
+	s3.STK_USRNUM6 AS 'Custom - Units / Pallet',
+	s3.STK_USRNUM7 AS 'Custom - Units / Layer',
+	s3.STK_USRCHAR16 AS 'Custom - Executive',
+	s3.STK_USRCHAR17 AS 'Custom - Champion Categ',
+	s3.STK_USRNUM9 AS 'Custom - Weight / Pallet',
+	s3.STK_USRCHAR18 AS 'Custom - Categ Manager',
+	--- Sell price table ---
+	s2.STK_SANALYSIS1 AS 'Selling Price 1 - Analysis',
+	s2.STK_SANALYSIS2 AS 'Selling Price 2 - Analysis',
+	s2.STK_SANALYSIS3 AS 'Selling Price 3 - Analysis',
+	s2.STK_SANALYSIS4 AS 'Selling Price 4 - Analysis',
+	s2.STK_SANALYSIS5 AS 'Selling Price 5 - Analysis',
+	s2.STK_SANALYSIS6 AS 'Selling Price 6 - Analysis',
+	s2.STK_SANALYSIS7 AS 'Selling Price 7 - Analysis',
+	s2.STK_SANALYSIS8 AS 'Selling Price 8 - Analysis',
+	s2.STK_SANALYSIS9 AS 'Selling Price 9 - Analysis',
+	s2.STK_SANALYSIS10 AS 'Selling Price 10 - Analysis',
+	s2.STK_SELLPRICE1 'Selling Price 1 - RETAIL',
+	s2.STK_SELLPRICE2 'Selling Price 2 - WHOLESALE',
+	s2.STK_SELLPRICE3 'Selling Price 3 - W NET',
+	s2.STK_SELLPRICE4 'Selling Price 4 - OFFER',
+	s2.STK_SELLPRICE5 'Selling Price 5 - PET SHOP NET',
+	s2.STK_SELLPRICE6 'Selling Price 6 - CONSUMER EXC VAT',
+	s2.STK_SELLPRICE7 'Selling Price 7 - MUST-HAVES WEBSITE',
+	s2.STK_SELLPRICE8 'Selling Price 8 - AGENT',
+	s2.STK_SELLPRICE9 'Selling Price 9 - SUB_A RETAIL',
+	s2.STK_SELLPRICE10 'Selling Price 10 - CONSUMER'
+
 FROM
 	STK_STOCK S
 	INNER JOIN STK_STOCK3 S3 ON S.STKCODE = S3.STKCODE3
 	INNER JOIN STK_STOCK_2 S2 ON S.STKCODE = S2.STKCODE2
-	INNER JOIN SL_ANALYSIS SL ON S2.STK_SANALYSIS1 = SL.SACODE
-	INNER JOIN SYS_VATCONTROL V ON SL.SAVATCODE = V.VAT_CODE
-	INNER JOIN (
-		SELECT DISTINCT
-			LOC_STOCKCODE2,
-			LOC_USERFLAG1,
-			LOC_USERFLAG2
-		FROM
-			STK_LOCATION2
-	) L ON S.STKCODE = L.LOC_STOCKCODE2
-WHERE
-	s.STK_DO_NOT_USE = 0 AND
-	S3.STK_USRFLAG3 = 0 
+	-- INNER JOIN SL_ANALYSIS SL ON S2.STK_SANALYSIS1 = SL.SACODE
+	-- INNER JOIN SYS_VATCONTROL V ON SL.SAVATCODE = V.VAT_CODE
+	-- INNER JOIN (
+	-- 	SELECT DISTINCT
+	-- 		LOC_STOCKCODE2,
+	-- 		LOC_USERFLAG1,
+	-- 		LOC_USERFLAG2
+	-- 	FROM
+	-- 		STK_LOCATION2
+	-- ) L ON S.STKCODE = L.LOC_STOCKCODE2
+-- WHERE
+	-- s.STK_DO_NOT_USE = 0 
+	-- AND
+	-- S3.STK_USRFLAG3 = 0
 	-- AND
 	-- STK_SORT_KEY IN (
 	-- 	'30 NIVEA',
@@ -106,6 +139,7 @@ WHERE
 	-- 	'30 NUVENIA',
 	-- 	'30 TEMPO'
 	-- )
+	-- and stkcode = '30ffk_15086'
 ORDER BY
 	stk_sort_key,
-	stkcode;	
+	stkcode;

@@ -14,6 +14,11 @@ STKCODE+' | '+STKNAME AS STK_CN,
  S3.STK_USRNUM5 AS MAX_STK_QTY,
  S3.STK_USRNUM6 AS 'UNITS_PER_PALLET',
  s.stk_ec_sup_unit AS 'UNITS_PER_CASE',
+ ---------
+ LOC.STK_PHYSICAL,
+ STK_ORDER_IN,
+STK_USRNUM1,
+ ---------
  CAST(Z.[3M_AVG] AS INT) AS [3M_AVG], 
  CAST(Z2.[12M_AVG] AS INT) AS [12M_AVG],
   CASE 
@@ -43,7 +48,9 @@ STKCODE+' | '+STKNAME AS STK_CN,
             FLOOR(
               ((S3.STK_USRNUM5 * Z.[3M_AVG] * S.STK_EC_SUP_UNIT) - LOC.STK_PHYSICAL - STK_ORDER_IN) 
               / S.STK_EC_SUP_UNIT
-            ) / (STK_USRNUM1 / S.STK_EC_SUP_UNIT), 0
+            ) / (STK_USRNUM1 
+            / S.STK_EC_SUP_UNIT
+            ), 0
           ) * STK_USRNUM1
       END 
   END AS AUTO_ORDER_QTY,
@@ -65,7 +72,9 @@ CASE
                   FLOOR(
                     ((S3.STK_USRNUM5 * Z.[3M_AVG] * S.STK_EC_SUP_UNIT) - LOC.STK_PHYSICAL - STK_ORDER_IN)
                     / S.STK_EC_SUP_UNIT
-                  ) / (STK_USRNUM1 / S.STK_EC_SUP_UNIT), 0
+                  ) / (STK_USRNUM1 
+                  / S.STK_EC_SUP_UNIT
+                  ), 0
                 ) * STK_USRNUM1
               ) / (Z.[3M_AVG]*S.STK_EC_SUP_UNIT) AS DECIMAL(18, 2)
             ) 
@@ -90,7 +99,9 @@ CASE
                     FLOOR(
                       ((S3.STK_USRNUM5 * Z.[3M_AVG] * S.STK_EC_SUP_UNIT) - LOC.STK_PHYSICAL - STK_ORDER_IN)
                       / S.STK_EC_SUP_UNIT
-                    ) / (STK_USRNUM1 / S.STK_EC_SUP_UNIT), 0
+                    ) / (STK_USRNUM1 
+                    / S.STK_EC_SUP_UNIT
+                    ), 0
                   ) * STK_USRNUM1
                 ) / STK_USRNUM6, 2
               ) AS DECIMAL(18, 2)

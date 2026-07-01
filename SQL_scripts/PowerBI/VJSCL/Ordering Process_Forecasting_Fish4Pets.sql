@@ -73,12 +73,3 @@ det_date
 
 
 
-begin tran;
-update sl_pl_nl_detail
-set det_stksortkey3 = '30 FISH 4 PETS'
-where det_stksortkey3 = '30 FISH4PETS' and
-det_date between cast(getdate()-91 as date) and cast(getdate()-1 as date)
-
-
-rollback tran;
-commit tran;

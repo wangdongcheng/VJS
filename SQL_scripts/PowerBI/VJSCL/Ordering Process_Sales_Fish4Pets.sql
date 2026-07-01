@@ -29,5 +29,5 @@ FROM Data
 
 
 SELECT * FROM STK_LOCATION 
-where loc_stock_code = '30F4P_309'
+where loc_stock_code = '30F4P_301'
 -- GROUP BY LOC_STOCK_CODE
