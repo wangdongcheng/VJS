@@ -1,6 +1,3 @@
--- select * from STK_STOCK where stkcode =  '30aca_9048fr';
--- select * from stk_location where loc_stock_code = '30aca_cotton';
--- return;
 SELECT
 	s.STKCODE AS 'Main - Stock code',
 	s.STKNAME AS 'Main - Description',

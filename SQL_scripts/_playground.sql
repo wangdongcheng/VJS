@@ -1,3 +1,11 @@
+  SELECT STKNAME,STKCODE,	CAST(stk_date_putin AS DATE) AS 'Created On',
+	CAST(stk_date_edited AS DATE) AS 'Last Changed',STK_SORT_KEY,STK_SORT_KEY2,STK_SORT_KEY3,STK_SORT_KEY1,STK_USRFLAG7 AS DONOTSHOWWEB,STK_FLAG2 AS DNR,STK_USRFLAG1 AS 'DoNotLoad',STK_DO_NOT_USE AS 'Inactive'
+  FROM [SVBeauty].[dbo].[STK_STOCK]
+  INNER JOIN STK_STOCK3 on STKCODE3 = STKCODE
+ 
+
+
+
 select stk_sort_key,count(stkcode) as count
 from stk_stock
 where stk_sort_key3 = '30 SPECTRUM BRANDS'

@@ -65,10 +65,45 @@ SELECT
     --- Custom fields tab
     pl2.SU_USRCHAR1 as 'Custom - Street Name',
     pl2.SU_USRCHAR2 as 'Custom - Building No.',
-    pl2.SU_USRCHAR5 as 'Custom - Building Name'
+    pl2.SU_USRCHAR5 as 'Custom - Building Name',
+    --- Addresses dialog
+    AD.pl_AD_CODE AS 'Addresses - Code',
+    pl.sU_DEL_ADD_CDE AS 'Addresses - Default Address Code',
+    ad.pl_AD_CONTACT AS 'Addresses - Contact',
+    AD.pl_AD_ADDRESS AS 'Addresses - Address',
+    AD.pl_AD_ADDRESS_USER1 AS 'Addresses - Town',
+    AD.pl_ad_address_user2 AS 'Addresses - County',
+    AD.pl_AD_POSTCODE AS 'Addresses - Postcode',
+    ad.pl_AD_COUNTRY AS 'Addresses - Country',
+    AD.pl_AD_EMAIL AS 'Addresses - E-mail',
+    ad.pl_ad_cc_email AS 'Addresses - CC E-mail',
+    ad.pl_AD_ANALYSIS AS 'Addresses - Purchase Analysis',
+    AD.pl_ad_phone AS 'Addresses - Phone',
+    ad.pl_ad_mobile AS 'Addresses - Mobile',
+    ad.pl_ad_fax AS 'Addresses - Fax',
+    CASE
+        WHEN ad.pl_ad_inv_add = 1 THEN 'Yes'
+        ELSE ''
+    END AS 'Address for Order',
+    CASE
+        WHEN ad.pl_ad_del_add = 1 OR
+        ad.pl_ad_del_address_2 = 1 THEN 'Yes'
+        ELSE ''
+    END AS 'Address for Delivery',
+    CASE
+        WHEN ad.pl_ad_stat_add = 1 THEN 'Yes'
+        ELSE ''
+    END AS 'Address for Statement',
+    CASE
+        WHEN ad.pl_ad_rem_add = 1 THEN 'Yes'
+        ELSE ''
+    END AS 'Address for Remittance',
+    ad.pl_AD_DO_NOT_USE AS 'Addresses - No Longer Use',
+    ad.pl_AD_PRIMARY AS 'Address Primary ID'
 FROM
     PL_ACCOUNTS pl
     INNER JOIN PL_ACCOUNTS2 pl2 ON pl.sucode = pl2.sucode2
+    INNER JOIN pl_ADDRESSES AD ON pl.sucode = AD.pl_AD_ACCCODE
     LEFT OUTER JOIN SDK_SL_PL_CONTRA_RECS sc ON pl.sucode = sc.spc_sucode
 ORDER BY
     pl.suname;
