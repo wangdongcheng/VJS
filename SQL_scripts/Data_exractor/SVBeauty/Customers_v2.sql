@@ -55,9 +55,9 @@ SELECT
     END AS 'VAT - VAT Reg No',
     ac.cu_company_reg_number AS 'VAT - Company Reg. No.',
     --- Sort Key tab
-    ac.cusort AS 'Sort Key - Sub Category',
-    ac.cuuser1 AS 'Sort Key - Default Rep',
-    ac.cuuser2 AS 'Sort Key - Main Category',
+    ac.cusort AS 'Sort Key - Channel',
+    ac.cuuser1 AS 'Sort Key - Sales Rep',
+    ac.cuuser2 AS 'Sort Key - SubChannel',
     ac.cuuser3 AS 'Sort Key - Document',
     --- Notes tab
     ac.cu_notes AS 'Notes - Notes',
@@ -80,41 +80,20 @@ SELECT
     ac.CU_BIC_CODE AS 'Bank - SWIFT/BIC Code',
     --- Comms tab
     ac2.CU_WEBSITE_ADDRESS AS 'Comms - Internet',
-    ac.CU_WEB_PASSWORD AS 'Comms - High Risk Customer',
+    ac.CU_WEB_PASSWORD AS 'Comms - AccessWebPassword',
     ac2.CU_ISDN_NUMBER AS 'Comms - ISDN',
     ac2.CU_OUR_ACCOUNT_CODE AS 'Comms - Our Account code',
     ac2.CU_EDI_ANA AS 'Comms - ANA/EAN Location Code',
     ac2.CU_EDI_CUSTIDN AS 'Comms - Delivery Location Code',
     --- Custom fields tab
-    ac2.cu_usrflag1 AS 'Custom - Do Not Load',
-    AC2.CU_USRCHAR1 AS 'Custom - ID Card No',
-    AC2.CU_USRCHAR2 AS 'Custom - Co Reg No',
-    AC2.CU_USRCHAR8 AS 'Custom - Contract Detail',
-    AC2.CU_USRCHAR9 AS 'Custom - Pet/PersC/Food',
-    AC2.CU_USRCHAR11 AS 'Custom - Det/HouseH/Niv',
-    AC2.CU_USRCHAR5 AS 'Custom - BDF Cus Rank',
-    AC2.CU_USRCHAR6 AS 'Custom - H&D Cus Rank',
-    ac2.CU_USRCHAR7 AS 'Custom - Cust Short Desc',
-    AC2.CU_USRFLAG2 AS 'Custom - FocusReview',
-    AC2.CU_USRFLAG3 AS 'Custom - NotShowDiscount',
-    AC2.CU_USRFLAG4 AS 'Custom - Strictly Cash',
-    AC2.CU_USRFLAG5 AS 'Custom - MarketingOptOut',
-    ac2.CU_USRNUM1 AS 'Custom - BDF Cus Target',
-    AC2.CU_USRCHAR10 AS 'Custom - Director 1',
-    ac2.CU_USRNUM2 AS 'Custom - H&D Cus Target',
-    AC2.CU_USRCHAR12 AS 'Custom - Director 2',
-    AC2.CU_USRCHAR13 AS 'Custom - Phone Marketing',
-    AC2.CU_USRFLAG6 AS 'Custom - Bad Debts',
-    AC2.CU_USRFLAG7 AS 'Custom - Commissionable',
-    AC2.CU_USRFLAG8 AS 'Custom - Automated Invoice',
-    AC2.CU_USRFLAG9 AS 'Custom - %Rebate',
-    AC2.CU_USRFLAG10 AS 'Custom - Fixed Cost',
-    AC2.CU_USRNUM3 AS 'Custom - Disc 0 = %, 1 = Net',
-    AC2.CU_USRCHAR14 AS 'Custom - Hills_C_CHANNEL',
-    AC2.CU_USRCHAR15 AS 'Custom - Hills_C_CLASS',
-    AC2.CU_USRNUM4 AS 'Custom - EOY Set Off %',
-    AC2.CU_USRCHAR16 AS 'Custom - Champion Categ',
-    AC2.CU_USRCHAR17 AS 'Custom - Bi-Weekly Stmt?'
+    ac2.CU_USRNUM1 as 'Custom - global Discount',
+    ac2.CU_USRFLAG1 as 'Custom - Display Barcode',
+    ac2.CU_USRCHAR14 as 'Custom - Customer Group',
+    ac2.CU_USRFLAG2 as 'Custom - Do Not Load',
+    ac2.CU_USRFLAG3 as 'Custom - MarketingOptOut',
+    ac2.CU_USRFLAG4 as 'Custom - No Commission',
+    ac2.CU_USRFLAG6 as 'Custom - Remove Overdues',
+    ac2.CU_USRFLAG5 as 'Custom - Omit Trish Odue'
 FROM
     sl_accounts ac
     INNER JOIN sl_accounts2 ac2 ON ac.cucode = ac2.cucode2
@@ -128,7 +107,7 @@ RETURN;
 SELECT
     *
 FROM
-    [vjsclcasesunits].[dbo].[sl_accounts] ac
-    INNER JOIN [vjsclcasesunits].[dbo].[sl_accounts2] ac2 ON ac.cucode = ac2.cucode2
+    [svbeautytest].[dbo].[sl_accounts] ac
+    INNER JOIN [svbeautytest].[dbo].[sl_accounts2] ac2 ON ac.cucode = ac2.cucode2
 WHERE
-    ac.cucode = '30aab001';
+    ac.cucode = '20abc001';

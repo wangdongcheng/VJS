@@ -59,37 +59,21 @@ SELECT
 	S.STK_BARCODE AS 'Weights - Barcode',
 	--- Custom tab
 	s3.STK_USRCHAR10 as 'Custom - Stk Brand Class',
-	--continue from here, 20260703_145308 done mark
-	s3.stk_usrflag3 AS 'Custom - Delisted',
 	s3.stk_usrflag1 AS 'Custom - Do Not Load',
-	s3.stk_usrchar2 AS 'Custom - Comp. Division',
-	s3.stk_usrchar5 AS 'Custom - Barcode',
+	s3.stk_usrchar2 AS 'Custom - Supplier Source',
+	s3.stk_usrchar5 AS 'Custom - Unit Barcode',
 	s3.stk_usrnum1 AS 'Custom - PO Min Qty',
-	s3.stk_usrnum2 AS 'Custom - Commission',
-	s3.stk_usrflag2 AS 'Custom - Order Process',
-	s3.stk_usrchar12 AS 'Custom - Order Shelf Life',
-	s3.STK_USRCHAR13 AS 'Custom - Sales MOQ (Min Ord Qty)',
-	s3.STK_USRFLAG4 AS 'Custom - Pick List Large Bag',
-	s3.STK_USRFLAG6 AS 'Custom - Exclude MHV Report',
-	s3.STK_USRCHAR6 AS 'Custom - Brand Category',
-	s3.STK_USRFLAG5 AS 'Custom - LCS Zero Value',
-	s3.STK_USRFLAG7 AS 'Custom - ORI S Breed',
-	s3.STK_USRFLAG9 AS 'Custom - Not Used 2',
-	s3.STK_USRFLAG8 AS 'Custom - Sell Only cases',
-	s3.STK_USRFLAG10 AS 'Custom - Not Used 3',
-	s3.STK_USRCHAR7 AS 'Custom - BarcodeOutCase',
-	s3.STK_USRCHAR8 AS 'Custom - Warehouse Locat',
-	s3.STK_USRCHAR14 AS 'Custom - Dimensions',
-	s3.STK_USRCHAR15 AS 'Custom - NotUsed',
-	s3.STK_USRNUM3 AS 'Custom - DispUOM',
-	s3.STK_USRNUM4 AS 'Custom - MinStkCoverage',
-	s3.STK_USRNUM5 AS 'Custom - MaxStkCoverage',
-	s3.STK_USRNUM6 AS 'Custom - Units / Pallet',
-	s3.STK_USRNUM7 AS 'Custom - Units / Layer',
-	s3.STK_USRCHAR16 AS 'Custom - Executive',
-	s3.STK_USRCHAR17 AS 'Custom - Champion Categ',
-	s3.STK_USRNUM9 AS 'Custom - Weight / Pallet',
-	s3.STK_USRCHAR18 AS 'Custom - Categ Manager',
+	s3.stk_usrflag2 AS 'Custom - DNR',
+	s3.stk_usrchar12 AS 'Custom - Sales in Motion',
+	s3.STK_USRCHAR13 AS 'Custom - Alt. Stock',
+	s3.STK_USRCHAR6 AS 'Custom - BI Security',
+	s3.STK_USRCHAR11 as 'Custom - ClaThl Type',
+	s3.STK_USRCHAR14 AS 'Custom - StockGroupCode',
+	s3.STK_USRCHAR9 as 'Custom - Brand Name(BI)',
+	s3.STK_USRFLAG6 as 'Non-Saleable?',
+	s3.STK_USRFLAG5 AS 'Custom - LCS Zero Value?',
+	s3.STK_USRFLAG7 as 'DoNotShowWeb',
+
 	--- Sell price table
 	s2.STK_SANALYSIS1 AS 'Selling Price 1 - Analysis',
 	s2.STK_SANALYSIS2 AS 'Selling Price 2 - Analysis',
@@ -101,22 +85,22 @@ SELECT
 	s2.STK_SANALYSIS8 AS 'Selling Price 8 - Analysis',
 	s2.STK_SANALYSIS9 AS 'Selling Price 9 - Analysis',
 	s2.STK_SANALYSIS10 AS 'Selling Price 10 - Analysis',
-	s2.STK_SELLPRICE1 'Selling Price 1 - RETAIL',
-	s2.STK_SELLPRICE2 'Selling Price 2 - WHOLESALE',
-	s2.STK_SELLPRICE3 'Selling Price 3 - W NET',
-	s2.STK_SELLPRICE4 'Selling Price 4 - OFFER',
-	s2.STK_SELLPRICE5 'Selling Price 5 - PET SHOP NET',
-	s2.STK_SELLPRICE6 'Selling Price 6 - CONSUMER EXC VAT',
-	s2.STK_SELLPRICE7 'Selling Price 7 - MUST-HAVES WEBSITE',
-	s2.STK_SELLPRICE8 'Selling Price 8 - AGENT',
-	s2.STK_SELLPRICE9 'Selling Price 9 - SUB_A RETAIL',
+	s2.STK_SELLPRICE1 'Selling Price 1 - STANDARD',
+	s2.STK_SELLPRICE2 'Selling Price 2 - .',
+	s2.STK_SELLPRICE3 'Selling Price 3 - .',
+	s2.STK_SELLPRICE4 'Selling Price 4 - .',
+	s2.STK_SELLPRICE5 'Selling Price 5 - .',
+	s2.STK_SELLPRICE6 'Selling Price 6 - EXPORT',
+	s2.STK_SELLPRICE7 'Selling Price 7 - STOCK CLEARANCE',
+	s2.STK_SELLPRICE8 'Selling Price 8 - FRANKS',
+	s2.STK_SELLPRICE9 'Selling Price 9 - CONS LESS VAT',
 	s2.STK_SELLPRICE10 'Selling Price 10 - CONSUMER'
 FROM
 	STK_STOCK S
 	INNER JOIN STK_STOCK3 S3 ON S.STKCODE = S3.STKCODE3
 	INNER JOIN STK_STOCK_2 S2 ON S.STKCODE = S2.STKCODE2
-WHERE
-	s.stkcode = '20EYL6001102'
+-- WHERE
+-- 	s.stkcode = '20EYL6001102'
 ORDER BY
 	stkcode;
 
