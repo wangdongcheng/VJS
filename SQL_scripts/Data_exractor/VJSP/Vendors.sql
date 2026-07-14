@@ -1,5 +1,5 @@
 SELECT
-	'VJSP' AS 'Company',
+	'VJSCL' AS 'Company',
 	'' AS 'Reason for Sample',
 	PL.SUCODE AS 'Vendor ID',
 	PL.SUNAME AS 'Description',

@@ -74,7 +74,7 @@ SELECT
 	s3.STK_USRFLAG5 AS 'Custom - LCS Zero Value?',
 	s3.STK_USRFLAG7 as 'DoNotShowWeb',
 
-	--- Sell price table
+	--- Selling price table
 	s2.STK_SANALYSIS1 AS 'Selling Price 1 - Analysis',
 	s2.STK_SANALYSIS2 AS 'Selling Price 2 - Analysis',
 	s2.STK_SANALYSIS3 AS 'Selling Price 3 - Analysis',
@@ -85,16 +85,39 @@ SELECT
 	s2.STK_SANALYSIS8 AS 'Selling Price 8 - Analysis',
 	s2.STK_SANALYSIS9 AS 'Selling Price 9 - Analysis',
 	s2.STK_SANALYSIS10 AS 'Selling Price 10 - Analysis',
-	s2.STK_SELLPRICE1 'Selling Price 1 - STANDARD',
-	s2.STK_SELLPRICE2 'Selling Price 2 - .',
-	s2.STK_SELLPRICE3 'Selling Price 3 - .',
-	s2.STK_SELLPRICE4 'Selling Price 4 - .',
-	s2.STK_SELLPRICE5 'Selling Price 5 - .',
-	s2.STK_SELLPRICE6 'Selling Price 6 - EXPORT',
-	s2.STK_SELLPRICE7 'Selling Price 7 - STOCK CLEARANCE',
-	s2.STK_SELLPRICE8 'Selling Price 8 - FRANKS',
-	s2.STK_SELLPRICE9 'Selling Price 9 - CONS LESS VAT',
-	s2.STK_SELLPRICE10 'Selling Price 10 - CONSUMER'
+	s2.STK_SELLPRICE1 as 'Selling Price 1 - STANDARD',
+	s2.STK_SELLPRICE2 as 'Selling Price 2 - .',
+	s2.STK_SELLPRICE3 as 'Selling Price 3 - .',
+	s2.STK_SELLPRICE4 as 'Selling Price 4 - .',
+	s2.STK_SELLPRICE5 as 'Selling Price 5 - .',
+	s2.STK_SELLPRICE6 as 'Selling Price 6 - EXPORT',
+	s2.STK_SELLPRICE7 as 'Selling Price 7 - STOCK CLEARANCE',
+	s2.STK_SELLPRICE8 as 'Selling Price 8 - FRANKS',
+	s2.STK_SELLPRICE9 as 'Selling Price 9 - CONS LESS VAT',
+	s2.STK_SELLPRICE10 as 'Selling Price 10 - CONSUMER',
+
+	--- Buying price table
+	s2.STK_PANALYSIS1 AS 'Buying Price 1 - Analysis',
+	s2.STK_PANALYSIS2 AS 'Buying Price 2 - Analysis',
+	s2.STK_PANALYSIS3 AS 'Buying Price 3 - Analysis',
+	s2.STK_PANALYSIS4 AS 'Buying Price 4 - Analysis',
+	s2.STK_PANALYSIS5 AS 'Buying Price 5 - Analysis',
+	s2.STK_PANALYSIS6 AS 'Buying Price 6 - Analysis',
+	s2.STK_PANALYSIS7 AS 'Buying Price 7 - Analysis',
+	s2.STK_PANALYSIS8 AS 'Buying Price 8 - Analysis',
+	s2.STK_PANALYSIS9 AS 'Buying Price 9 - Analysis',
+	s2.STK_PANALYSIS10 AS 'Buying Price 10 - Analysis',
+	s2.STK_COSTPRICE1 as 'Buying Price 1',
+	s2.STK_COSTPRICE2 as 'Buying Price 2',
+	s2.STK_COSTPRICE3 as 'Buying Price 3',
+	s2.STK_COSTPRICE4 as 'Buying Price 4',
+	s2.STK_COSTPRICE5 as 'Buying Price 5',
+	s2.STK_COSTPRICE6 as 'Buying Price 6',
+	s2.STK_COSTPRICE7 as 'Buying Price 7',
+	s2.STK_COSTPRICE8 as 'Buying Price 8',
+	s2.STK_COSTPRICE9 as 'Buying Price 9',
+	s2.STK_COSTPRICE10 as 'Buying Price 10'
+
 FROM
 	STK_STOCK S
 	INNER JOIN STK_STOCK3 S3 ON S.STKCODE = S3.STKCODE3
