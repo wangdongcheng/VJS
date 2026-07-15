@@ -66,42 +66,43 @@ SELECT
     END,2) AS GrowthPercentageSales,
 	wd.WorkedDaysRatio,
 	ROUND(SUM(CASE WHEN YEAR(det_date) = YEAR(DATEADD(YEAR, -2, GETDATE()))
-                   THEN CASE WHEN det_type = 'CRN' THEN (DET_QUANTITY * -1)*STK_S_WEIGHT ELSE DET_QUANTITY*STK_S_WEIGHT END 
+                   THEN CASE WHEN det_type = 'CRN' THEN (DET_QUANTITY * -1) ELSE DET_QUANTITY END 
                    ELSE 0 END), 0) AS 'LY-2_QTY',
     ROUND(SUM(CASE WHEN YEAR(det_date) = YEAR(DATEADD(YEAR, -1, GETDATE()))
-                   THEN CASE WHEN det_type = 'CRN' THEN (DET_QUANTITY * -1)*STK_S_WEIGHT ELSE DET_QUANTITY*STK_S_WEIGHT END 
+                   THEN CASE WHEN det_type = 'CRN' THEN (DET_QUANTITY * -1) ELSE DET_QUANTITY END 
                    ELSE 0 END), 0) AS LY_QTY,
     ROUND(SUM(CASE WHEN det_date BETWEEN DATEFROMPARTS(YEAR(GETDATE()) - 1, 1, 1) AND DATEADD(YEAR, -1, GETDATE())
-                   THEN CASE WHEN det_type = 'CRN' THEN (DET_QUANTITY * -1)*STK_S_WEIGHT ELSE DET_QUANTITY*STK_S_WEIGHT END 
+                   THEN CASE WHEN det_type = 'CRN' THEN (DET_QUANTITY * -1) ELSE DET_QUANTITY END 
                    ELSE 0 END), 0) AS LYTD_QTY,
     ROUND(SUM(CASE WHEN YEAR(det_date) = YEAR(GETDATE())
-                   THEN CASE WHEN det_type = 'CRN' THEN (DET_QUANTITY * -1)*STK_S_WEIGHT ELSE DET_QUANTITY*STK_S_WEIGHT END 
+                   THEN CASE WHEN det_type = 'CRN' THEN (DET_QUANTITY * -1) ELSE DET_QUANTITY END 
                    ELSE 0 END), 0) AS YTD_QTY,
 	ROUND(ROUND(SUM(CASE WHEN YEAR(det_date) = YEAR(GETDATE())
-                   THEN CASE WHEN det_type = 'CRN' THEN (DET_QUANTITY * -1)*STK_S_WEIGHT ELSE DET_QUANTITY*STK_S_WEIGHT END 
+                   THEN CASE WHEN det_type = 'CRN' THEN (DET_QUANTITY * -1) ELSE DET_QUANTITY END 
                    ELSE 0 END), 0)
 	*
 	wd.WorkedDaysRatio,2) as 'FCST Y QTY',
+    
 	ROUND(CASE 
         WHEN 
             ROUND(SUM(CASE WHEN YEAR(det_date) = YEAR(GETDATE())
-                           THEN CASE WHEN det_type = 'CRN' THEN (DET_QUANTITY * -1)*STK_S_WEIGHT ELSE DET_QUANTITY*STK_S_WEIGHT END 
+                           THEN CASE WHEN det_type = 'CRN' THEN (DET_QUANTITY * -1) ELSE DET_QUANTITY END 
                            ELSE 0 END), 0) = 0 AND
 				ROUND(SUM(CASE WHEN det_date BETWEEN DATEFROMPARTS(YEAR(GETDATE()) - 1, 1, 1) AND DATEADD(YEAR, -1, GETDATE())
-                           THEN CASE WHEN det_type = 'CRN' THEN (DET_QUANTITY * -1)*STK_S_WEIGHT ELSE DET_QUANTITY*STK_S_WEIGHT END 
+                           THEN CASE WHEN det_type = 'CRN' THEN (DET_QUANTITY * -1) ELSE DET_QUANTITY END 
                            ELSE 0 END), 0) != 0
         THEN -1
         ELSE
             ((ROUND(SUM(CASE WHEN YEAR(det_date) = YEAR(GETDATE())
-                            THEN CASE WHEN det_type = 'CRN' THEN (DET_QUANTITY * -1)*STK_S_WEIGHT ELSE DET_QUANTITY*STK_S_WEIGHT END 
+                            THEN CASE WHEN det_type = 'CRN' THEN (DET_QUANTITY * -1) ELSE DET_QUANTITY END 
                             ELSE 0 END), 0)
             -
             ROUND(SUM(CASE WHEN det_date BETWEEN DATEFROMPARTS(YEAR(GETDATE()) - 1, 1, 1) AND DATEADD(YEAR, -1, GETDATE())
-                           THEN CASE WHEN det_type = 'CRN' THEN (DET_QUANTITY * -1)*STK_S_WEIGHT ELSE DET_QUANTITY*STK_S_WEIGHT END 
+                           THEN CASE WHEN det_type = 'CRN' THEN (DET_QUANTITY * -1) ELSE DET_QUANTITY END 
                            ELSE 0 END), 0))
             /
             NULLIF(ROUND(SUM(CASE WHEN det_date BETWEEN DATEFROMPARTS(YEAR(GETDATE()) - 1, 1, 1) AND DATEADD(YEAR, -1, GETDATE())
-                                  THEN CASE WHEN det_type = 'CRN' THEN (DET_QUANTITY * -1)*STK_S_WEIGHT ELSE DET_QUANTITY*STK_S_WEIGHT END 
+                                  THEN CASE WHEN det_type = 'CRN' THEN (DET_QUANTITY * -1) ELSE DET_QUANTITY END 
                                   ELSE 0 END), 0), 0))
     END,2) AS GrowthPercentageQty
 FROM SL_PL_NL_DETAIL d
@@ -114,3 +115,7 @@ GROUP BY cuuser2, cusort, CU_USRCHAR15,cuname, stk_sort_key, STK_SORT_KEY1, STK_
 ORDER BY StockBrand
 
 
+SELECT DISTINCT CUUSER1
+FROM SL_ACCOUNTS A
+INNER JOIN SL_ACCOUNTS2 a2 ON A.CUCODE = A2.CUCODE2
+WHERE a2.CU_USRCHAR14 = 'VET';
