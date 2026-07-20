@@ -25,7 +25,7 @@ FROM
     INFORMATION_SCHEMA.COLUMNS
 WHERE
     -- table_name like @searchtab ESCAPE '\'  -- list all order related tables from DB
-    COLUMN_NAME LIKE '%bank%' ESCAPE '\'
+    COLUMN_NAME LIKE '%credit%' ESCAPE '\'
     -- order by table_name, ordinal_position
 ;
 
