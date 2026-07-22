@@ -1,0 +1,360 @@
+/*
+ * Disclaimer!!!
+ * This is not a real query being executed, but a simplified version for general vision.
+ * Executing it with any other tool may produce a different result.
+ */
+ 
+select 
+	[Rebate_Totals].[Customer2_CustID] as [Customer2_CustID],
+	[Rebate_Totals].[InvcDtl1_ShipToNum] as [InvcDtl1_ShipToNum],
+	[Rebate_Totals].[ShipTo1_Name] as [ShipTo1_Name],
+	[Rebate_Totals].[RebateHdr_RebateID] as [RebateHdr_RebateID],
+	[Rebate_Totals].[Calculated_Rebate_Perc] as [Calculated_Rebate_Perc],
+	[Rebate_Totals].[RebateHdr_RebateDesc] as [RebateHdr_RebateDesc],
+	[Rebate_Totals].[CustGrup_GroupDesc] as [CustGrup_GroupDesc],
+	[Rebate_Totals].[SalesRep1_Name] as [SalesRep1_Name],
+	[Rebate_Totals].[Calculated_LastYrSales] as [Calculated_LastYrSales],
+	(SUM(CASE WHEN Sales_Targets.SalesTargets_Year = @Year THEN
+ 			(CASE WHEN Sales_Targets.SalesTargets_Target IS NULL OR Sales_Targets.SalesTargets_Target = 0 THEN 0
+ 			 ELSE
+ 					(CASE WHEN Rebate_Totals.Calculated_Payment_Count = 3 THEN
+ 								 (CASE WHEN @Quarter = 'Q1' AND Sales_Targets.SalesTargets_Month IN ('1','2','3','4') THEN Sales_Targets.SalesTargets_Target
+ 									 		WHEN @Quarter = 'Q2' AND Sales_Targets.SalesTargets_Month IN ('5','6','7','8') THEN Sales_Targets.SalesTargets_Target
+ 											 WHEN @Quarter = 'Q3' AND Sales_Targets.SalesTargets_Month IN ('9','10','11','12') THEN Sales_Targets.SalesTargets_Target
+ 									ELSE 0
+ 									END)
+ 			 		ELSE 			
+ 		 		 (CASE WHEN Rebate_Totals.Calculated_Payment_Count = 4 THEN
+ 							 	(CASE WHEN @Quarter = 'Q1' AND Sales_Targets.SalesTargets_Month IN ('1','2','3') THEN Sales_Targets.SalesTargets_Target
+ 								 			WHEN @Quarter = 'Q2' AND Sales_Targets.SalesTargets_Month IN ('4','5','6') THEN Sales_Targets.SalesTargets_Target
+ 											 WHEN @Quarter = 'Q3' AND Sales_Targets.SalesTargets_Month IN ('7','8','9') THEN Sales_Targets.SalesTargets_Target
+ 											 WHEN @Quarter = 'Q4' AND Sales_Targets.SalesTargets_Month IN ('10','11','12') THEN Sales_Targets.SalesTargets_Target
+ 									ELSE 0
+ 									END)
+ 					 END)
+ 			 		END)
+ 			 END)
+ 		ELSE 0
+ 		END)) as [Calculated_SalesTargets],
+	[Rebate_Totals].[Calculated_CurrentYrSales] as [Calculated_CurrentYrSales],
+	[Rebate_Totals].[Calculated_OfferLineDisc] as [Calculated_OfferLineDisc],
+	((CASE WHEN SalesTargets IS NULL OR SalesTargets = 0 THEN 0 
+ 		ELSE 
+ 			 (CASE WHEN Rebate_Totals.Calculated_CurrentYrSales IS NULL  OR Rebate_Totals.Calculated_CurrentYrSales = 0 THEN 0 
+ 				ELSE ((Rebate_Totals.Calculated_CurrentYrSales/SalesTargets) * 100) 
+ 				END)
+ END)) as [Calculated_IXvsTarget],
+	[Rebate_Totals].[Calculated_IXvsLY] as [Calculated_IXvsLY],
+	[Rebate_Totals].[Calculated_RebateCYSales] as [Calculated_RebateCYSales],
+	[Rebate_Totals].[RebateBrk_RebatePercent] as [RebateBrk_RebatePercent],
+	[Rebate_Totals].[Calculated_RebateAmount] as [Calculated_RebateAmount],
+	[Rebate_Totals].[Calculated_RebateVariance] as [Calculated_RebateVariance],
+	[Rebate_Totals].[Calculated_RebatePaid] as [Calculated_RebatePaid],
+	[Rebate_Totals].[Calculated_RebateUnpaid] as [Calculated_RebateUnpaid],
+	[Rebate_Totals].[Calculated_Payment_Count] as [Calculated_Payment_Count]
+from  (select 
+	[Rebate_Details1].[RebateHdr_Company] as [RebateHdr_Company],
+	[Rebate_Details1].[Customer2_CustID] as [Customer2_CustID],
+	[Rebate_Details1].[InvcDtl1_ShipToNum] as [InvcDtl1_ShipToNum],
+	[Rebate_Details1].[ShipTo1_Name] as [ShipTo1_Name],
+	[Rebate_Details1].[RebateHdr_RebateID] as [RebateHdr_RebateID],
+	[Rebate_Details1].[Calculated_Rebate_Perc] as [Calculated_Rebate_Perc],
+	[Rebate_Details1].[RebateHdr_RebateDesc] as [RebateHdr_RebateDesc],
+	[Rebate_Details1].[CustGrup_GroupDesc] as [CustGrup_GroupDesc],
+	[Rebate_Details1].[SalesRep1_Name] as [SalesRep1_Name],
+	(SUM(Rebate_Details1.Calculated_Last_Yr_Sales)) as [Calculated_LastYrSales],
+	(SUM(Rebate_Details1.Calculated_Current_Yr_Sales)) as [Calculated_CurrentYrSales],
+	(SUM(Rebate_Details1.Calculated_Offer_Line_Disc)) as [Calculated_OfferLineDisc],
+	(SUM(Rebate_Details1.Calculated_IX_vs_LY)) as [Calculated_IXvsLY],
+	(SUM(Rebate_Details1.Calculated_Rebate_CY_Sales)) as [Calculated_RebateCYSales],
+	[Rebate_Details1].[RebateBrk_RebatePercent] as [RebateBrk_RebatePercent],
+	(SUM(CASE WHEN Rebate_Details1.Calculated_Rebate_Amount IS NULL OR Rebate_Details1.Calculated_Rebate_Amount = 0 THEN 0
+ 		ELSE Rebate_Details1.Calculated_Rebate_Amount
+ 		END)) as [Calculated_RebateAmount],
+	(SUM(Rebate_Details1.Calculated_Rebate_CY_Sales - Rebate_Details1.Calculated_Rebate_Amount)) as [Calculated_RebateVariance],
+	[Rebate_Details1].[Calculated_Payment_Count] as [Calculated_Payment_Count],
+	(SUM(Rebate_Details1.Calculated_Rebate_Paid)) as [Calculated_RebatePaid],
+	(SUM(Rebate_Details1.Calculated_Rebate_Unpaid)) as [Calculated_RebateUnpaid]
+from  (select 
+	[RebateHdr].[Company] as [RebateHdr_Company],
+	[Customer2].[CustID] as [Customer2_CustID],
+	[InvcDtl1].[ShipToNum] as [InvcDtl1_ShipToNum],
+	[ShipTo1].[Name] as [ShipTo1_Name],
+	[RebateHdr].[RebateID] as [RebateHdr_RebateID],
+	(SUBSTRING(CAST(RebateHdr.RebateDesc AS VARCHAR(50)),PATINDEX('%[0-9]%',RebateHdr.Rebatedesc),(LEN(RebateHdr.Rebatedesc)-(PATINDEX('%[0-9]%',RebateHdr.Rebatedesc))))) as [Calculated_Rebate_Perc],
+	[RebateHdr].[RebateDesc] as [RebateHdr_RebateDesc],
+	[CustGrup].[GroupDesc] as [CustGrup_GroupDesc],
+	[SalesRep1].[Name] as [SalesRep1_Name],
+	(CASE WHEN InvcHead1.FiscalYear = @Year - 1 THEN
+ 			(CASE WHEN InvcTax1.TaxableAmt IS NULL OR InvcTax1.TaxableAmt = 0 THEN 0
+ 			 ELSE
+ 					(CASE WHEN Payment_Count.Calculated_Payment_Count = 3 THEN
+ 								 (CASE WHEN @Quarter = 'Q1' AND InvcHead1.FiscalPeriod IN ('1','2','3','4') THEN InvcTax1.TaxableAmt
+ 									 		WHEN @Quarter = 'Q2' AND InvcHead1.FiscalPeriod IN ('5','6','7','8') THEN InvcTax1.TaxableAmt
+ 											 WHEN @Quarter = 'Q3' AND InvcHead1.FiscalPeriod IN ('9','10','11','12') THEN InvcTax1.TaxableAmt
+ 									ELSE 0
+ 									END)
+ 			 		ELSE 			
+ 		 		 (CASE WHEN Payment_Count.Calculated_Payment_Count = 4 THEN
+ 							 	(CASE WHEN @Quarter = 'Q1' AND InvcHead1.FiscalPeriod IN ('1','2','3') THEN InvcTax1.TaxableAmt
+ 								 			WHEN @Quarter = 'Q2' AND InvcHead1.FiscalPeriod IN ('4','5','6') THEN InvcTax1.TaxableAmt
+ 											 WHEN @Quarter = 'Q3' AND InvcHead1.FiscalPeriod IN ('7','8','9') THEN InvcTax1.TaxableAmt
+ 											 WHEN @Quarter = 'Q4' AND InvcHead1.FiscalPeriod IN ('10','11','12') THEN InvcTax1.TaxableAmt
+ 									ELSE 0
+ 									END)
+ 					 END)
+ 			 		END)
+ 			 END)
+ ELSE 0
+ END) as [Calculated_Last_Yr_Sales],
+	(CASE WHEN InvcHead1.FiscalYear = @Year THEN
+ 			(CASE WHEN InvcTax1.TaxableAmt IS NULL OR InvcTax1.TaxableAmt = 0 THEN 0
+ 			 ELSE
+ 					(CASE WHEN Payment_Count.Calculated_Payment_Count = 3 THEN
+ 								 (CASE WHEN @Quarter = 'Q1' AND InvcHead1.FiscalPeriod IN ('1','2','3','4') THEN InvcTax1.TaxableAmt
+ 									 		WHEN @Quarter = 'Q2' AND InvcHead1.FiscalPeriod IN ('5','6','7','8') THEN InvcTax1.TaxableAmt
+ 											 WHEN @Quarter = 'Q3' AND InvcHead1.FiscalPeriod IN ('9','10','11','12') THEN InvcTax1.TaxableAmt
+ 									ELSE 0
+ 									END)
+ 			 		ELSE 			
+ 		 		 (CASE WHEN Payment_Count.Calculated_Payment_Count = 4 THEN
+ 							 	(CASE WHEN @Quarter = 'Q1' AND InvcHead1.FiscalPeriod IN ('1','2','3') THEN InvcTax1.TaxableAmt
+ 								 			WHEN @Quarter = 'Q2' AND InvcHead1.FiscalPeriod IN ('4','5','6') THEN InvcTax1.TaxableAmt
+ 											 WHEN @Quarter = 'Q3' AND InvcHead1.FiscalPeriod IN ('7','8','9') THEN InvcTax1.TaxableAmt
+ 											 WHEN @Quarter = 'Q4' AND InvcHead1.FiscalPeriod IN ('10','11','12') THEN InvcTax1.TaxableAmt
+ 									ELSE 0
+ 									END)
+ 					 END)
+ 			 		END)
+ 			 END)
+ ELSE 0
+ END) as [Calculated_Current_Yr_Sales],
+	(CASE WHEN InvcHead1.FiscalYear = @Year THEN
+ 			(CASE WHEN InvcDtl1.InvOfferLineDiscAmt_c IS NULL OR InvcDtl1.InvOfferLineDiscAmt_c = 0 THEN 0
+ 			 ELSE
+ 					(CASE WHEN Payment_Count.Calculated_Payment_Count = 3 THEN
+ 							(CASE WHEN InvcHead1.CreditMemo = 1 THEN
+ 								 (CASE WHEN @Quarter = 'Q1' AND InvcHead1.FiscalPeriod IN ('1','2','3','4') THEN InvcDtl1.InvOfferLineDiscAmt_c * -1
+ 									 		WHEN @Quarter = 'Q2' AND InvcHead1.FiscalPeriod IN ('5','6','7','8') THEN InvcDtl1.InvOfferLineDiscAmt_c * -1
+ 											 WHEN @Quarter = 'Q3' AND InvcHead1.FiscalPeriod IN ('9','10','11','12') THEN InvcDtl1.InvOfferLineDiscAmt_c * -1
+ 									END)
+ 							 ELSE
+ 								 (CASE WHEN @Quarter = 'Q1' AND InvcHead1.FiscalPeriod IN ('1','2','3','4') THEN InvcDtl1.InvOfferLineDiscAmt_c
+ 									 		WHEN @Quarter = 'Q2' AND InvcHead1.FiscalPeriod IN ('5','6','7','8') THEN InvcDtl1.InvOfferLineDiscAmt_c
+ 											 WHEN @Quarter = 'Q3' AND InvcHead1.FiscalPeriod IN ('9','10','11','12') THEN InvcDtl1.InvOfferLineDiscAmt_c
+ 									END)
+ 							 END)
+ 					 ELSE
+ 					(CASE WHEN Payment_Count.Calculated_Payment_Count = 4 THEN
+ 							(CASE WHEN InvcHead1.CreditMemo = 1 THEN
+ 								 (CASE WHEN @Quarter = 'Q1' AND InvcHead1.FiscalPeriod IN ('1','2','3') THEN InvcDtl1.InvOfferLineDiscAmt_c * -1
+ 									 		WHEN @Quarter = 'Q2' AND InvcHead1.FiscalPeriod IN ('4','5','6') THEN InvcDtl1.InvOfferLineDiscAmt_c * -1
+ 											 WHEN @Quarter = 'Q3' AND InvcHead1.FiscalPeriod IN ('7','8','9') THEN InvcDtl1.InvOfferLineDiscAmt_c * -1
+ 											 WHEN @Quarter = 'Q4' AND InvcHead1.FiscalPeriod IN ('10','11','12') THEN InvcDtl1.InvOfferLineDiscAmt_c * -1
+ 									END)
+ 							 ELSE
+ 								 (CASE WHEN @Quarter = 'Q1' AND InvcHead1.FiscalPeriod IN ('1','2','3') THEN InvcDtl1.InvOfferLineDiscAmt_c
+ 									 		WHEN @Quarter = 'Q2' AND InvcHead1.FiscalPeriod IN ('4','5','6') THEN InvcDtl1.InvOfferLineDiscAmt_c
+ 											 WHEN @Quarter = 'Q3' AND InvcHead1.FiscalPeriod IN ('7','8','9') THEN InvcDtl1.InvOfferLineDiscAmt_c
+ 											 WHEN @Quarter = 'Q4' AND InvcHead1.FiscalPeriod IN ('10','11','12') THEN InvcDtl1.InvOfferLineDiscAmt_c
+ 									END)
+ 							 END)
+ 			  	 END)
+ 			  	 END)
+ 				END)
+ ELSE 0
+ END) as [Calculated_Offer_Line_Disc],
+	(CASE WHEN Last_Yr_Sales IS NULL OR Last_Yr_Sales = 0 THEN 0 
+ ELSE (CASE WHEN Current_Yr_Sales IS NULL OR Current_Yr_Sales = 0 THEN 0 
+ 			ELSE ((Current_Yr_Sales/Last_Yr_Sales) * 100) 
+ 			END) 
+ END) as [Calculated_IX_vs_LY],
+	(CASE WHEN Current_Yr_Sales IS NULL or Current_Yr_Sales = 0 THEN 0
+ ELSE 
+ 		SUBSTRING(CAST(RebateHdr.RebateDesc AS VARCHAR(50)),PATINDEX('%[0-9]%',RebateHdr.RebateDesc),
+ 		(LEN(RebateHdr.RebateDesc)-(PATINDEX('%[0-9]%',RebateHdr.RebateDesc)))) * (Current_Yr_Sales / 100) END) as [Calculated_Rebate_CY_Sales],
+	[RebateBrk].[RebatePercent] as [RebateBrk_RebatePercent],
+	(CASE WHEN InvcHead1.FiscalYear = @Year THEN
+ 			(CASE WHEN RebateTrans.RebateAmount IS NULL OR RebateTrans.RebateAmount = 0 THEN 0
+ 			 ELSE
+ 					(CASE WHEN Payment_Count.Calculated_Payment_Count = 3 THEN
+ 								 (CASE WHEN @Quarter = 'Q1' AND InvcHead1.FiscalPeriod IN ('1','2','3','4') THEN RebateTrans.RebateAmount
+ 									 		WHEN @Quarter = 'Q2' AND InvcHead1.FiscalPeriod IN ('5','6','7','8') THEN RebateTrans.RebateAmount
+ 											 WHEN @Quarter = 'Q3' AND InvcHead1.FiscalPeriod IN ('9','10','11','12') THEN RebateTrans.RebateAmount
+ 									ELSE 0
+ 									END)
+ 			 		ELSE 			
+ 		 		 (CASE WHEN Payment_Count.Calculated_Payment_Count = 4 THEN
+ 							 	(CASE WHEN @Quarter = 'Q1' AND InvcHead1.FiscalPeriod IN ('1','2','3') THEN RebateTrans.RebateAmount
+ 								 			WHEN @Quarter = 'Q2' AND InvcHead1.FiscalPeriod IN ('4','5','6') THEN RebateTrans.RebateAmount
+ 											 WHEN @Quarter = 'Q3' AND InvcHead1.FiscalPeriod IN ('7','8','9') THEN RebateTrans.RebateAmount
+ 											 WHEN @Quarter = 'Q4' AND InvcHead1.FiscalPeriod IN ('10','11','12') THEN RebateTrans.RebateAmount
+ 									ELSE 0
+ 									END)
+ 					 END)
+ 			 		END)
+ 			 END)
+ ELSE 0
+ END) as [Calculated_Rebate_Amount],
+	(Current_Yr_Sales - Rebate_Amount) as [Calculated_Rebate_Variance],
+	(CASE WHEN InvcHead1.FiscalYear = @Year THEN
+ 			(CASE WHEN RebateTrans.RebateAmount IS NULL OR RebateTrans.RebateAmount = 0 THEN 0
+ 			 ELSE
+ 					(CASE WHEN RebateTrans.Applied = 0 THEN 0
+ 					 ELSE
+ 							(CASE WHEN Payment_Count.Calculated_Payment_Count = 3 THEN
+ 										 (CASE WHEN @Quarter = 'Q1' AND InvcHead1.FiscalPeriod <= 4 THEN RebateTrans.RebateAmount
+ 											 		WHEN @Quarter = 'Q2' AND InvcHead1.FiscalPeriod <= 8 THEN RebateTrans.RebateAmount
+ 													 WHEN @Quarter = 'Q3' AND InvcHead1.FiscalPeriod <= 12 THEN RebateTrans.RebateAmount
+ 											ELSE 0
+ 											END)
+ 			 				ELSE 			
+ 		 		 		(CASE WHEN Payment_Count.Calculated_Payment_Count = 4 THEN
+ 									 	(CASE WHEN @Quarter = 'Q1' AND InvcHead1.FiscalPeriod <= 3 THEN RebateTrans.RebateAmount
+ 										 			WHEN @Quarter = 'Q2' AND InvcHead1.FiscalPeriod <= 6 THEN RebateTrans.RebateAmount
+ 													 WHEN @Quarter = 'Q3' AND InvcHead1.FiscalPeriod <= 9 THEN RebateTrans.RebateAmount
+ 													 WHEN @Quarter = 'Q4' AND InvcHead1.FiscalPeriod <= 12 THEN RebateTrans.RebateAmount
+ 											ELSE 0
+ 											END)
+ 					 		END)
+ 			 				END)
+ 					END)
+ 			 END)
+ ELSE 0
+ END) as [Calculated_Rebate_Paid],
+	(CASE WHEN InvcHead1.FiscalYear = @Year THEN
+ 			(CASE WHEN RebateTrans.RebateAmount IS NULL OR RebateTrans.RebateAmount = 0 THEN 0
+ 			 ELSE
+ 					(CASE WHEN RebateTrans.Applied = 1 THEN 0
+ 					 ELSE
+ 							(CASE WHEN Payment_Count.Calculated_Payment_Count = 3 THEN
+ 										 (CASE WHEN @Quarter = 'Q1' AND InvcHead1.FiscalPeriod <= 4 THEN RebateTrans.RebateAmount
+ 											 		WHEN @Quarter = 'Q2' AND InvcHead1.FiscalPeriod <= 8 THEN RebateTrans.RebateAmount
+ 													 WHEN @Quarter = 'Q3' AND InvcHead1.FiscalPeriod <= 12 THEN RebateTrans.RebateAmount
+ 											ELSE 0
+ 											END)
+ 			 				ELSE 			
+ 		 		 		(CASE WHEN Payment_Count.Calculated_Payment_Count = 4 THEN
+ 									 	(CASE WHEN @Quarter = 'Q1' AND InvcHead1.FiscalPeriod <= 3 THEN RebateTrans.RebateAmount
+ 										 			WHEN @Quarter = 'Q2' AND InvcHead1.FiscalPeriod <= 6 THEN RebateTrans.RebateAmount
+ 													 WHEN @Quarter = 'Q3' AND InvcHead1.FiscalPeriod <= 9 THEN RebateTrans.RebateAmount
+ 													 WHEN @Quarter = 'Q4' AND InvcHead1.FiscalPeriod <= 12 THEN RebateTrans.RebateAmount
+ 											ELSE 0
+ 											END)
+ 					 		END)
+ 			 				END)
+ 					END)
+ 			 END)
+ ELSE 0
+ END) as [Calculated_Rebate_Unpaid],
+	[Payment_Count].[Calculated_Payment_Count] as [Calculated_Payment_Count],
+	(MONTH(RebateTrans.InvoiceDate)) as [Calculated_Rebate_Month],
+	(YEAR(RebateTrans.InvoiceDate)) as [Calculated_Rebate_Year],
+	(@Quarter) as [Calculated_Quarter]
+from Erp.RebateHdr as RebateHdr
+inner join Erp.RebateCust as RebateCust on 
+	RebateHdr.Company = RebateCust.Company
+	and RebateHdr.RebateID = RebateCust.RebateID
+	and ( RebateCust.Void = 0  )
+
+inner join Erp.RebateTrans as RebateTrans on 
+	RebateCust.Company = RebateTrans.Company
+	and RebateCust.RebateID = RebateTrans.RebateID
+	and RebateCust.CustNum = RebateTrans.CustNum
+	and ( RebateTrans.Void = 0  )
+
+inner join Erp.RebateDtl as RebateDtl on 
+	RebateTrans.Company = RebateDtl.Company
+	and RebateTrans.RebateID = RebateDtl.RebateID
+	and RebateTrans.ProdCode = RebateDtl.ProdCode
+	and RebateTrans.LineNum = RebateDtl.LineNum
+inner join Erp.RebateBrk as RebateBrk on 
+	RebateDtl.Company = RebateBrk.Company
+	and RebateDtl.RebateID = RebateBrk.RebateID
+	and RebateDtl.LineNum = RebateBrk.LineNum
+inner join dbo.InvcDtl as InvcDtl1 on 
+	RebateTrans.Company = InvcDtl1.Company
+	and RebateTrans.CustNum = InvcDtl1.CustNum
+	and RebateTrans.InvoiceNum = InvcDtl1.InvoiceNum
+	and RebateTrans.InvoiceLine = InvcDtl1.InvoiceLine
+	and RebateTrans.ProdCode = InvcDtl1.ProdCode
+inner join Erp.InvcTax as InvcTax1 on 
+	InvcDtl1.Company = InvcTax1.Company
+	and InvcDtl1.InvoiceNum = InvcTax1.InvoiceNum
+	and InvcDtl1.InvoiceLine = InvcTax1.InvoiceLine
+inner join dbo.InvcHead as InvcHead1 on 
+	InvcTax1.Company = InvcHead1.Company
+	and InvcTax1.InvoiceNum = InvcHead1.InvoiceNum
+	and ( InvcHead1.Posted = 1  )
+
+inner join dbo.Customer as Customer2 on 
+	RebateCust.Company = Customer2.Company
+	and RebateCust.CustNum = Customer2.CustNum
+	and ( Customer2.DIVISION_c = 'FMCG'  )
+
+inner join Erp.ShipTo as ShipTo1 on 
+	Customer2.Company = ShipTo1.Company
+	and Customer2.CustNum = ShipTo1.CustNum
+	and Customer2.ShipToNum = ShipTo1.ShipToNum
+inner join Erp.SalesRep as SalesRep1 on 
+	Customer2.Company = SalesRep1.Company
+	and Customer2.SalesRepCode = SalesRep1.SalesRepCode
+inner join Erp.CustGrup as CustGrup on 
+	Customer2.Company = CustGrup.Company
+	and Customer2.GroupCode = CustGrup.GroupCode
+inner join  (select 
+	[RebatePymt].[Company] as [RebatePymt_Company],
+	[RebatePymt].[RebateID] as [RebatePymt_RebateID],
+	(COUNT(*)) as [Calculated_Payment_Count],
+	(YEAR(RebatePymt.PymtDate)) as [Calculated_Payment_Year]
+from Erp.RebatePymt as RebatePymt
+where ((YEAR(RebatePymt.PymtDate)) = @Year)
+
+group by RebatePymt.Company,
+	RebatePymt.RebateID,
+	YEAR(RebatePymt.PymtDate)
+having ((COUNT(*)) = 3  or (COUNT(*)) = 4 ))  as Payment_Count on 
+	RebateHdr.Company = Payment_Count.RebatePymt_Company
+	and RebateHdr.RebateID = Payment_Count.RebatePymt_RebateID
+where (RebateHdr.Active = 1)
+ and ((((YEAR(RebateTrans.InvoiceDate)) = @Year  or (YEAR(RebateTrans.InvoiceDate)) = @Year - 1 ) and (Payment_Count.Calculated_Payment_Count = 3  and (@Quarter) = 'Q1'  and (MONTH(RebateTrans.InvoiceDate)) <= 4  or (@Quarter) = 'Q2'  and (MONTH(RebateTrans.InvoiceDate)) <= 8  or (@Quarter) = 'Q3'  and (MONTH(RebateTrans.InvoiceDate)) <= 12  or Payment_Count.Calculated_Payment_Count = 4  and (@Quarter) = 'Q1'  and (MONTH(RebateTrans.InvoiceDate)) <= 3  or (@Quarter) = 'Q2'  and (MONTH(RebateTrans.InvoiceDate)) <= 6  or (@Quarter) = 'Q3'  and (MONTH(RebateTrans.InvoiceDate)) <= 9  or (@Quarter) = 'Q4'  and (MONTH(RebateTrans.InvoiceDate)) <= 12 ))))  as Rebate_Details1
+group by Rebate_Details1.RebateHdr_Company,
+	Rebate_Details1.RebateHdr_RebateID,
+	Rebate_Details1.Customer2_CustID,
+	Rebate_Details1.InvcDtl1_ShipToNum,
+	Rebate_Details1.ShipTo1_Name,
+	Rebate_Details1.Calculated_Rebate_Perc,
+	Rebate_Details1.RebateHdr_RebateDesc,
+	Rebate_Details1.CustGrup_GroupDesc,
+	Rebate_Details1.SalesRep1_Name,
+	Rebate_Details1.RebateBrk_RebatePercent,
+	Rebate_Details1.Calculated_Payment_Count)  as Rebate_Totals
+left outer join  (select 
+	[SalesTargets].[Company] as [SalesTargets_Company],
+	[SalesTargets].[ShipTo] as [SalesTargets_ShipTo],
+	[SalesTargets].[Year] as [SalesTargets_Year],
+	[SalesTargets].[Month] as [SalesTargets_Month],
+	[SalesTargets].[Target] as [SalesTargets_Target]
+from dbo.SalesTargets('VJSM',@Year)  as SalesTargets)  as Sales_Targets on 
+	Rebate_Totals.RebateHdr_Company = Sales_Targets.SalesTargets_Company
+	and Rebate_Totals.InvcDtl1_ShipToNum = Sales_Targets.SalesTargets_ShipTo
+group by Rebate_Totals.Customer2_CustID,
+	Rebate_Totals.InvcDtl1_ShipToNum,
+	Rebate_Totals.ShipTo1_Name,
+	Rebate_Totals.RebateHdr_RebateID,
+	Rebate_Totals.Calculated_Rebate_Perc,
+	Rebate_Totals.RebateHdr_RebateDesc,
+	Rebate_Totals.CustGrup_GroupDesc,
+	Rebate_Totals.SalesRep1_Name,
+	Rebate_Totals.Calculated_LastYrSales,
+	Rebate_Totals.Calculated_CurrentYrSales,
+	Rebate_Totals.Calculated_OfferLineDisc,
+	Rebate_Totals.Calculated_IXvsLY,
+	Rebate_Totals.Calculated_RebateCYSales,
+	Rebate_Totals.RebateBrk_RebatePercent,
+	Rebate_Totals.Calculated_RebateAmount,
+	Rebate_Totals.Calculated_RebateVariance,
+	Rebate_Totals.Calculated_RebatePaid,
+	Rebate_Totals.Calculated_RebateUnpaid,
+	Rebate_Totals.Calculated_Payment_Count
+order by Rebate_Totals.InvcDtl1_ShipToNum, Rebate_Totals.RebateHdr_RebateID
