@@ -43,8 +43,24 @@ FROM
     LEFT JOIN SVBeauty.dbo.STK_STOCK S ON S.STKCODE = OD.OD_STOCK_CODE
     LEFT JOIN DiscountLines dl ON dl.id = ol.discountlineids
 WHERE
-    -- OH_ORDER_NUMBER = '48125'
-    ol.Orderid = '1105537'
-    --AND DefaultRep = ''
+    OH_ORDER_NUMBER = '134817'
+--     ol.Orderid = '134817'
+--     --AND DefaultRep = ''
 ORDER BY
     StockCode;
+
+
+
+  select OD_PRIMARY,*
+  from ord_detail 
+  where od_order_number = '134817'  
+
+  select top(100) *
+  from doc_order_detail
+  where dod_order_link IN (
+'1676239',
+'1676240',
+'1676241',
+'1676242',
+'1676243'
+  );

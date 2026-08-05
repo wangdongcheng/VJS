@@ -38,7 +38,8 @@ select
 	[Rebate_Totals].[Calculated_RebateAmount] as [Calculated_RebateAmount],
 	[Rebate_Totals].[Calculated_RebateVariance] as [Calculated_RebateVariance],
 	[Rebate_Totals].[Calculated_RebatePaid] as [Calculated_RebatePaid],
-	[Rebate_Totals].[Calculated_RebateUnpaid] as [Calculated_RebateUnpaid]
+	[Rebate_Totals].[Calculated_RebateUnpaid] as [Calculated_RebateUnpaid],
+	[Rebate_Totals].[Calculated_Payment_Count] as [Calculated_Payment_Count]
 from  (select 
 	[Rebate_Details1].[RebateHdr_Company] as [RebateHdr_Company],
 	[Rebate_Details1].[Customer2_CustID] as [Customer2_CustID],
@@ -59,16 +60,28 @@ from  (select
  		ELSE Rebate_Details1.Calculated_Rebate_Amount
  		END)) as [Calculated_RebateAmount],
 	(SUM(Rebate_Details1.Calculated_Rebate_CY_Sales - Rebate_Details1.Calculated_Rebate_Amount)) as [Calculated_RebateVariance],
+	[Rebate_Details1].[Calculated_Payment_Count] as [Calculated_Payment_Count],
 	(SUM(Rebate_Details1.Calculated_Rebate_Paid)) as [Calculated_RebatePaid],
-	(SUM(Rebate_Details1.Calculated_Rebate_Unpaid)) as [Calculated_RebateUnpaid],
-	[Rebate_Details1].[Calculated_Payment_Count] as [Calculated_Payment_Count]
+	(SUM(Rebate_Details1.Calculated_Rebate_Unpaid)) as [Calculated_RebateUnpaid]
 from  (select 
 	[RebateHdr].[Company] as [RebateHdr_Company],
 	[Customer2].[CustID] as [Customer2_CustID],
 	[InvcDtl1].[ShipToNum] as [InvcDtl1_ShipToNum],
 	[ShipTo1].[Name] as [ShipTo1_Name],
 	[RebateHdr].[RebateID] as [RebateHdr_RebateID],
-	(SUBSTRING(CAST(RebateHdr.RebateDesc AS VARCHAR(50)),PATINDEX('%[0-9]%',RebateHdr.Rebatedesc),(LEN(RebateHdr.Rebatedesc)-(PATINDEX('%[0-9]%',RebateHdr.Rebatedesc))))) as [Calculated_Rebate_Perc],
+	(TRY_CONVERT(
+     DECIMAL(18, 6),
+     SUBSTRING(
+         RebateHdr.RebateDesc,
+         PATINDEX('%[0-9]%', RebateHdr.RebateDesc),
+         CHARINDEX(
+             '%',
+             RebateHdr.RebateDesc,
+             PATINDEX('%[0-9]%', RebateHdr.RebateDesc)
+         )
+         - PATINDEX('%[0-9]%', RebateHdr.RebateDesc)
+     )
+ )) as [Calculated_Rebate_Perc],
 	[RebateHdr].[RebateDesc] as [RebateHdr_RebateDesc],
 	[CustGrup].[GroupDesc] as [CustGrup_GroupDesc],
 	[SalesRep1].[Name] as [SalesRep1_Name],
@@ -154,9 +167,9 @@ from  (select
  			 END)
  ELSE 0
  END) as [Calculated_Rebate_Unpaid],
+	[Payment_Count].[Calculated_Payment_Count] as [Calculated_Payment_Count],
 	(MONTH(RebateTrans.InvoiceDate)) as [Calculated_Rebate_Month],
 	(YEAR(RebateTrans.InvoiceDate)) as [Calculated_Rebate_Year],
-	[Payment_Count].[Calculated_Payment_Count] as [Calculated_Payment_Count],
 	(@Semester) as [Calculated_Semester]
 from Erp.RebateHdr as RebateHdr
 inner join Erp.RebateCust as RebateCust on 
