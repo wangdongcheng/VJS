@@ -31,7 +31,12 @@ CAST(SL.LOC_PHYSICAL AS DECIMAL(10,0)) AS [Physical],
 SL2.LOC_USERDATE1 AS [Expiry_Date],
 CONVERT(VARCHAR(10), GETDATE(), 103) AS [Today_Date],
 S.STK_EC_KILOS AS Expiry_Days_Alarm,
-CASE WHEN DATEDIFF(day, dbo.dateonly(getdate()), SL2.LOC_USERDATE1)<=0 THEN 'Expired!' ELSE DATEDIFF(day, dbo.dateonly(getdate()), SL2.LOC_USERDATE1) END AS Days_to_Expiry,
+CASE WHEN DATEDIFF(day, dbo.dateonly(getdate()), SL2.LOC_USERDATE1)<=0 THEN 'Expired!' 
+-- ELSE DATEDIFF(day, dbo.dateonly(getdate()), SL2.LOC_USERDATE1) 
+ELSE CONVERT(VARCHAR(20),
+        DATEDIFF(DAY, CAST(GETDATE() AS DATE), SL2.LOC_USERDATE1)
+    )
+END AS Days_to_Expiry,
 CAST(SLS.[4M_AVG] AS DECIMAL (18,2)) AS 'AVG_4M',
 CASE WHEN CAST(SLS.[4M_AVG] AS DECIMAL (18,2)) = 0 THEN 0 ELSE GETDATE()+(CAST(SL.LOC_PHYSICAL AS DECIMAL(10,0))/CAST(SLS.[4M_AVG] AS DECIMAL (18,2)))*30 END AS 'Calculated End Date'
 FROM
@@ -47,7 +52,32 @@ LEFT JOIN (
 	where det_date between cast(getdate()-122 as date) and cast(getdate()-1 as date) and det_type in ('INV','CRN') AND DET_LEDGER = 'SL'
 	group by DET_STOCK_CODE) SLS
  ON SLS.DET_STOCK_CODE=S.STKCODE
-WHERE sl2.LOC_SOPCHECK = 0 
-AND loc_physical > 0
-AND datediff (dd, dbo.dateonly(getdate()), loc_userdate1 ) <= S.STK_EC_KILOS AND S3.STK_USRFLAG3=0
+WHERE 
+sl2.LOC_SOPCHECK = 0 AND 
+loc_physical > 0
+AND datediff (dd, dbo.dateonly(getdate()), loc_userdate1 ) <= S.STK_EC_KILOS 
+AND S3.STK_USRFLAG3=0
 AND S3.STK_USRCHAR2 IN (SELECT VALUE FROM @Division) AND (S3.STK_USRCHAR16+' | '+EX.[Full Name]) IN (SELECT VALUE FROM @Executive) AND (S3.STK_USRCHAR18+' | '+C.[Full Name]) IN (SELECT VALUE FROM @CategManager)
+and s.stkcode in (
+'30ORI_80126'
+,'30ACN_00115'
+,'30ACN_20113'
+,'30ACN_43129'
+,'30HIL_2097U'
+,'30HIL_4628F'
+,'30HIL_9189U'
+,'30HIL_9189U'
+,'30HIL_8685U'
+,'30HIL_604176'
+,'30HIL_604058'
+,'30ACN_14581'
+,'30HIL_606379'
+,'30HIL_605852'
+,'30HIL_605842'
+,'30HIL_605869'
+,'30HIL_605869'
+,'30HIL_605947'
+,'30HIL_607634'
+,'30HIL_606383'
+,'30ORI_81540'
+  )
