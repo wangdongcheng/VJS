@@ -1,4 +1,10 @@
-DECLARE @SalesRep NVARCHAR(100) = 'All';
+DECLARE @SalesRep NVARCHAR(100) = '30 MARIA SCIBERRAS';
+
+-- !!!!
+-- For convenience and to make the update quicker, 
+-- the “half-year” sales figure is temporarily based on YTD sales, 
+-- while the target uses the H2 target, which is effectively the year-end target.
+
 
 IF OBJECT_ID('tempdb..#slplnldetail_thisyear') IS NOT NULL
 DROP TABLE #slplnldetail_thisyear;
@@ -96,7 +102,7 @@ FROM
 WHERE
 	det_type IN ('INV', 'CRN') AND
 	det_date >= DATEFROMPARTS(YEAR(GETDATE()), 1, 1) AND
-	det_date <= DATEFROMPARTS(YEAR(GETDATE()), 6, 30) and
+	det_date <= DATEFROMPARTS(YEAR(GETDATE()), 12, 31) and
 	sa.cusort <> '30 WHOLESALER';
 
 -- det_date >= CAST(
@@ -254,7 +260,7 @@ FROM
 			INNER JOIN SPOT.[dbo].[TGT_HALVES] TGT_Half ON TGT_Inner.QTR = TGT_Half.HALF_DESC
 		WHERE
 			TGT_Half.HALF_DATE_FROM = CAST(
-				CAST(YEAR(GETDATE()) AS VARCHAR) + '-01-01' AS DATE
+				CAST(YEAR(GETDATE()) AS VARCHAR) + '-07-01' AS DATE
 			)
 			--Start of Current Half-Year
 	) CurrHalfTgts

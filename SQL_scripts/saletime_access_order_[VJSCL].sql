@@ -49,11 +49,12 @@ FROM
         )
     END
 WHERE
-OH_ORDER_NUMBER = '852242'
-    --  CustomerCode = '30FRU003'
-    --  ol.Orderid  IN (
-    --     1309406,1309401,1309369,1309368
-    --     )
+-- OH_ORDER_NUMBER = '852242'
+     CustomerCode = '30hsc001'
+     and ol.Orderid  IN (
+        1238171
+        )
     -- and ol.stockcode = '30EUC_63073N'
+    -- and ol.datecreated > '2026-08-01'
 ORDER BY
     DATECREATED DESC

@@ -85,13 +85,17 @@ l.loc_code 'Location code',
 l.loc_name 'Location name',
 l.loc_usersort1 'Warehouse',
 l.loc_usersort2 'Lot Number',
+l.loc_physical as 'Physical stock',
 cast(l2.loc_userdate1 as date) 'Expiry Date'
 FROM [VJSCL].[dbo].[STK_LOCATION] AS l
 left OUTER join stk_location2 as l2 on l.loc_code = l2.LOC_CODE2
 and l.LOC_STOCK_CODE = l2.LOC_STOCKCODE2
 inner join stk_stock st on l.LOC_STOCK_CODE = st.STKCODE
 where st.STK_DO_NOT_USE = 0
--- and st.stkcode = '308in1_01567'
-and l.loc_usersort2 <> ''
+-- and st.stkcode = '30ORI_80126'
+-- and l.loc_usersort2 <> ''
+and l.loc_usersort1 = 'w99'
+and l.loc_physical <> 0
+and ( l2.loc_userdate1 is NULL or l2.loc_userdate1 = '')
 ORDER BY l.loc_stock_code,
 l.loc_code;
