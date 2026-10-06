@@ -1,3 +1,12 @@
+  select 
+  doh_vat_code1,
+  doh_vat_code2,
+  DOH_VAT_CODE3,
+  DOH_VAT_CODE4,
+  doh_vat_code5
+  from DOC_ORDER_HEADER;
+  
+  
   SELECT STKNAME,STKCODE,	CAST(stk_date_putin AS DATE) AS 'Created On',
 	CAST(stk_date_edited AS DATE) AS 'Last Changed',STK_SORT_KEY,STK_SORT_KEY2,STK_SORT_KEY3,STK_SORT_KEY1,STK_USRFLAG7 AS DONOTSHOWWEB,STK_FLAG2 AS DNR,STK_USRFLAG1 AS 'DoNotLoad',STK_DO_NOT_USE AS 'Inactive'
   FROM [SVBeauty].[dbo].[STK_STOCK]

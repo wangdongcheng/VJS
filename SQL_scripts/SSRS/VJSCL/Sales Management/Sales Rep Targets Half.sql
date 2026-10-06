@@ -1,4 +1,4 @@
-DECLARE @SalesRep NVARCHAR(100) = '30 MARIA SCIBERRAS';
+DECLARE @SalesRep NVARCHAR(100) = '30 STEVE BORG';
 
 -- !!!!
 -- For convenience and to make the update quicker, 
@@ -40,7 +40,7 @@ FROM
 WHERE
 	det_date >= DATEADD(yy, DATEDIFF(yy, 0, GETDATE()), 0) --StartOfThisYr
 	AND
-	det_date <= CAST(GETDATE() AS DATE) AND
+	det_date <= DATEADD(DAY, -1, GETDATE()) AND
 	det_type IN ('INV', 'CRN') and
 	sa.cusort <> '30 WHOLESALER';
 
@@ -103,7 +103,9 @@ WHERE
 	det_type IN ('INV', 'CRN') AND
 	det_date >= DATEFROMPARTS(YEAR(GETDATE()), 1, 1) AND
 	det_date <= DATEFROMPARTS(YEAR(GETDATE()), 12, 31) and
+	-- det_date <= DATEADD(DAY, -1, GETDATE()) and
 	sa.cusort <> '30 WHOLESALER';
+
 
 -- det_date >= CAST(
 -- 	CAST(YEAR(GETDATE()) AS VARCHAR) + CASE

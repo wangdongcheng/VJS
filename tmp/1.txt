@@ -1,0 +1,68 @@
+/*********************************************************************************
+** Trigger has been created by 'VJSCL\VJSCL Email Ta Dirjanu Invoice - VJSCL\MS SQL Server Trigger - on SL_TRANSACTIONS (Update only)' 
+** and is monitored by the Access TaskCentre SQL Agent.
+** Any changes to the Trigger not made from within Access TaskCentre  will be discarded.
+*********************************************************************************/
+AFTER INSERT
+AS
+DECLARE @errmsg varchar(256)
+DECLARE @sqlconnector int
+DECLARE @hresult int
+DECLARE InsertedCursor CURSOR
+	LOCAL FAST_FORWARD
+	FOR
+	SELECT ST_HEADER_REF, ST_TRANTYPE, ST_COPYCUST FROM Inserted
+DECLARE @insST_HEADER_REF varchar(10)
+DECLARE @insST_TRANTYPE varchar(3)
+DECLARE @insST_COPYCUST varchar(10)
+
+SET @sqlconnector = 0
+SET @hresult = 0
+
+DECLARE @class  VARCHAR(256)
+SET  @class  = ('iwsqlea.sqlconnector$' + CAST(COALESCE(SERVERPROPERTY('InstanceName'),'MSSQLSERVER') as VARCHAR(128)))
+EXEC @hresult = sp_OACreate @class, @sqlconnector OUT
+IF @hresult <> 0
+	GOTO Quit
+
+EXEC @hresult = sp_OAMethod @sqlconnector, 'Init', NULL, _TASKID_, _TASKVERSION_, _TRIGGERID_
+IF @hresult <> 0
+	GOTO Quit
+
+OPEN InsertedCursor
+
+FETCH NEXT FROM InsertedCursor
+	INTO @insST_HEADER_REF, @insST_TRANTYPE, @insST_COPYCUST
+
+
+WHILE @@FETCH_STATUS = 0
+BEGIN
+
+	IF @insST_COPYCUST IN ('30BOT001') AND @insST_TRANTYPE = 'INV'
+	BEGIN
+		EXEC @hresult = sp_OAMethod @sqlconnector, 'SetParameter', NULL, 'InvoiceNum', @insST_HEADER_REF
+		IF @hresult <> 0
+			GOTO Quit
+
+		EXEC @hresult = sp_OAMethod @sqlconnector, 'RunTask', NULL
+		IF @hresult <> 0
+			GOTO Quit
+
+	END
+
+	FETCH NEXT FROM InsertedCursor
+		INTO @insST_HEADER_REF, @insST_TRANTYPE, @insST_COPYCUST
+END
+
+Quit:
+IF CURSOR_STATUS('local', 'InsertedCursor') >= 0
+	CLOSE InsertedCursor
+
+IF @hresult <> 0
+BEGIN
+	SELECT @errmsg = 'Trigger on SL_TRANSACTIONS failed to Queue Task _TASKID_(' + CAST(@hresult AS varchar(16)) + ')'
+	EXEC master..xp_logevent 70000, @errmsg, ERROR
+END
+
+IF (@sqlconnector != 0)
+	EXEC sp_OADestroy @sqlconnector
