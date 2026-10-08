@@ -2,9 +2,11 @@
 -- Shift today's date back by 20 days to determine the reporting month.
 -- This means dates from the 1st to the 20th are treated as the previous reporting month,
 -- while dates from the 21st onward are treated as the current reporting month.
+if 0=1
+begin
 DECLARE @ReportDate DATE;
 SET @ReportDate = DATEADD(DAY, -20, GETDATE());
-
+-- SET @ReportDate = '2026-07-21';
 ---CTE QUERIES FOR NUMBER OF CUSTOMERS AND NET SALES
 ---TEMP TABLE ACANA DISTRIBUTION
 SELECT DISTINCT
@@ -276,3 +278,40 @@ DROP TABLE #ORIDISTRIB
 DROP TABLE #ACANACHEAP
 DROP TABLE #ORIDOGSB
 DROP TABLE #NETSALES
+
+end;
+
+SELECT
+	DET_ACCOUNT,
+	SUM(
+		CASE
+			WHEN DET_TYPE = 'CRN' THEN DET_NETT * -1
+			ELSE DET_NETT
+		END
+	) AS NET
+FROM
+	SL_PL_NL_DETAIL D
+	INNER JOIN STK_STOCK S ON D.DET_STOCK_CODE = S.STKCODE
+	inner join 	SL_ACCOUNTS A on d.DET_ACCOUNT = a.cucode
+	INNER JOIN SL_ACCOUNTS2 A2 ON A.CUCODE = A2.CUCODE2
+WHERE
+	D.DET_ORIGIN = 'SO' AND --YEAR(D.DET_DATE)=YEAR(GETDATE()) AND MONTH(D.DET_DATE)=MONTH(GETDATE())
+	YEAR(D.DET_DATE) = 2026 AND
+	MONTH(D.DET_DATE) = 9 AND
+	S.STK_SORT_KEY3 = '30 CHAMPION PETFOODS' 
+and CU_DO_NOT_USE = 0
+and (
+	(	CUSORT IN ('30 PET A', '30 PET B', '30 PET C') AND
+	A2.CU_USRCHAR16 != 'Yes' )  -- 30GAM201
+	or
+	CUSORT = '30 GROOMER'
+	 or
+	A2.CU_USRCHAR16 = 'Yes' -- 30ROY200
+	or
+	CUSORT = '30 PET ECOM' 
+	or
+	CUSORT = '30 VET'
+
+)
+GROUP BY
+	DET_ACCOUNT;

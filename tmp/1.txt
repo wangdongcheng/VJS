@@ -1,68 +1,8 @@
-/*********************************************************************************
-** Trigger has been created by 'VJSCL\VJSCL Email Ta Dirjanu Invoice - VJSCL\MS SQL Server Trigger - on SL_TRANSACTIONS (Update only)' 
-** and is monitored by the Access TaskCentre SQL Agent.
-** Any changes to the Trigger not made from within Access TaskCentre  will be discarded.
-*********************************************************************************/
-AFTER INSERT
-AS
-DECLARE @errmsg varchar(256)
-DECLARE @sqlconnector int
-DECLARE @hresult int
-DECLARE InsertedCursor CURSOR
-	LOCAL FAST_FORWARD
-	FOR
-	SELECT ST_HEADER_REF, ST_TRANTYPE, ST_COPYCUST FROM Inserted
-DECLARE @insST_HEADER_REF varchar(10)
-DECLARE @insST_TRANTYPE varchar(3)
-DECLARE @insST_COPYCUST varchar(10)
+Result Set Batch 1 - Query 1
+========================================
 
-SET @sqlconnector = 0
-SET @hresult = 0
+STKCODE2      STK_BUY_UNIT1  STK_BUY_UNIT2  STK_BUY_UNIT3  STK_BUY_UNIT4  STK_BUY_UNIT5  STK_BUY_UNIT6  STK_BUY_UNIT7  STK_BUY_UNIT8  STK_BUY_UNIT9  STK_BUY_UNIT10  STK_BUY_NAME1  STK_BUY_NAME2  STK_BUY_NAME3  STK_BUY_NAME4  STK_BUY_NAME5  STK_BUY_NAME6  STK_BUY_NAME7  STK_BUY_NAME8  STK_BUY_NAME9  STK_BUY_NAME10  STK_COSTMETH1  STK_COSTMETH2  STK_COSTMETH3  STK_COSTMETH4  STK_COSTMETH5  STK_COSTMETH6  STK_COSTMETH7  STK_COSTMETH8  STK_COSTMETH9  STK_COSTMETH10  STK_P_PERCENT1  STK_P_PERCENT2  STK_P_PERCENT3  STK_P_PERCENT4  STK_P_PERCENT5  STK_P_PERCENT6  STK_P_PERCENT7  STK_P_PERCENT8  STK_P_PERCENT9  STK_P_PERCENT10  STK_COSTPRICE1     STK_COSTPRICE2  STK_COSTPRICE3  STK_COSTPRICE4  STK_COSTPRICE5  STK_COSTPRICE6  STK_COSTPRICE7  STK_COSTPRICE8  STK_COSTPRICE9  STK_COSTPRICE10  STK_P_CURRCDE1  STK_P_CURRCDE2  STK_P_CURRCDE3  STK_P_CURRCDE4  STK_P_CURRCDE5  STK_P_CURRCDE6  STK_P_CURRCDE7  STK_P_CURRCDE8  STK_P_CURRCDE9  STK_P_CURRCDE10  STK_P_CURRCST1  STK_P_CURRCST2  STK_P_CURRCST3  STK_P_CURRCST4  STK_P_CURRCST5  STK_P_CURRCST6  STK_P_CURRCST7  STK_P_CURRCST8  STK_P_CURRCST9  STK_P_CURRCST10  STK_MIN_ORDER1  STK_MIN_ORDER2  STK_MIN_ORDER3  STK_MIN_ORDER4  STK_MIN_ORDER5  STK_MIN_ORDER6  STK_MIN_ORDER7  STK_MIN_ORDER8  STK_MIN_ORDER9  STK_MIN_ORDER10  STK_PANALYSIS1       STK_PANALYSIS2       STK_PANALYSIS3  STK_PANALYSIS4  STK_PANALYSIS5  STK_PANALYSIS6  STK_PANALYSIS7  STK_PANALYSIS8  STK_PANALYSIS9  STK_PANALYSIS10  STK_PQTY_FROM1  STK_PQTY_FROM2  STK_PQTY_FROM3  STK_PQTY_FROM4  STK_PQTY_FROM5  STK_PQTY_FROM6  STK_PQTY_FROM7  STK_PQTY_FROM8  STK_PQTY_FROM9  STK_PQTY_FROM10  STK_PQTY_TO1  STK_PQTY_TO2  STK_PQTY_TO3  STK_PQTY_TO4  STK_PQTY_TO5  STK_PQTY_TO6  STK_PQTY_TO7  STK_PQTY_TO8  STK_PQTY_TO9  STK_PQTY_TO10  STK_SUPPLIER1  STK_SUPPLIER2  STK_SUPPLIER3  STK_SUPPLIER4  STK_SUPPLIER5  STK_SUPPLIER6  STK_SUPPLIER7  STK_SUPPLIER8  STK_SUPPLIER9  STK_SUPPLIER10  STK_SUPSTKCDE1  STK_SUPSTKCDE2  STK_SUPSTKCDE3  STK_SUPSTKCDE4  STK_SUPSTKCDE5  STK_SUPSTKCDE6  STK_SUPSTKCDE7  STK_SUPSTKCDE8  STK_SUPSTKCDE9  STK_SUPSTKCDE10  STK_SELL_UNIT1  STK_SELL_UNIT2  STK_SELL_UNIT3  STK_SELL_UNIT4  STK_SELL_UNIT5  STK_SELL_UNIT6  STK_SELL_UNIT7  STK_SELL_UNIT8  STK_SELL_UNIT9  STK_SELL_UNIT10  STK_SELL_NAME1  STK_SELL_NAME2  STK_SELL_NAME3  STK_SELL_NAME4  STK_SELL_NAME5  STK_SELL_NAME6  STK_SELL_NAME7  STK_SELL_NAME8  STK_SELL_NAME9  STK_SELL_NAME10  STK_PRICEMETH1  STK_PRICEMETH2  STK_PRICEMETH3  STK_PRICEMETH4  STK_PRICEMETH5  STK_PRICEMETH6  STK_PRICEMETH7  STK_PRICEMETH8  STK_PRICEMETH9  STK_PRICEMETH10  STK_S_PERCENT1  STK_S_PERCENT2  STK_S_PERCENT3  STK_S_PERCENT4  STK_S_PERCENT5  STK_S_PERCENT6  STK_S_PERCENT7  STK_S_PERCENT8  STK_S_PERCENT9  STK_S_PERCENT10  STK_SELLPRICE1  STK_SELLPRICE2  STK_SELLPRICE3  STK_SELLPRICE4  STK_SELLPRICE5  STK_SELLPRICE6  STK_SELLPRICE7  STK_SELLPRICE8  STK_SELLPRICE9  STK_SELLPRICE10  STK_S_CURRCDE1  STK_S_CURRCDE2  STK_S_CURRCDE3  STK_S_CURRCDE4  STK_S_CURRCDE5  STK_S_CURRCDE6  STK_S_CURRCDE7  STK_S_CURRCDE8  STK_S_CURRCDE9  STK_S_CURRCDE10  STK_S_CURRPRC1  STK_S_CURRPRC2  STK_S_CURRPRC3  STK_S_CURRPRC4  STK_S_CURRPRC5  STK_S_CURRPRC6  STK_S_CURRPRC7  STK_S_CURRPRC8  STK_S_CURRPRC9  STK_S_CURRPRC10  STK_SANALYSIS1       STK_SANALYSIS2       STK_SANALYSIS3       STK_SANALYSIS4       STK_SANALYSIS5       STK_SANALYSIS6       STK_SANALYSIS7       STK_SANALYSIS8       STK_SANALYSIS9       STK_SANALYSIS10      STK_SQTY_FROM1  STK_SQTY_FROM2  STK_SQTY_FROM3  STK_SQTY_FROM4  STK_SQTY_FROM5  STK_SQTY_FROM6  STK_SQTY_FROM7  STK_SQTY_FROM8  STK_SQTY_FROM9  STK_SQTY_FROM10  STK_SQTY_TO1  STK_SQTY_TO2  STK_SQTY_TO3  STK_SQTY_TO4  STK_SQTY_TO5  STK_SQTY_TO6  STK_SQTY_TO7  STK_SQTY_TO8  STK_SQTY_TO9  STK_SQTY_TO10  STK_PRIMARY_2
+------------  -------------  -------------  -------------  -------------  -------------  -------------  -------------  -------------  -------------  --------------  -------------  -------------  -------------  -------------  -------------  -------------  -------------  -------------  -------------  --------------  -------------  -------------  -------------  -------------  -------------  -------------  -------------  -------------  -------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  ---------------  -----------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  ---------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  ---------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  ---------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  ---------------  -------------------  -------------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  ---------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  ---------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  -------------  -------------  -------------  -------------  -------------  -------------  -------------  -------------  -------------  -------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  ---------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  ---------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  ---------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  ---------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  ---------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  ---------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  ---------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  ---------------  -------------------  -------------------  -------------------  -------------------  -------------------  -------------------  -------------------  -------------------  -------------------  -------------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  --------------  ---------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  ------------  -------------  -------------
+30TMS_174807  1              1              1              1              1              1              1              1              1              1               Unit           Unit           Unit           Unit           Unit           Unit           Unit           Unit           Unit           Unit            F              F              F              F              F              F              F              F              F              F               0               0               0               0               0               0               0               0               0               0                7.934166666666666  0               0               0               0               0               0               0               0               0                EUR             EUR             EUR             EUR             EUR             EUR             EUR             EUR             EUR             EUR              0               0               0               0               0               0               0               0               0               0                0               0               0               0               0               0               0               0               0               0                PURCH THERMOS - USD  PURCH THERMOS - USD  STOCK           STOCK           STOCK           STOCK           STOCK           STOCK           STOCK           STOCK            0               0               0               0               0               0               0               0               0               0                0             0             0             0             0             0             0             0             0             0                             NULL           NULL           NULL           NULL           NULL           NULL           NULL           NULL           NULL            F401AG          NULL            NULL            NULL            NULL            NULL            NULL            NULL            NULL            NULL             1               1               1               1               1               1               1               1               1               1                Unit            Unit            Unit            Unit            Unit            Unit            Unit            Unit            Unit            Unit             F               F               F               F               F               F               F               F               F               F                0               0               0               0               0               0               0               0               0               0                14.09           13.42           12.34           0               13.42           16.91           16.91           0               12.91           19.95            EUR             EUR             EUR             EUR             EUR             EUR             EUR             EUR             EUR             EUR              0               0               0               0               0               0               0               0               0               0                SL30 THERMOS HK LTD  SL30 THERMOS HK LTD  SL30 THERMOS HK LTD  SL30 THERMOS HK LTD  SL30 THERMOS HK LTD  SL30 THERMOS HK LTD  SL30 THERMOS HK LTD  SL30 THERMOS HK LTD  SL30 THERMOS HK LTD  SL30 THERMOS HK LTD  0               0               0               0               0               0               0               0               0               0                0             0             0             0             0             0             0             0             0             0              9214         
+(1 row affected)
 
-DECLARE @class  VARCHAR(256)
-SET  @class  = ('iwsqlea.sqlconnector$' + CAST(COALESCE(SERVERPROPERTY('InstanceName'),'MSSQLSERVER') as VARCHAR(128)))
-EXEC @hresult = sp_OACreate @class, @sqlconnector OUT
-IF @hresult <> 0
-	GOTO Quit
-
-EXEC @hresult = sp_OAMethod @sqlconnector, 'Init', NULL, _TASKID_, _TASKVERSION_, _TRIGGERID_
-IF @hresult <> 0
-	GOTO Quit
-
-OPEN InsertedCursor
-
-FETCH NEXT FROM InsertedCursor
-	INTO @insST_HEADER_REF, @insST_TRANTYPE, @insST_COPYCUST
-
-
-WHILE @@FETCH_STATUS = 0
-BEGIN
-
-	IF @insST_COPYCUST IN ('30BOT001') AND @insST_TRANTYPE = 'INV'
-	BEGIN
-		EXEC @hresult = sp_OAMethod @sqlconnector, 'SetParameter', NULL, 'InvoiceNum', @insST_HEADER_REF
-		IF @hresult <> 0
-			GOTO Quit
-
-		EXEC @hresult = sp_OAMethod @sqlconnector, 'RunTask', NULL
-		IF @hresult <> 0
-			GOTO Quit
-
-	END
-
-	FETCH NEXT FROM InsertedCursor
-		INTO @insST_HEADER_REF, @insST_TRANTYPE, @insST_COPYCUST
-END
-
-Quit:
-IF CURSOR_STATUS('local', 'InsertedCursor') >= 0
-	CLOSE InsertedCursor
-
-IF @hresult <> 0
-BEGIN
-	SELECT @errmsg = 'Trigger on SL_TRANSACTIONS failed to Queue Task _TASKID_(' + CAST(@hresult AS varchar(16)) + ')'
-	EXEC master..xp_logevent 70000, @errmsg, ERROR
-END
-
-IF (@sqlconnector != 0)
-	EXEC sp_OADestroy @sqlconnector
