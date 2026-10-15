@@ -1,0 +1,18 @@
+SELECT
+    STKCODE,
+    STKNAME,
+    STK_USRCHAR12 AS OrderShelfLife,
+    STK_USRFLAG8 AS SellOnlyCases,
+    STK_USRFLAG1 AS DoNotLoad,
+    STK_EC_SUP_UNIT AS UnitsPercase,
+    STK_USRFLAG3 AS Delisted,
+    s.stk_order_in AS IncomingOrderedQty,
+    STK_USRNUM1 AS POMinQty,
+    S3.STK_USRNUM6 AS UnitsPerPallet,
+    S3.STK_USRNUM7 AS UnitsPerLayer
+FROM
+    STK_STOCK S
+    INNER JOIN STK_STOCK3 S3 ON S3.STKCODE3 = S.STKCODE
+WHERE
+    STK_SORT_KEY3 = '30 JRS' AND
+    STK_USRFLAG2 = 1
