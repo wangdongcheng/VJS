@@ -2,11 +2,11 @@
 -- Shift today's date back by 20 days to determine the reporting month.
 -- This means dates from the 1st to the 20th are treated as the previous reporting month,
 -- while dates from the 21st onward are treated as the current reporting month.
-if 0=1
+if 1=1
 begin
 DECLARE @ReportDate DATE;
-SET @ReportDate = DATEADD(DAY, -20, GETDATE());
--- SET @ReportDate = '2026-07-21';
+-- SET @ReportDate = DATEADD(DAY, -20, GETDATE());
+SET @ReportDate = '2026-08-21';
 ---CTE QUERIES FOR NUMBER OF CUSTOMERS AND NET SALES
 ---TEMP TABLE ACANA DISTRIBUTION
 SELECT DISTINCT
@@ -75,6 +75,7 @@ WHERE
 	S.STK_SORT_KEY3 = '30 CHAMPION PETFOODS'
 GROUP BY
 	DET_ACCOUNT
+	
 	--ROW 1 - CHAINS (ALL 0)
 SELECT
 	'1' AS [Order],
@@ -273,6 +274,18 @@ FROM
 WHERE
 	CU_DO_NOT_USE = 0 AND
 	CUSORT = '30 VET'
+union all
+	select CONVERT(char(7), @ReportDate, 120) as [Order],
+	'' AS [Group],
+	'' AS [Type],
+	0 AS [Total Relevant Numeric Distribution Points (# shops in market)],
+	0 AS [ACANA Numeric Distribution (# shops ACANA)],
+	0 AS [ORIJEN Numeric Distribution (# shops ORIJEN)],
+	0 AS [# Shops New ACANA Cat in],
+	0 AS [# Shops ORIJEN Small Breed in],
+	0 AS [Rate of Sale (avg sell-out per store (local currency))],
+	0 AS [Total Turnover per account (local currency)],
+	'' AS [Competitive Benchmark brand's Distribution (which brands we should be targeting in same channel)];
 DROP TABLE #ACADISTRIB
 DROP TABLE #ORIDISTRIB
 DROP TABLE #ACANACHEAP
@@ -280,6 +293,8 @@ DROP TABLE #ORIDOGSB
 DROP TABLE #NETSALES
 
 end;
+
+return;
 
 SELECT
 	-- DET_ACCOUNT,
@@ -300,18 +315,51 @@ WHERE
 	MONTH(D.DET_DATE) = 9 AND
 	S.STK_SORT_KEY3 = '30 CHAMPION PETFOODS' 
 and CU_DO_NOT_USE = 0
-and (
-	(	CUSORT IN ('30 PET A', '30 PET B', '30 PET C') AND
-	A2.CU_USRCHAR16 != 'Yes' )  -- 30GAM201
-	or
-	CUSORT = '30 GROOMER'
-	 or
-	A2.CU_USRCHAR16 = 'Yes' -- 30ROY200
-	or
-	CUSORT = '30 PET ECOM' 
-	or
-	CUSORT = '30 VET'
+and 
+		CUSORT IN ('30 PET A', '30 PET B', '30 PET C')
+	and
+	A2.CU_USRCHAR16 = 'YES'   -- 30GAM201
+	-- or
+	-- CUSORT = '30 GROOMER'
+	--  or
+	-- A2.CU_USRCHAR16 = 'Yes' -- 30ROY200
+	-- or
+	-- CUSORT = '30 PET ECOM' 
+	-- or
+	-- CUSORT = '30 VET'
 
-)
+
 -- GROUP BY
 -- 	DET_ACCOUNT;
+
+
+select CUCODE2 as 'Customer code',
+cuname as 'Customer name',
+case when CU_USRCHAR16 = 'YES' then 'YES' 
+when CU_USRCHAR16 = '' then ''
+when cu_usrchar16 is null then 'NULL'
+ end as 'Champion Categ'
+from SL_ACCOUNTS2 inner join SL_ACCOUNTS on CUCODE2 = CUCODE
+where  CUSORT IN ('30 PET A', '30 PET B', '30 PET C')
+-- and cu_usrchar16 is null
+--  and cucode2 = '30aax201'
+
+
+
+SELECT DISTINCT
+    A2.CUCODE2
+FROM SL_PL_NL_DETAIL D
+INNER JOIN STK_STOCK S
+    ON D.DET_STOCK_CODE = S.STKCODE
+INNER JOIN SL_ACCOUNTS A
+    ON D.DET_ACCOUNT = A.CUCODE
+INNER JOIN SL_ACCOUNTS2 A2
+    ON A.CUCODE = A2.CUCODE2
+WHERE
+    D.DET_ORIGIN = 'SO'
+    AND YEAR(D.DET_DATE) = 2026
+    AND MONTH(D.DET_DATE) = 9
+    AND S.STK_SORT_KEY3 = '30 CHAMPION PETFOODS'
+    AND CU_DO_NOT_USE = 0
+    AND CUSORT IN ('30 PET A', '30 PET B', '30 PET C')
+    AND A2.CU_USRCHAR16 IS NULL;
