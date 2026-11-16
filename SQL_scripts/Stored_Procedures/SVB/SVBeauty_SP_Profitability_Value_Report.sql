@@ -1,0 +1,1328 @@
+DECLARE @DATEFROM date = '20261116';
+declare @Cons varchar(50) = 'Excl. On Consignment';
+SELECT
+dbo.STK_STOCK.STKCODE AS 'Stock Code',
+dbo.STK_STOCK.STKNAME AS 'Description',
+STK_STOCK.STK_SORT_KEY /*stk_usrchar10*/ AS 'Business Type', --changed on 24/9/18 to accomodate change requested by Joanna as she wants it by Brand
+left(dbo.STK_STOCK.STK_SORT_KEY, 1) AS 'Business Line', --changed on 9/12/2016 to accomodate profitability report
+dbo.STK_STOCK.STK_SORT_KEY AS 'Sort Key',
+dbo.STK_STOCK.STK_SORT_KEY1 AS 'User Key 1',
+dbo.STK_STOCK.STK_SORT_KEY2 AS 'User Key 2',
+dbo.STK_STOCK.STK_SORT_KEY3 AS 'User Key 3',	
+SUM (CASE WHEN DET_PERIODNUMBR = 1 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Jan_Sales,
+SUM (CASE WHEN DET_PERIODNUMBR = 1 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Jan_COS,
+SUM (CASE WHEN DET_PERIODNUMBR = 2 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Feb_Sales,
+SUM (CASE WHEN DET_PERIODNUMBR = 2 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Feb_COS,
+SUM (CASE WHEN DET_PERIODNUMBR = 3 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Mar_Sales,
+SUM (CASE WHEN DET_PERIODNUMBR = 3 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Mar_COS,
+SUM (CASE WHEN DET_PERIODNUMBR = 4 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Apr_Sales,
+SUM (CASE WHEN DET_PERIODNUMBR = 4 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Apr_COS,
+SUM (CASE WHEN DET_PERIODNUMBR = 5 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS May_Sales,
+SUM (CASE WHEN DET_PERIODNUMBR = 5 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS May_COS,
+SUM (CASE WHEN DET_PERIODNUMBR = 6 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Jun_Sales,
+SUM (CASE WHEN DET_PERIODNUMBR = 6 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Jun_COS,
+SUM (CASE WHEN DET_PERIODNUMBR = 7 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Jul_Sales,
+SUM (CASE WHEN DET_PERIODNUMBR = 7 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Jul_COS,
+SUM (CASE WHEN DET_PERIODNUMBR = 8 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Aug_Sales,
+SUM (CASE WHEN DET_PERIODNUMBR = 8 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Aug_COS,
+SUM (CASE WHEN DET_PERIODNUMBR = 9 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Sep_Sales,
+SUM (CASE WHEN DET_PERIODNUMBR = 9 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Sep_COS,
+SUM (CASE WHEN DET_PERIODNUMBR = 10 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Oct_Sales,
+SUM (CASE WHEN DET_PERIODNUMBR = 10 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Oct_COS,
+SUM (CASE WHEN DET_PERIODNUMBR = 11 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Nov_Sales,
+SUM (CASE WHEN DET_PERIODNUMBR = 11 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Nov_COS,
+SUM (CASE WHEN DET_PERIODNUMBR = 12 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Dec_Sales,
+SUM (CASE WHEN DET_PERIODNUMBR = 12 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Dec_COS,
+----Last Year
+	SUM (CASE WHEN DET_PERIODNUMBR = 1 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Jan_Sales_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 1 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Jan_COS_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 2 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Feb_Sales_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 2 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Feb_COS_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 3 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Mar_Sales_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 3 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Mar_COS_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 4 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Apr_Sales_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 4 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Apr_COS_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 5 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS May_Sales_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 5 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS May_COS_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 6 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Jun_Sales_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 6 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Jun_COS_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 7 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Jul_Sales_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 7 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Jul_COS_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 8 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Aug_Sales_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 8 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Aug_COS_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 9 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Sep_Sales_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 9 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Sep_COS_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 10 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Oct_Sales_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 10 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Oct_COS_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 11 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Nov_Sales_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 11 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Nov_COS_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 12 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Dec_Sales_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 12 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Dec_COS_LY
+
+    	
+
+FROM         dbo.SL_PL_NL_DETAIL INNER JOIN
+             dbo.STK_STOCK ON dbo.SL_PL_NL_DETAIL.DET_STOCK_CODE = dbo.STK_STOCK.STKCODE INNER JOIN
+             dbo.STK_STOCK3 ON dbo.STK_STOCK.STKCODE = dbo.STK_STOCK3.STKCODE3
+			  /*ADDED ON 2/10/21 - To Exclude Export Sales from this report*/ inner join sl_accounts on cucode = det_account
+WHERE     DET_TYPE IN ('INV', 'CRN') AND DET_LEDGER = 'SL' 
+/*remove on consignment*/ 
+and det_account  LIKE
+	CASE WHEN @Cons = 'Incl. On Consignment' THEN '%' ELSE '20%' END
+ /*ADDED ON 2/10/21 - To Exclude Export Sales from this report*/ and left(cuuser2,9) <> '20 EXPORT'
+ and stk_sort_key not in ('20 GENERAL DISCOUNT','20 TENDER')
+AND DET_DATE <= @DATEFROM
+GROUP BY
+left(dbo.STK_STOCK.STK_SORT_KEY, 1),
+stk_usrchar10,
+dbo.STK_STOCK.STK_SORT_KEY,
+dbo.STK_STOCK.STK_SORT_KEY1, 
+dbo.STK_STOCK.STK_SORT_KEY2,
+dbo.STK_STOCK.STK_SORT_KEY3,
+dbo.STK_STOCK.STKCODE,
+dbo.STK_STOCK.STKNAME
+
+
+
+union all
+
+
+SELECT
+dbo.STK_STOCK.STKCODE AS 'Stock Code',
+dbo.STK_STOCK.STKNAME AS 'Description',
+'20 EXPORT',-- STK_STOCK.STK_SORT_KEY /*stk_usrchar10*/ AS 'Business Type', --changed on 24/9/18 to accomodate change requested by Joanna as she wants it by Brand
+'2' , --left(dbo.STK_STOCK.STK_SORT_KEY, 1) AS 'Business Line', --changed on 9/12/2016 to accomodate profitability report
+'20 EXPORT',-- -- dbo.STK_STOCK.STK_SORT_KEY AS 'Sort Key',
+'20 EXPORT',--dbo.STK_STOCK.STK_SORT_KEY1 AS 'User Key 1',
+'20 EXPORT',--dbo.STK_STOCK.STK_SORT_KEY2 AS 'User Key 2',
+'20 EXPORT',--dbo.STK_STOCK.STK_SORT_KEY3 AS 'User Key 3',	
+SUM (CASE WHEN DET_PERIODNUMBR = 1 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Jan_Sales,
+SUM (CASE WHEN DET_PERIODNUMBR = 1 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Jan_COS,
+SUM (CASE WHEN DET_PERIODNUMBR = 2 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Feb_Sales,
+SUM (CASE WHEN DET_PERIODNUMBR = 2 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Feb_COS,
+SUM (CASE WHEN DET_PERIODNUMBR = 3 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Mar_Sales,
+SUM (CASE WHEN DET_PERIODNUMBR = 3 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Mar_COS,
+SUM (CASE WHEN DET_PERIODNUMBR = 4 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Apr_Sales,
+SUM (CASE WHEN DET_PERIODNUMBR = 4 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Apr_COS,
+SUM (CASE WHEN DET_PERIODNUMBR = 5 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS May_Sales,
+SUM (CASE WHEN DET_PERIODNUMBR = 5 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS May_COS,
+SUM (CASE WHEN DET_PERIODNUMBR = 6 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Jun_Sales,
+SUM (CASE WHEN DET_PERIODNUMBR = 6 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Jun_COS,
+SUM (CASE WHEN DET_PERIODNUMBR = 7 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Jul_Sales,
+SUM (CASE WHEN DET_PERIODNUMBR = 7 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Jul_COS,
+SUM (CASE WHEN DET_PERIODNUMBR = 8 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Aug_Sales,
+SUM (CASE WHEN DET_PERIODNUMBR = 8 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Aug_COS,
+SUM (CASE WHEN DET_PERIODNUMBR = 9 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Sep_Sales,
+SUM (CASE WHEN DET_PERIODNUMBR = 9 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Sep_COS,
+SUM (CASE WHEN DET_PERIODNUMBR = 10 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Oct_Sales,
+SUM (CASE WHEN DET_PERIODNUMBR = 10 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Oct_COS,
+SUM (CASE WHEN DET_PERIODNUMBR = 11 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Nov_Sales,
+SUM (CASE WHEN DET_PERIODNUMBR = 11 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Nov_COS,
+SUM (CASE WHEN DET_PERIODNUMBR = 12 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Dec_Sales,
+SUM (CASE WHEN DET_PERIODNUMBR = 12 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM) THEN
+             		(CASE WHEN DET_DATE <= @DATEFROM THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Dec_COS,
+----Last Year
+	SUM (CASE WHEN DET_PERIODNUMBR = 1 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Jan_Sales_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 1 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Jan_COS_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 2 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Feb_Sales_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 2 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Feb_COS_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 3 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Mar_Sales_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 3 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Mar_COS_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 4 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Apr_Sales_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 4 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Apr_COS_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 5 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS May_Sales_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 5 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS May_COS_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 6 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Jun_Sales_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 6 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Jun_COS_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 7 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Jul_Sales_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 7 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Jul_COS_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 8 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Aug_Sales_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 8 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Aug_COS_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 9 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Sep_Sales_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 9 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Sep_COS_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 10 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Oct_Sales_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 10 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Oct_COS_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 11 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Nov_Sales_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 11 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Nov_COS_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 12 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN DET_NETT * 1 
+	        				WHEN 'CRN' THEN (DET_NETT * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Dec_Sales_LY,
+SUM (CASE WHEN DET_PERIODNUMBR = 12 THEN
+		(CASE WHEN YEAR(DET_DATE) = YEAR(@DATEFROM)-1 THEN
+             		(CASE WHEN DET_DATE <= DATEADD(YYYY, -1, @DATEFROM) THEN
+ 				(CASE DET_TYPE WHEN 'INV' THEN (DET_COSTPRICE * DET_QUANTITY) * 1 
+	        				WHEN 'CRN' THEN ((DET_COSTPRICE * DET_QUANTITY) * - 1)
+         			END)
+             		END)
+		ELSE	
+			0
+		END)
+	ELSE
+		0 
+	END) AS Dec_COS_LY
+
+    	
+
+FROM         dbo.SL_PL_NL_DETAIL INNER JOIN
+             dbo.STK_STOCK ON dbo.SL_PL_NL_DETAIL.DET_STOCK_CODE = dbo.STK_STOCK.STKCODE INNER JOIN
+             dbo.STK_STOCK3 ON dbo.STK_STOCK.STKCODE = dbo.STK_STOCK3.STKCODE3
+			 /*ADDED ON 2/10/21 - To Exclude Export Sales from this report*/ inner join sl_accounts on cucode = det_account
+			 /*added on 21/7/22 - To allow only certain categories*/ inner join (select txt_user_text from SYS_LOOKUP_TEXT where txt_origin = 'STKSORT')categories on
+			  categories.txt_user_text = stk_sort_key
+WHERE     DET_TYPE IN ('INV', 'CRN') AND DET_LEDGER = 'SL' 
+/*remove on consignment*/ 
+and det_account  LIKE
+	CASE WHEN @Cons = 'Incl. On Consignment' THEN '%' ELSE '20%' END
+ /*ADDED ON 8/10/21 - To Include Export Sales in this report*/ and left(cuuser2,9) = '20 EXPORT'
+/*9-10-10 : following meetings with the accounts dept and Joanna it was agreed that stock with general discount sort key iwll be excluded*/
+AND DET_DATE <= @DATEFROM
+
+GROUP BY
+left(dbo.STK_STOCK.STK_SORT_KEY, 1),
+stk_usrchar10,
+dbo.STK_STOCK.STK_SORT_KEY,
+dbo.STK_STOCK.STK_SORT_KEY1, 
+dbo.STK_STOCK.STK_SORT_KEY2,
+dbo.STK_STOCK.STK_SORT_KEY3,
+dbo.STK_STOCK.STKCODE,
+dbo.STK_STOCK.STKNAME
+
+
+

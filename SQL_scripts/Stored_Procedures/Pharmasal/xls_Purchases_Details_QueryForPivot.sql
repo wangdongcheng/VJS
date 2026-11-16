@@ -1,33 +1,33 @@
 USE [IBS001]
-GO
-/****** Object:  StoredProcedure [dbo].[xls_Purchases_Details_QueryForPivot]    Script Date: 11/06/2026 13:35:53 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
+-- GO
+-- /****** Object:  StoredProcedure [dbo].[xls_Purchases_Details_QueryForPivot]    Script Date: 11/06/2026 13:35:53 ******/
+-- SET ANSI_NULLS ON
+-- GO
+-- SET QUOTED_IDENTIFIER ON
+-- GO
 
 
 
--- =============================================
--- Author:		David Spiteri
--- Create date: 16/10/2024
--- Description:	Excel Report
--- =============================================
-ALTER PROCEDURE [dbo].[xls_Purchases_Details_QueryForPivot]
-	-- Add the parameters for the stored procedure here
-	@DATEFROM DATETIME,
-	@DATETO DATETIME
+-- -- =============================================
+-- -- Author:		David Spiteri
+-- -- Create date: 16/10/2024
+-- -- Description:	Excel Report
+-- -- =============================================
+-- ALTER PROCEDURE [dbo].[xls_Purchases_Details_QueryForPivot]
+-- 	-- Add the parameters for the stored procedure here
+-- 	@DATEFROM DATETIME,
+-- 	@DATETO DATETIME
 	
-/*
-exec [xls_Purchases_Details_QueryForPivot] '2020-10-01 00:00:00.000', '2020-10-31 00:00:00.000'
-exec [xls_Purchases_Details_QueryForPivot] '2020-01-01 00:00:00.000', '2020-01-15 00:00:00.000'
-*/
+-- /*
+-- exec [xls_Purchases_Details_QueryForPivot] '2020-10-01 00:00:00.000', '2020-10-31 00:00:00.000'
+-- exec [xls_Purchases_Details_QueryForPivot] '2020-01-01 00:00:00.000', '2020-01-15 00:00:00.000'
+-- */
 	
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;
+-- AS
+-- BEGIN
+-- 	-- SET NOCOUNT ON added to prevent extra result sets from
+-- 	-- interfering with SELECT statements.
+-- 	SET NOCOUNT ON;
 
 
 SELECT 
