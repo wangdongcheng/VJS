@@ -1,4 +1,4 @@
-use vjsp;
+-- use vjsp;
 
 SELECT
     CASE oh.oh_type
@@ -29,8 +29,8 @@ FROM
     INNER JOIN sl_accounts sl ON sl.cucode = st.st_copycust
     LEFT OUTER JOIN STK_LOCATION loc ON od.OD_LOCATN = loc.LOC_CODE AND
     od.OD_STOCK_CODE = loc.LOC_STOCK_CODE
-WHERE
-    oh.oh_account LIKE '95%'
+-- WHERE
+    -- oh.oh_account LIKE '95%'
 ORDER BY
     sl.cucode,
     st.st_date,
